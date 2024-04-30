@@ -1,0 +1,10 @@
+{
+  "name": "litigesApp",
+  "version": "1.0.0",
+  "main": "index.html",
+  "author": "Nicolas DECRESSAC <decressac.nicolas@icloud.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  }
+}
