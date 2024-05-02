@@ -4,14 +4,33 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
+    width: 100%;
 }
 
 .horizontal-bar {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    width: 850px;
+    justify-content: space-between;
 }
 
 .vertical-bar {
     display: flex;
     flex-direction: column;
+    height: 180px;
+    justify-content: space-between;
+}
+
+button {
+    height: 40px;
+    width: 180px;
+    background-color: rgb(147, 166, 210);
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+    color: #fff;
 }
