@@ -5,9 +5,6 @@ class MainMenu {
     this.pageName = null
   }
 
-  // TODO : A TOI DE JOUER LOLO 🤣 Exemple classe dans header/Header.js | MainMenu.js = index.html (entry point, menu général)
-  // http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html (1ère URL, (A affecter)
-
   async render() {
     const linkH1 = document.createElement('a')
     linkH1.href =
@@ -52,44 +49,63 @@ class MainMenu {
     const horizontalBar = document.createElement('div')
     horizontalBar.classList.add('horizontal-bar')
 
-    const buttonH1 = document.createElement('button')
-    buttonH1.textContent = 'À Affecter'
-    horizontalBar.appendChild(buttonH1)
-    buttonH1.appendChild(linkH1)
+    // Les titres et les liens pour les boutons horizontaux
+    const buttonsInfoH = [
+      {
+        title: 'À Affecter',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+      {
+        title: 'À Valider',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+      {
+        title: 'Liste',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+      {
+        title: 'Calendrier',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+    ]
 
-    const buttonH2 = document.createElement('button')
-    buttonH2.textContent = 'À Valider'
-    horizontalBar.appendChild(buttonH2)
-    buttonH2.appendChild(linkH2)
-
-    const buttonH3 = document.createElement('button')
-    buttonH3.textContent = 'Liste'
-    horizontalBar.appendChild(buttonH3)
-    buttonH3.appendChild(linkH3)
-
-    const buttonH4 = document.createElement('button')
-    buttonH4.textContent = 'Calendrier'
-    horizontalBar.appendChild(buttonH4)
-    buttonH4.appendChild(linkH4)
+    buttonsInfoH.forEach((info) => {
+      const button = document.createElement('a')
+      button.href = info.href
+      button.title = info.title
+      button.textContent = info.title
+      button.classList.add('button')
+      horizontalBar.appendChild(button)
+    })
 
     // Création de la barre de boutons verticaux
     const verticalBar = document.createElement('div')
     verticalBar.classList.add('vertical-bar')
 
-    const buttonV1 = document.createElement('button')
-    buttonV1.textContent = 'Alertes'
-    verticalBar.appendChild(buttonV1)
-    buttonV1.appendChild(linkV1)
+    // Les titres et les liens pour les boutons verticaux
+    const buttonsInfoV = [
+      {
+        title: 'Alertes',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+      {
+        title: 'Thèmes',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+      {
+        title: 'Conseils',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+      },
+    ]
 
-    const buttonV2 = document.createElement('button')
-    buttonV2.textContent = 'Thèmes'
-    verticalBar.appendChild(buttonV2)
-    buttonV2.appendChild(linkV2)
-
-    const buttonV3 = document.createElement('button')
-    buttonV3.textContent = 'Conseils'
-    verticalBar.appendChild(buttonV3)
-    buttonV3.appendChild(linkV3)
+    buttonsInfoV.forEach((info) => {
+      const button = document.createElement('a')
+      button.href = info.href
+      button.title = info.title
+      button.textContent = info.title
+      button.classList.add('button')
+      verticalBar.appendChild(button)
+    })
 
     // Ajout des barres au conteneur du menu
     menuContainer.appendChild(horizontalBar)
