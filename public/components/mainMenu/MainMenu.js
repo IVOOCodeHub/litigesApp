@@ -10,39 +10,39 @@ class MainMenu {
 
   async render() {
     const linkH1 = document.createElement('a')
-    link.href =
+    linkH1.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'À Affecter'
+    linkH1.title = 'À Affecter'
 
     const linkH2 = document.createElement('a')
-    link.href =
+    linkH2.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'À Valider'
+    linkH2.title = 'À Valider'
 
     const linkH3 = document.createElement('a')
-    link.href =
+    linkH3.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'Liste'
+    linkH3.title = 'Liste'
 
     const linkH4 = document.createElement('a')
-    link.href =
+    linkH4.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'Calendrier'
+    linkH4.title = 'Calendrier'
 
     const linkV1 = document.createElement('a')
-    link.href =
+    linkV1.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'Alertes'
+    linkV1.title = 'Alertes'
 
     const linkV2 = document.createElement('a')
-    link.href =
+    linkV2.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'Thèmes'
+    linkV2.title = 'Thèmes'
 
     const linkV3 = document.createElement('a')
-    link.href =
+    linkV3.href =
       'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    link.title = 'Conseils'
+    linkV3.title = 'Conseils'
 
     // Création du conteneur du menu
     const menuContainer = document.createElement('div')
@@ -51,20 +51,45 @@ class MainMenu {
     // Création de la barre de boutons horizontaux
     const horizontalBar = document.createElement('div')
     horizontalBar.classList.add('horizontal-bar')
-    for (let i = 0; i < 4; i++) {
-      const button = document.createElement('button')
-      button.textContent = `Bouton H${i + 1}`
-      horizontalBar.appendChild(button)
-    }
+
+    const buttonH1 = document.createElement('button')
+    buttonH1.textContent = 'À Affecter'
+    horizontalBar.appendChild(buttonH1)
+    buttonH1.appendChild(linkH1)
+
+    const buttonH2 = document.createElement('button')
+    buttonH2.textContent = 'À Valider'
+    horizontalBar.appendChild(buttonH2)
+    buttonH2.appendChild(linkH2)
+
+    const buttonH3 = document.createElement('button')
+    buttonH3.textContent = 'Liste'
+    horizontalBar.appendChild(buttonH3)
+    buttonH3.appendChild(linkH3)
+
+    const buttonH4 = document.createElement('button')
+    buttonH4.textContent = 'Calendrier'
+    horizontalBar.appendChild(buttonH4)
+    buttonH4.appendChild(linkH4)
 
     // Création de la barre de boutons verticaux
     const verticalBar = document.createElement('div')
     verticalBar.classList.add('vertical-bar')
-    for (let j = 0; j < 3; j++) {
-      const button = document.createElement('button')
-      button.textContent = `Bouton V${j + 1}`
-      verticalBar.appendChild(button)
-    }
+
+    const buttonV1 = document.createElement('button')
+    buttonV1.textContent = 'Alertes'
+    verticalBar.appendChild(buttonV1)
+    buttonV1.appendChild(linkV1)
+
+    const buttonV2 = document.createElement('button')
+    buttonV2.textContent = 'Thèmes'
+    verticalBar.appendChild(buttonV2)
+    buttonV2.appendChild(linkV2)
+
+    const buttonV3 = document.createElement('button')
+    buttonV3.textContent = 'Conseils'
+    verticalBar.appendChild(buttonV3)
+    buttonV3.appendChild(linkV3)
 
     // Ajout des barres au conteneur du menu
     menuContainer.appendChild(horizontalBar)
