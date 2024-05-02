@@ -1,1 +1,17 @@
-/* TODO : A TOI DE JOUER LOLO 🤣 */
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.horizontal-bar {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.vertical-bar {
+    display: flex;
+    flex-direction: column;
+}
