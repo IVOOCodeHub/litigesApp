@@ -12,6 +12,12 @@ html,
   cursor: default;
 }
 
-a:hover {
+a:hover,
+button:hover,
+select:hover {
   cursor: pointer;
+}
+
+input {
+  cursor: text;
 }
