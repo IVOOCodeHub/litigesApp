@@ -14,7 +14,7 @@ class Header {
         break
       }
       case url.pathname.endsWith('/affectation.html'): {
-        this.pageName = 'A affecter'
+        this.pageName = 'À affecter'
         break
       }
       default: {
