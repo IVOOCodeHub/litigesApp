@@ -9,11 +9,40 @@ class MainMenu {
   // http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html (1ère URL, (A affecter)
 
   async render() {
-    const header = document.createElement('header')
+    const linkH1 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'À Affecter'
 
-    const link = document.createElement('a')
-    link.href = 'http://192.168.0.254:8080/usv_prod/menugeneral.asp'
-    link.title = 'Menu général'
+    const linkH2 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'À Valider'
+
+    const linkH3 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'Liste'
+
+    const linkH4 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'Calendrier'
+
+    const linkV1 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'Alertes'
+
+    const linkV2 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'Thèmes'
+
+    const linkV3 = document.createElement('a')
+    link.href =
+      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
+    link.title = 'Conseils'
 
     // Création du conteneur du menu
     const menuContainer = document.createElement('div')
