@@ -6,41 +6,6 @@ class MainMenu {
   }
 
   async render() {
-    const linkH1 = document.createElement('a')
-    linkH1.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkH1.title = 'À Affecter'
-
-    const linkH2 = document.createElement('a')
-    linkH2.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkH2.title = 'À Valider'
-
-    const linkH3 = document.createElement('a')
-    linkH3.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkH3.title = 'Liste'
-
-    const linkH4 = document.createElement('a')
-    linkH4.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkH4.title = 'Calendrier'
-
-    const linkV1 = document.createElement('a')
-    linkV1.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkV1.title = 'Alertes'
-
-    const linkV2 = document.createElement('a')
-    linkV2.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkV2.title = 'Thèmes'
-
-    const linkV3 = document.createElement('a')
-    linkV3.href =
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html'
-    linkV3.title = 'Conseils'
-
     // Création du conteneur du menu
     const menuContainer = document.createElement('div')
     menuContainer.classList.add('menu-container')
