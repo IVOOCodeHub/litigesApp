@@ -18,7 +18,7 @@
 .vertical-bar {
     display: flex;
     flex-direction: column;
-    height: 180px;
+    height: 200px;
     justify-content: space-between;
 }
 
