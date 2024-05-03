@@ -12,16 +12,23 @@ class Footer {
   async renderButton() {
     const container = document.createElement('buttonWrapper')
     const goBackButton = document.createElement('button')
+    goBackButton.classList.add('goBackButton')
     goBackButton.textContent = 'Retour'
 
     container.appendChild(goBackButton)
     this.footer.appendChild(container)
   }
 
+  async initEventListeners() {
+    const goBackButton = document.querySelector('.goBackButton')
+    goBackButton.addEventListener('click', () => window.history.back())
+  }
+
   async initFooter() {
     await this.renderFooter()
     await this.renderButton()
     this.root.appendChild(this.footer)
+    await this.initEventListeners()
   }
 }
 
