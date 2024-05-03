@@ -17,7 +17,7 @@ try {
   $conn = new PDO("sqlsrv:server=$serverName;Database=$databaseName", $userName, $password);
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  // Requête pour obtenir la liste des sociétés filtrée
+  // Requête pour obtenir la liste des sociétés filtrée..
   $sql = "SELECT cle, societe, action, dh_saisie, auteur_saisie, service, action, commentaire, statut, nature, societe_emettrice FROM IVOO.dbo.courrier
 WHERE service='FINANCE'
 AND statut='DISTRIBUE'
