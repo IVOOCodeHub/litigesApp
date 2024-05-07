@@ -28,7 +28,7 @@ try {
   $results1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
   // Deuxième requête
-  $sql2 = "SELECT cle, societe, action, dh_saisie, auteur_saisie, service, action, commentaire, statut, nature, societe_emettrice FROM IVOO.dbo.courrier
+  $sql2 = "SELECT cle, societe, action, dh_saisie, auteur_saisie, nom_fichier, service, action, commentaire, statut, nature, societe_emettrice FROM IVOO.dbo.courrier
             WHERE service='FINANCE' AND statut='DISTRIBUE' AND action='A TRAITER'
             AND cle_prevision=0 AND date_piece > '31/12/2017 23:59:59'
             AND nature <> 'FACTUREC' AND nature <> 'CHEQUE' AND nature <> 'ACCORD PART'
