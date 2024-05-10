@@ -1,50 +1,41 @@
-class ViewMail extends Affectation {
+class ViewMail {
   constructor() {
-    super()
     this.searchBar = new SearchBar()
     this.utils = new Utils()
     this.footer = new Footer()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
+    this.datas = null
+    this.mailFolder = 'http://192.168.0.254:8080/usv_prod/courriers/'
   }
 
   async getParams() {
     const urlParams = new URLSearchParams(window.location.search)
     this.id = urlParams.get('id')
-    console.log('this.id —>', this.id)
+  }
+
+  async getDatas() {
+    this.datas = JSON.parse(localStorage.getItem('datas'))
+    this.datas = this.datas['courriers'].find(
+      (object) => object['cle'] === this.id,
+    )
     console.log('this.datas —>', this.datas)
   }
 
-  async displaySearchBar() {
+  async createViewMailDom() {
     this.main = document.createElement('main')
     this.root.appendChild(this.main)
+  }
 
-    const inputs = [
-      {
-        label: 'Société:',
-        input: true,
-        placeholder: 'Société',
-      },
-      {
-        label: 'Nature:',
-        input: true,
-        placeholder: 'Nature',
-      },
-      {
-        label: 'Action:',
-        input: true,
-        placeholder: 'A traiter',
-      },
-      {
-        label: 'Commentaire:',
-        input: true,
-        placeholder: 'P.DOZ - Facture F20231202',
-      },
-    ]
-    await this.searchBar.initSearchBar(inputs)
-    const h2 = document.querySelector('h2')
-    h2.textContent = inputs[3].placeholder
+  async title() {
+    const titleWrapper = document.createElement('div')
+    titleWrapper.setAttribute('class', 'titleWrapper')
+    const h2 = document.createElement('h2')
+    h2.textContent = this.datas['commentaire']
+
+    titleWrapper.appendChild(h2)
+    this.main.appendChild(titleWrapper)
   }
 
   async createSections() {
@@ -66,7 +57,7 @@ class ViewMail extends Affectation {
     iframe.setAttribute('class', 'courrier')
     iframe.setAttribute(
       'src',
-      'http://192.168.0.254:8080/usv_prod/litigesApp/public/assets/sample.pdf',
+      `${this.mailFolder}${this.datas['nom_fichier']}`,
     )
 
     leftArticle.appendChild(iframe)
@@ -124,8 +115,10 @@ class ViewMail extends Affectation {
   }
 
   async initViewMail() {
+    await this.createViewMailDom()
     await this.getParams()
-    await this.displaySearchBar()
+    await this.getDatas()
+    await this.title()
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()
