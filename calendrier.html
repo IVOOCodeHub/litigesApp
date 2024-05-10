@@ -8,14 +8,21 @@
     <link rel="icon" type="image/png" href="./public/assets/favicon.ico" />
     <link rel="stylesheet" href="./public/components/header/header.css" />
     <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./public/components/mainMenu/mainMenu.css" />
+
     <title>Calendrier Actions</title>
 </head>
 
-<body id="root" class="root"></body>
-<script lang="application/javascript" src="./public/scripts/api/ApiCalls.js"></script>
-<script lang="application/javascript" src="./public/scripts/utils/Utils.js"></script>
-<script lang="application/javascript" src="./public/components/header/Header.js"></script>
-<!-- <script lang="application/javascript" src="./public/components/mainMenu/MainMenu.js"></script> -->
+<body>
+    <div id="headerContainer"></div>
+    <main>
+        <h2>Bienvenue dans le calendrier</h2>
+        <p>Calendrier dynamique intégré via un CDN</p>
+    </main>
+    <script src="./public/components/header/calendarHeader.js"></script>
+
+    <script lang="application/javascript" src="./public/scripts/api/ApiCalls.js"></script>
+    <script lang="application/javascript" src="./public/scripts/utils/Utils.js"></script>
+    <script lang="application/javascript" src="./public/components/header/Header.js"></script>
+</body>
 
 </html>
