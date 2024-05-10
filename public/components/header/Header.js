@@ -17,6 +17,10 @@ class Header {
         this.pageName = 'À affecter'
         break
       }
+      case url.pathname.endsWith('/viewMail.html'): {
+        this.pageName = 'Consulté un courrier'
+        break
+      }
       default: {
         this.pageName = ''
       }

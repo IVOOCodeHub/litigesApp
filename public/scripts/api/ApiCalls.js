@@ -7,13 +7,11 @@ class ApiCalls {
 
   async getRequest(url) {
     try {
-      const res = await fetch(url)
-      if (!this.validStatus.includes(res.status)) {
-        return console.error(`${res.status} : ${res.statusText}`)
-      }
-      return await res.data.json()
+      return await fetch(url)
+          .then((res) => res.json())
+          .then((data) => data)
     } catch (err) {
-      console.error(`Cannot fetch datas : ${err}`)
+      console.error(`Can't fetch datas : ${err}`);
     }
   }
 

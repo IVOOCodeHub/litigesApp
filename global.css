@@ -14,10 +14,11 @@ html,
 
 a:hover,
 button:hover,
-select:hover {
+select:hover,
+input[type='checkbox']:hover {
   cursor: pointer;
 }
 
-input {
+input[type='text'] {
   cursor: text;
 }
