@@ -21,6 +21,10 @@ class Header {
         this.pageName = 'Consulté un courrier'
         break
       }
+      case url.pathname.endsWith('/validation.html'): {
+        this.pageName = 'À valider'
+        break
+      }
       default: {
         this.pageName = ''
       }
