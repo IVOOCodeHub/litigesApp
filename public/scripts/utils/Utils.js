@@ -13,4 +13,17 @@ class Utils {
 
     return `${dd}-${mm}-${yyyy} ${hh}:${min}:${ss}`
   }
+
+  reformatDate(dateString) {
+    const date = new Date(dateString)
+
+    const jour = date.getDate().toString().padStart(2, '0')
+    const mois = (date.getMonth() + 1).toString().padStart(2, '0') // getMonth() retourne un mois de 0 à 11
+    const annee = date.getFullYear()
+
+    const heures = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+
+    return `${jour}/${mois}/${annee} ${heures}:${minutes}`
+  }
 }
