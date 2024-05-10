@@ -38,7 +38,7 @@ class Header {
 
     this.pageName === 'Litiges'
       ? (brandingLogo.src = './public/assets/brandingLogo.png')
-      : (brandingLogo.src = '../assets/brandingLogo.png')
+      : (brandingLogo.src = '../../assets/brandingLogo.png')
 
     const appTitle = document.createElement('h1')
     appTitle.textContent = this.pageName
