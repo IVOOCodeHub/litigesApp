@@ -26,16 +26,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1em;
+  gap: 0.5em;
   width: 100%;
 }
 
 #searchBar li label {
   color: #ffffff;
+  font-size: 1.1dvw;
 }
 
 #searchBar li input {
   text-align: center;
+  font-size: 1.1dvw;
 }
 
 #searchBar button {
@@ -54,8 +56,5 @@
   overflow: hidden;
   text-align: center;
   width: 75px;
-}
-
-#searchBar button:disabled {
-  cursor: default;
+  font-size: 1.1dvw;
 }

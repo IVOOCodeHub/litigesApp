@@ -17,6 +17,18 @@ class Header {
         this.pageName = 'À affecter'
         break
       }
+      case url.pathname.endsWith('/viewMail.html'): {
+        this.pageName = 'Consulté un courrier'
+        break
+      }
+      case url.pathname.endsWith('/validation.html'): {
+        this.pageName = 'À valider'
+        break
+      }
+      case url.pathname.endsWith('/list.html'): {
+        this.pageName = 'Liste'
+        break
+      }
       default: {
         this.pageName = ''
       }

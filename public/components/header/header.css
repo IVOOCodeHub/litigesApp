@@ -3,8 +3,11 @@ header {
   width: 100%;
   align-items: center;
   padding: 0.5em 2em;
-  background: #f1f1f1;
-  box-shadow: rgba(17, 17, 26, 0.1) 0 1px 0;
+  background: #ffffff;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0 2px 4px,
+    rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
 .logoWrapper {

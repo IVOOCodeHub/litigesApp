@@ -1,0 +1,17 @@
+#searchFolder {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background: #36395a;
+  padding: 1em;
+  border-bottom: 4px solid #1191b7;
+}
+
+#searchFolder .inputWrapper {
+  display: flex;
+  gap: 1em;
+}
+
+#searchFolder .inputWrapper label {
+  color: #ffffff;
+}

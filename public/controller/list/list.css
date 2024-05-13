@@ -1,0 +1,17 @@
+#searchList {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background: #36395a;
+  padding: 1em;
+  border-bottom: 4px solid #1191b7;
+}
+
+#searchList .inputWrapper {
+  display: flex;
+  gap: 1em;
+}
+
+#searchList .inputWrapper label {
+  color: #ffffff;
+}

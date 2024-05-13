@@ -1,48 +1,23 @@
 .menu-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 90vh;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  width: 100%;
 }
 
 .horizontal-bar {
-    display: flex;
-    margin-bottom: 30px;
-    width: 100%;
-    height: 100px;
-    justify-content: space-around;
+  display: flex;
+  margin-bottom: 30px;
+  width: 100%;
+  height: 100px;
+  justify-content: space-around;
 }
 
 .vertical-bar {
-    display: flex;
-    flex-direction: column;
-    height: 200px;
-    justify-content: space-between;
-}
-
-.button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    width: 180px;
-    background-color: rgb(147, 166, 210);
-    color: #36395a;
-    border: none;
-    text-decoration: none;
-    font-weight: bold;
-    line-height: normal;
-    border-radius: 5px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #0056b3;
-    color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  justify-content: space-between;
 }

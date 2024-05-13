@@ -31,14 +31,21 @@ class SearchBar {
 
       if (input.select) {
         const select = document.createElement('select')
+        select.name = input.label
         input.options.forEach((option) => {
           const opt = document.createElement('option')
           opt.textContent = option
+          opt.value = option
+          if (option === input.selected) {
+            opt.selected = true
+          }
+          select.setAttribute('value', input.options[0])
           select.appendChild(opt)
         })
         li.appendChild(select)
       } else if (input.input) {
         const inputElement = document.createElement('input')
+        inputElement.setAttribute('name', input.label)
         inputElement.setAttribute('type', 'text')
         inputElement.setAttribute('placeholder', input.placeholder)
         li.appendChild(inputElement)

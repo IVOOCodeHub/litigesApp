@@ -13,7 +13,7 @@ class Footer {
     const container = document.createElement('buttonWrapper')
     const goBackButton = document.createElement('button')
     goBackButton.classList.add('goBackButton')
-    goBackButton.textContent = 'Retour'
+    goBackButton.classList.add('errorButton')
 
     container.appendChild(goBackButton)
     this.footer.appendChild(container)
@@ -31,15 +31,3 @@ class Footer {
     await this.initEventListeners()
   }
 }
-
-const footer = new Footer()
-footer
-  .initFooter()
-  .then(() =>
-    console.log(`Footer successfully loaded at : ${footer.utils.getDate()}`),
-  )
-  .catch((err) =>
-    console.error(
-      `Footer failed to load : ${err} at: ${footer.utils.getDate()}`,
-    ),
-  )

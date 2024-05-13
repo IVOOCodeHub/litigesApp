@@ -14,10 +14,115 @@ html,
 
 a:hover,
 button:hover,
-select:hover {
+select:hover,
+input[type='checkbox']:hover {
   cursor: pointer;
 }
 
-input {
+input[type='text'] {
   cursor: text;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #4b91f7 0%, #367af6 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button:focus {
+  box-shadow:
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+    0 0.5px 1.5px rgba(54, 122, 246, 0.25),
+    0 0 0 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+.menuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 180px;
+  background-color: rgb(147, 166, 210);
+  border: none;
+  text-decoration: none;
+  font-weight: bold;
+  line-height: normal;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menuButton:hover {
+  background-color: #0056b3;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.validButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgba(76, 175, 80, 0.25),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.validButton:focus {
+  box-shadow:
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+    0 0.5px 1.5px rgba(76, 175, 80, 0.25),
+    0 0 0 3.5px rgba(56, 142, 60, 0.5);
+
+  outline: 0;
+}
+
+.errorButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #f44336 0%, #ff5722 100%);
+  background-origin: border-box;
+  box-shadow:
+    0 0.5px 1.5px rgba(244, 67, 54, 0.25),
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.errorButton:focus {
+  box-shadow:
+    inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2),
+    0 0.5px 1.5px rgba(244, 67, 54, 0.25),
+    0 0 0 3.5px rgba(255, 87, 34, 0.5);
+
+  outline: 0;
 }

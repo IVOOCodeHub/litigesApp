@@ -22,11 +22,11 @@ class MainMenu {
       },
       {
         title: 'À Valider',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
       },
       {
         title: 'Liste',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
       },
       {
         title: 'Calendrier',
@@ -39,7 +39,7 @@ class MainMenu {
       button.href = info.href
       button.title = info.title
       button.textContent = info.title
-      button.classList.add('button')
+      button.classList.add('menuButton')
       horizontalBar.appendChild(button)
     })
 
@@ -51,16 +51,15 @@ class MainMenu {
     const buttonsInfoV = [
       {
         title: 'Alertes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
       {
         title: 'Thèmes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
       {
         title: 'Conseils',
-        // href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
-        href: '#',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
     ]
 
@@ -69,7 +68,7 @@ class MainMenu {
       button.href = info.href
       button.title = info.title
       button.textContent = info.title
-      button.classList.add('button')
+      button.classList.add('menuButton')
       verticalBar.appendChild(button)
       // test du php au clic
       if (info.title === 'Conseils') {
