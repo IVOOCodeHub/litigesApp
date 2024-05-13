@@ -1,5 +1,5 @@
 main {
-  min-height: 70dvh;
+  min-height: 67dvh;
 }
 
 .titleWrapper {
@@ -19,7 +19,7 @@ main {
 
 #leftArticle,
 #rightArticle {
-  min-height: 70dvh;
+  min-height: 67dvh;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
@@ -52,7 +52,7 @@ main {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  gap: 4em;
+  gap: 2em;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,

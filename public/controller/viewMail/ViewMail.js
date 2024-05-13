@@ -80,9 +80,12 @@ class ViewMail {
             <label>Prochaine action : </label>
             <select>
                 <option>Choisir</option>
-                <option>Mockup pAction1</option>
-                <option>Mockup pAction2</option>
-                <option>Mockup pAction3</option>
+                <option>pAction1</option>
+                <option>pAction2</option>
+                <option>pAction3</option>
+                <option>pAction4</option>
+                <option>pAction5</option>
+                <option>pAction6</option>
             </select>
         </li>
          <li>
@@ -93,9 +96,12 @@ class ViewMail {
             <label>Statut : </label>
             <select>
                 <option>Choisir</option>
-                <option>Mockup statut1</option>
-                <option>Mockup statut2</option>
-                <option>Mockup statut3</option>
+                <option>statut1</option>
+                <option>statut2</option>
+                <option>statut3</option>
+                <option>statut4</option>
+                <option>statut5</option>
+                <option>statut6</option>
             </select>
         </li>
         <li>

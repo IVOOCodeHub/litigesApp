@@ -22,11 +22,11 @@ class MainMenu {
       },
       {
         title: 'À Valider',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
       },
       {
         title: 'Liste',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
       },
       {
         title: 'Calendrier',
@@ -51,15 +51,15 @@ class MainMenu {
     const buttonsInfoV = [
       {
         title: 'Alertes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
       {
         title: 'Thèmes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
       {
         title: 'Conseils',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
       },
     ]
 
