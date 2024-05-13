@@ -41,8 +41,8 @@ class Validation {
     </div>
     
     <div class="inputWrapper">
-        <button>Gérer les sortants</button>
-        <button>Gérer les internes</button>
+        <button class="button">Gérer les sortants</button>
+        <button class="button">Gérer les internes</button>
     </div>
     `
     this.main.appendChild(section)

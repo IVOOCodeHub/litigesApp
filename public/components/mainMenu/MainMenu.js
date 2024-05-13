@@ -39,7 +39,7 @@ class MainMenu {
       button.href = info.href
       button.title = info.title
       button.textContent = info.title
-      button.classList.add('button')
+      button.classList.add('menuButton')
       horizontalBar.appendChild(button)
     })
 
@@ -68,7 +68,7 @@ class MainMenu {
       button.href = info.href
       button.title = info.title
       button.textContent = info.title
-      button.classList.add('button')
+      button.classList.add('menuButton')
       verticalBar.appendChild(button)
     })
 

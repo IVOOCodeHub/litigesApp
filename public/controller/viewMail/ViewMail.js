@@ -55,10 +55,7 @@ class ViewMail {
     const leftArticle = document.querySelector('#leftArticle')
     const iframe = document.createElement('iframe')
     iframe.setAttribute('class', 'courrier')
-    iframe.setAttribute(
-      'src',
-      `${this.mailFolder}${this.datas['nom_fichier']}`,
-    )
+    iframe.setAttribute('src', `${this.mailFolder}${this.datas['nom_fichier']}`)
 
     leftArticle.appendChild(iframe)
   }
@@ -109,13 +106,12 @@ class ViewMail {
             <input type="file"/>
         </li>
         <li>
-            <button>Crée un dossier</button>
+            <button class="button">Crée un dossier</button>
         </li>
     </ul>
     
     <div class="btnWrapper">
-        <button>Valider</button>
-        <button>Annuler</button>
+        <button class="validButton">Valider</button>
     </div>
     `
   }

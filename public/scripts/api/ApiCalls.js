@@ -8,10 +8,10 @@ class ApiCalls {
   async getRequest(url) {
     try {
       return await fetch(url)
-          .then((res) => res.json())
-          .then((data) => data)
+        .then((res) => res.json())
+        .then((data) => data)
     } catch (err) {
-      console.error(`Can't fetch datas : ${err}`);
+      console.error(`Can't fetch datas : ${err}`)
     }
   }
 
