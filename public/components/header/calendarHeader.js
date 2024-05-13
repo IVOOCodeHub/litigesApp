@@ -4,7 +4,7 @@ class HeaderRenderer {
     if (!this.root) throw new Error('Root element not found')
     this.pageName = pageName
   }
-
+// ceci est un Header retravaillé pour la page du calendrier
   async render() {
     const header = document.createElement('header')
 
