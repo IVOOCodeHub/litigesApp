@@ -14,7 +14,6 @@ class Footer {
     const goBackButton = document.createElement('button')
     goBackButton.classList.add('goBackButton')
     goBackButton.classList.add('errorButton')
-    goBackButton.textContent = 'Retour'
 
     container.appendChild(goBackButton)
     this.footer.appendChild(container)

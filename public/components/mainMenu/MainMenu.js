@@ -70,6 +70,13 @@ class MainMenu {
       button.textContent = info.title
       button.classList.add('menuButton')
       verticalBar.appendChild(button)
+      // test du php au clic
+      if (info.title === 'Conseils') {
+        button.addEventListener('click', (e) => {
+          e.preventDefault() // Empêche le navigateur de suivre le lien
+          this.fetchTest() // Déclenche la fonction de récupération des données
+        })
+      }
     })
 
     // Ajout des barres au conteneur du menu
@@ -78,6 +85,28 @@ class MainMenu {
 
     // Ajout du menu au root de la page
     this.root.appendChild(menuContainer)
+  }
+
+  async fetchTest() {
+    const url = 'http://192.168.0.112/Public/ndecr_test/aAffecter.php'
+    const options = {
+      method: 'GET', // ou 'POST' selon la méthode que votre serveur attend
+      headers: {
+        'Content-Type': 'application/json',
+        // Ajoutez d'autres en-têtes ici si nécessaire
+      },
+    }
+
+    try {
+      const response = await fetch(url, options)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      console.log('data récupérées :', data)
+    } catch (error) {
+      console.error('Error:', error)
+    }
   }
 
   async initMainMenu() {
