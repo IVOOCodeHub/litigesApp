@@ -25,6 +25,10 @@ class Header {
         this.pageName = 'À valider'
         break
       }
+      case url.pathname.endsWith('/list.html'): {
+        this.pageName = 'Liste'
+        break
+      }
       default: {
         this.pageName = ''
       }

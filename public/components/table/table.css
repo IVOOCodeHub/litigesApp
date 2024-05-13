@@ -1,4 +1,4 @@
-.tableContainer {
+#tableContainer {
   max-height: 60dvh;
   overflow-y: scroll;
   box-shadow:

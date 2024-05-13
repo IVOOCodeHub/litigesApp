@@ -44,15 +44,14 @@ class Validation {
         <button>Gérer les sortants</button>
         <button>Gérer les internes</button>
     </div>
-    
     `
     this.main.appendChild(section)
   }
 
   async initTable() {
-    this.section = document.createElement('section')
-    this.section.setAttribute('id', 'tableContainer')
-    this.section.innerHTML += `
+    const section = document.createElement('section')
+    section.setAttribute('id', 'tableContainer')
+    section.innerHTML += `
         <table>
           <thead>
               <tr>
@@ -72,7 +71,7 @@ class Validation {
                 <td>mockupEmet</td>
                 <td>mockupDate</td>
                 <td>mockupPiece</td>
-                <td>monckupRefDoc</td>
+                <td>mockupRefDoc</td>
                 <td><input type="checkbox"></td>
             </tr>
             <tr>
@@ -81,13 +80,13 @@ class Validation {
                 <td>mockupEmet2</td>
                 <td>mockupDate2</td>
                 <td>mockupPiece2</td>
-                <td>monckupRefDoc2</td>
+                <td>mockupRefDoc2</td>
                 <td><input type="checkbox"></td>
             </tr>
           </tbody>
         </table>
     `
-    this.main.appendChild(this.section)
+    this.main.appendChild(section)
   }
 
   async initEventListeners() {}
