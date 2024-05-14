@@ -15,7 +15,8 @@ html,
 a:hover,
 button:hover,
 select:hover,
-input[type='checkbox']:hover {
+input[type='checkbox']:hover,
+input[type='file']:hover {
   cursor: pointer;
 }
 

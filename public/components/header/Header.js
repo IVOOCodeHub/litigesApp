@@ -17,8 +17,8 @@ class Header {
         this.pageName = 'À affecter'
         break
       }
-      case url.pathname.endsWith('/viewMail.html'): {
-        this.pageName = 'Consulté un courrier'
+      case url.pathname.endsWith('/viewLitige.html'): {
+        this.pageName = 'Consulté un litige'
         break
       }
       case url.pathname.endsWith('/validation.html'): {
@@ -27,6 +27,10 @@ class Header {
       }
       case url.pathname.endsWith('/list.html'): {
         this.pageName = 'Liste'
+        break
+      }
+      case url.pathname.endsWith('/calendrier.html'): {
+        this.pageName = 'Calendrier'
         break
       }
       default: {
@@ -50,7 +54,7 @@ class Header {
 
     this.pageName === 'Litiges'
       ? (brandingLogo.src = './public/assets/brandingLogo.png')
-      : (brandingLogo.src = '../../assets/brandingLogo.png')
+      : (brandingLogo.src = '../assets/brandingLogo.png')
 
     const appTitle = document.createElement('h1')
     appTitle.textContent = this.pageName
