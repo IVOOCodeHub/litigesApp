@@ -1,5 +1,6 @@
 class CreateNewFolder {
   constructor() {
+    this.utils = new Utils()
     this.alert = new Alert()
     this.main = null
   }
@@ -38,6 +39,7 @@ class CreateNewFolder {
       </div>
     `
     this.main.appendChild(section)
+    await this.utils.trapFocus(section)
   }
 
   async handleSubmitFolderCreation() {

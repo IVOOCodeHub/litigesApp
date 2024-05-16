@@ -1,5 +1,6 @@
 class Alert {
   constructor() {
+    this.utils = new Utils()
     this.main = null
   }
 
@@ -20,6 +21,7 @@ class Alert {
         </div>
         `
     this.main.appendChild(section)
+    await this.utils.trapFocus(section)
   }
 
   async closeAlert() {
