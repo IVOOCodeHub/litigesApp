@@ -1,6 +1,6 @@
 class Alert {
   constructor() {
-    this.main = null;
+    this.main = null
   }
 
   async displayAlert(message) {
@@ -35,7 +35,6 @@ class Alert {
       return false
     }
     if (validButton) {
-      validButton.addEventListener('click', () => this.closeAlert())
       return true
     }
   }

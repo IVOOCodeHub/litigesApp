@@ -2,6 +2,7 @@ class List {
   constructor() {
     this.utils = new Utils()
     this.footer = new Footer()
+    this.createNewFolder = new CreateNewFolder()
     this.main = null
     this.root = document.querySelector('#root')
     this.datas = [
@@ -201,6 +202,12 @@ class List {
     await this.searchByStatut()
     await this.searchByUnit()
     await this.searchBySubUnit()
+
+    const createNewFolderButton = document.querySelector('.validButton')
+    createNewFolderButton.addEventListener(
+      'click',
+      async () => await this.createNewFolder.initCreateNewFolder(),
+    )
   }
 
   async initList() {
