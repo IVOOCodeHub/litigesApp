@@ -9,7 +9,7 @@ class Footer {
     this.footer = document.createElement('footer')
   }
 
-  async renderButton(withValidBtn) {
+  async renderButton(withValidBtn, buttonMessage) {
     const container = document.createElement('div')
     container.setAttribute('class', 'buttonWrapper')
     const goBackButton = document.createElement('button')
@@ -20,7 +20,11 @@ class Footer {
     if (withValidBtn) {
       const validButton = document.createElement('button')
       validButton.setAttribute('class', 'validButton')
-      validButton.textContent = 'Valider'
+      if (buttonMessage) {
+        validButton.textContent = buttonMessage
+      } else {
+        validButton.textContent = 'Valider'
+      }
       container.appendChild(validButton)
     }
 
@@ -33,9 +37,9 @@ class Footer {
     goBackButton.addEventListener('click', () => window.history.back())
   }
 
-  async initFooter(withValidBtn) {
+  async initFooter(withValidBtn, buttonMessage) {
     await this.renderFooter()
-    await this.renderButton(withValidBtn)
+    await this.renderButton(withValidBtn, buttonMessage)
     this.root.appendChild(this.footer)
     await this.initEventListeners()
   }
