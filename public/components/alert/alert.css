@@ -1,0 +1,38 @@
+#alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 9999;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+#alert form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4em;
+  min-width: 30dvw;
+  min-height: 35dvh;
+}
+
+#alertWrapper form h2 {
+  font-size: 1.5dvw;
+  font-weight: 700;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}

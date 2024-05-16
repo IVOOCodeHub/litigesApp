@@ -197,7 +197,6 @@ class ViewLitige {
             </form>
         </div>
     `
-
     this.main.appendChild(section)
     this.attachModalListeners()
   }
