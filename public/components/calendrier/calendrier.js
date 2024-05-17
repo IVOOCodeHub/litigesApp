@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
     plugins: ['dayGrid', 'timeGrid'],
-    events: 'https://fullcalendar.io/demo-events.json?overload-day',
+    // events: 'https://fullcalendar.io/demo-events.json?overload-day',
     header: {
       left: 'dayGridMonth,timeGridWeek,timeGridDay',
       center: 'title',
