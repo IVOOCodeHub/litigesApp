@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   var calendarEl = document.getElementById('calendar')
-
+  
   var calendar = new FullCalendar.Calendar(calendarEl, {
     plugins: ['dayGrid', 'timeGrid'],
     // events: 'https://fullcalendar.io/demo-events.json?overload-day',
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   })
 
-  calendar.render()
+  // calendar.render()
 })
 
 // events: [
