@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         start: '2024-05-28',
       },
     ],
+    eventSources: ['http://192.168.0.112/Public/ndecr_test/calendrier.php'],
   })
   const retrievedEvents = calendar.getEvents()
   console.log('évènements :', retrievedEvents)
