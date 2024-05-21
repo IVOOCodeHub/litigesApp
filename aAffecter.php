@@ -21,7 +21,7 @@ try {
   // Première requête
   $sql1 = "SELECT Count(cle) AS n, societe 
             FROM IVOO.dbo.courrier
-            WHERE service='FINANCE' AND statut='DISTRIBUE' AND action='A TRAITER'
+            WHERE service='FINANCE'
             AND cle_prevision=0 AND cle_paiement=0 AND date_piece > '2017-12-31 23:59:59'
             AND nature LIKE '%LITIGE%'
             GROUP BY societe 
@@ -33,7 +33,7 @@ try {
   // Deuxième requête
   $sql2 = "SELECT cle, societe, action, dh_saisie, auteur_saisie, nom_fichier, service, action, commentaire, statut, nature, societe_emettrice 
             FROM IVOO.dbo.courrier
-            WHERE service='FINANCE' AND statut='DISTRIBUE' AND action='A TRAITER'
+            WHERE service='FINANCE'
             AND cle_prevision=0 AND date_piece > '2017-12-31 23:59:59'
             AND nature LIKE '%LITIGE%'
             ORDER BY cle;";
