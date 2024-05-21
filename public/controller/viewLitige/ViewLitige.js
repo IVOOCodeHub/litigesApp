@@ -1,4 +1,4 @@
-class ViewMail {
+class ViewLitige {
   constructor() {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
@@ -66,54 +66,94 @@ class ViewMail {
     <h2>Dossier : </h2>
     <ul>
         <li>
-            <label>Nom : </label>
-            <input type="text" placeholder="Société VS Tiers"/>
+            <label for="name">Nom : </label>
+            <p>${this.datas['societe']} VS ${this.datas['societe_emettrice']}</p>
         </li>
         <li>
-            <label>Commentaire : </label>
-            <input type="text" placeholder="Résumé du litige"/>
+            <label for="comment">Commentaire : </label>
+            <p>${this.datas['commentaire']}</p>
         </li>
          <li>
-            <label>Prochaine action : </label>
-            <select>
-                <option>Choisir</option>
-                <option>pAction1</option>
-                <option>pAction2</option>
-                <option>pAction3</option>
-                <option>pAction4</option>
-                <option>pAction5</option>
-                <option>pAction6</option>
-            </select>
+            <label for="pAction">Prochaine action : </label>
+            <p>${this.datas['action']}</p>
         </li>
          <li>
-            <label>Date de prochaine action : </label>
-            <input type="date"/>
+            <label for="date">Date de prochaine action : </label>
+            <p>*Date pAction*</p>
         </li>
          <li>
-            <label>Statut : </label>
-            <select>
-                <option>Choisir</option>
-                <option>statut1</option>
-                <option>statut2</option>
-                <option>statut3</option>
-                <option>statut4</option>
-                <option>statut5</option>
-                <option>statut6</option>
-            </select>
-        </li>
-        <li>
-            <label>Associer : </label>
-            <input type="file"/>
-        </li>
-        <li>
-            <button class="button">Crée un dossier</button>
+            <label for="status">Statut : </label>
+            <p>${this.datas['statut']}</p>
         </li>
     </ul>
-    
-    <div class="btnWrapper">
-        <button class="validButton">Valider</button>
-    </div>
+    <h2>Gestion du dossier :</h2>
+    <ul class="manageDossier">
+        <li class="typeFile">
+            <label for="bindTo">Associer : </label>
+            <input name="bindTo" type="file"/>
+        </li>
+         <li>
+            <label for="status">Crée un dossier : </label>
+            <button class="button">Crée</button>
+        </li>
+    </ul>
     `
+  }
+
+  async submitDatas() {
+    const errorMessage = document.createElement('p')
+    errorMessage.classList.add('error') // TODO <—
+    const formValue = [
+      {
+        name: 'name',
+      },
+      {
+        name: 'comment',
+      },
+      {
+        name: 'pAction',
+      },
+      {
+        name: 'date',
+      },
+      {
+        name: 'status',
+      },
+      {
+        name: 'bindTo',
+      },
+    ]
+
+    formValue.forEach((element) => {
+      const value = document.querySelector(
+        `input[name='${element.name}']`,
+      ).value
+      if (!value) {
+        errorMessage.textContent = `Veuillez renseigné le champ ${element.name}`
+      }
+    })
+
+    const name = document.querySelector("input[name='name']").value
+    const comment = document.querySelector("input[name='comment']").value
+    const pAction = document.querySelector("select[name='pAction']").value
+    const date = document.querySelector("input[name='date']").value
+    const status = document.querySelector("select[name='status']").value
+    const bindTo = document.querySelector("input[name='bindTo']").value
+
+    const updatedDatas = {
+      nom: name,
+      commentaire: comment,
+      pAction: pAction,
+      date: date,
+      status: status,
+      bindTo: bindTo,
+    }
+
+    console.log('updatedDatas —>', updatedDatas)
+  }
+
+  async initEventListeners() {
+
   }
 
   async initViewMail() {
@@ -125,10 +165,11 @@ class ViewMail {
     await this.displayCourrier()
     await this.editCourrier()
     await this.footer.initFooter()
+    await this.initEventListeners()
   }
 }
 
-const viewMail = new ViewMail()
+const viewMail = new ViewLitige()
 viewMail
   .initViewMail()
   .then(() =>

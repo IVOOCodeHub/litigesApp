@@ -1,9 +1,13 @@
 main {
-  min-height: 67dvh;
+  min-height: 70dvh;
 }
 
 .titleWrapper {
   background: #36395a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 4px solid #1191b7;
 }
 
 .titleWrapper h2 {
@@ -19,7 +23,7 @@ main {
 
 #leftArticle,
 #rightArticle {
-  min-height: 67dvh;
+  min-height: 70dvh;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
@@ -52,16 +56,17 @@ main {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  gap: 2em;
+  gap: 1.5em;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
     rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
-  padding: 0 2em;
+  padding: 0 1em;
 }
 
 #rightArticle h2 {
   text-transform: uppercase;
+  font-size: 1.3dvw;
 }
 
 #rightArticle ul {
@@ -71,6 +76,10 @@ main {
   width: 100%;
 }
 
+.manageDossier {
+  gap: 1em !important;
+}
+
 #rightArticle li {
   list-style: none;
   display: flex;
@@ -78,17 +87,24 @@ main {
   justify-content: space-between;
 }
 
-#rightArticle input[type='text'] {
-  text-align: center;
+#rightArticle label {
+  font-weight: 700;
+  font-size: 1dvw;
+  width: 50%;
 }
 
-#rightArticle li button {
-  margin: auto;
-  text-align: center;
+#rightArticle p {
+  text-align: right;
+  font-size: 1dvw;
 }
 
-.btnWrapper {
+.typeFile {
   display: flex;
+  flex-flow: row;
   align-items: center;
-  gap: 4em;
+  justify-content: center;
+}
+
+.typeFile label {
+  width: 100% !important;
 }

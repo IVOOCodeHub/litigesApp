@@ -15,11 +15,14 @@ html,
 a:hover,
 button:hover,
 select:hover,
-input[type='checkbox']:hover {
+input[type='checkbox']:hover,
+input[type='file']:hover,
+input[type='date']:hover {
   cursor: pointer;
 }
 
-input[type='text'] {
+input[type='text'],
+textarea {
   cursor: text;
 }
 

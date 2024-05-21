@@ -89,7 +89,7 @@ class Affectation {
 
   async goToViewMail(key) {
     localStorage.setItem('datas', JSON.stringify(this.datas))
-    window.location.href = `viewMail.html?id=${key}`
+    window.location.href = `viewLitige.html?id=${key}`
   }
 
   async changeListener(htmlSelectElement) {
