@@ -6,105 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="./public/assets/favicon.ico" />
     <link rel="stylesheet" href="./public/components/header/header.css" />
-    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./public/components/calendrier/calendarFooter.css" />
+
     <title>Litiges — Calendrier</title>
 
     <script src='./dist/index.global.js' defer></script>
-    <script defer>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'fr',
-                initialDate: '2024-05-01',
-                editable: true,
-                selectable: true,
-                businessHours: true,
-                dayMaxEvents: true, // allow "more" link when too many events
-                titleFormat: { // will produce something like "Tuesday, September 18, 2018"
-                    month: 'long',
-                    year: 'numeric',
-                    day: 'numeric',
-                    weekday: 'long'
-                },
-                events: [
-                    {
-                        title: 'All Day Event',
-                        start: '2024-05-01'
-                    },
-                    {
-                        title: 'Long Event',
-                        start: '2024-05-07',
-                        end: '2024-05-10'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2024-05-09T16:00:00'
-                    },
-                    {
-                        groupId: 999,
-                        title: 'Repeating Event',
-                        start: '2024-05-16T16:00:00'
-                    },
-                    {
-                        title: 'Conference',
-                        start: '2024-05-11',
-                        end: '2024-05-13'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2024-05-12T10:30:00',
-                        end: '2024-05-12T12:30:00'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: '2024-05-12T12:00:00'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: '2024-05-12T14:30:00'
-                    },
-                    {
-                        title: 'Happy Hour',
-                        start: '2024-05-12T17:30:00'
-                    },
-                    {
-                        title: 'Dinner',
-                        start: '2024-05-12T20:00:00'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: '2024-05-13T07:00:00'
-                    },
-                    {
-                        title: 'Click for Google',
-                        url: 'http://google.com/',
-                        start: '2024-05-28'
-                    }
-                ]
-            });
-            // calendar.setOption('locale', 'fr');
-            calendar.render();
-        });
-
-    </script>
-    <style>
-        header {
-            margin-bottom: 2em;
-        }
-        #calendar {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-    </style>
+    <script src="./public/components/calendrier/calendar.js" defer></script>
 </head>
 
 <body>
     <div id="headerContainer"></div>
     <div id='calendar'></div>
+    <div id="footerContainer"></div>
 
+    <script src="https://kit.fontawesome.com/2743dbdb32.js" crossorigin="anonymous"></script>
     <script src="./public/components/header/calendarHeader.js"></script>
     <script lang="application/javascript" src="./public/scripts/api/ApiCalls.js"></script>
     <script lang="application/javascript" src="./public/scripts/utils/Utils.js"></script>

@@ -129,3 +129,15 @@ textarea {
 
   outline: 0;
 }
+
+.fc-prev-button::before {
+  content: '\f053';
+  /* FontAwesome unicode for left arrow */
+  font-family: FontAwesome;
+}
+
+.fc-next-button::before {
+  content: '\f054';
+  /* FontAwesome unicode for right arrow */
+  font-family: FontAwesome;
+}
