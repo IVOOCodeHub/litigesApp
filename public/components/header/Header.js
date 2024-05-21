@@ -14,23 +14,23 @@ class Header {
         break
       }
       case url.pathname.endsWith('/affectation.html'): {
-        this.pageName = 'À affecter'
+        this.pageName = 'Litiges à affecter'
         break
       }
       case url.pathname.endsWith('/viewLitige.html'): {
-        this.pageName = 'Consulté un litige'
+        this.pageName = 'Consulté un courier'
         break
       }
       case url.pathname.endsWith('/validation.html'): {
-        this.pageName = 'À valider'
+        this.pageName = 'Dossier a valider'
         break
       }
       case url.pathname.endsWith('/list.html'): {
-        this.pageName = 'Liste'
+        this.pageName = 'Liste des dossiers'
         break
       }
       case url.pathname.endsWith('/calendrier.html'): {
-        this.pageName = 'Calendrier'
+        this.pageName = 'Calendrier des litiges'
         break
       }
       case url.pathname.endsWith('/folder.html'): {

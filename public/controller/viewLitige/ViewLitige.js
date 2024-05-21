@@ -96,22 +96,6 @@ class ViewLitige {
             <label for="status">Crée un dossier : </label>
             <button class="button">Crée</button>
         </li>
-        <li>
-            <label for="status">Visualisé taches : </label>
-            <button class="button">Visu. taches</button>
-        </li>
-        <li>
-            <label for="status">Visualisé les pièces : </label>
-            <button class="button">Visu. pièces</button>
-        </li>
-        <li>
-            <label for="status">Visualisé dossier associer : </label>
-            <button class="button">Visu. dossier</button>
-        </li>
-        <li>
-            <label for="status">Prochaine action : </label>
-            <button class="button folderAccess">Modifier</button> 
-        </li>
     </ul>
     `
   }
@@ -168,59 +152,8 @@ class ViewLitige {
     console.log('updatedDatas —>', updatedDatas)
   }
 
-  async displayFolderModal() {
-    const section = document.createElement('section')
-    section.setAttribute('id', 'folderModal')
-
-    section.innerHTML += `
-        <div class="folderAccess">
-            <h2>Dossier relatif à la pièce :</h2>
-            <p>${this.datas['commentaire']}</p>
-            <form>
-                <div class="inputWrapper">
-                    <label for="name">Prochaine action : </label>
-                    <select>
-                        <option>Choisir</option>
-                        <option>pAction 1</option>
-                        <option>pAction 2</option>
-                        <option>pAction 3</option>
-                    </select>
-                </div>
-                <div class="inputWrapper">
-                    <label for="name">Date de prochaine action : </label>
-                    <input type="date" />
-                </div>
-                <div class="btnWrapper">
-                    <button class="button validButton">Valider</button>
-                    <button class="errorButton closeModal">Fermer</button>
-                </div>
-            </form>
-        </div>
-    `
-    this.main.appendChild(section)
-    this.attachModalListeners()
-  }
-
-  async closeFolderModal() {
-    const modal = document.querySelector('#folderModal')
-    if (modal) {
-      modal.remove()
-    }
-  }
-
-  attachModalListeners() {
-    const closeModalBtn = document.querySelector('.closeModal')
-    if (closeModalBtn) {
-      closeModalBtn.addEventListener('click', () => this.closeFolderModal())
-    }
-
-    const submitBtn = document.querySelector('.validButton')
-    submitBtn.addEventListener('click', () => this.submitDatas())
-  }
-
   async initEventListeners() {
-    const folderAccess = document.querySelector('.folderAccess')
-    folderAccess.addEventListener('click', () => this.displayFolderModal())
+
   }
 
   async initViewMail() {

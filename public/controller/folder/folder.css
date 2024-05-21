@@ -15,6 +15,24 @@ h2 {
   font-size: 1.3dvw;
 }
 
+h3 {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.2dvw;
+  position: relative;
+}
+
+h3:after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12%;
+  height: 2px;
+  background: #1191b7;
+}
+
 #folderContainer {
   display: flex;
   align-items: center;
@@ -24,12 +42,13 @@ h2 {
   margin-top: 1em;
 }
 
-.leftArticle,
-.rightArticle {
+.leftArticle {
   width: 46%;
-  min-height: 67dvh;
+  padding: 2.5em;
   display: flex;
   flex-flow: column;
+  align-items: center;
+  justify-content: center;
   gap: 4em;
   background: #ffffff;
   border-radius: 12px;
@@ -39,9 +58,139 @@ h2 {
     rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
+.rightArticle {
+  display: flex;
+  width: 46%;
+  flex-flow: column;
+  gap: 2em;
+}
+
+.element {
+  width: 100%;
+  padding: 2.5em;
+  gap: 3em;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0 2px 4px,
+    rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
+}
+
+ul {
+  display: flex;
+  flex-flow: column;
+  gap: 2em;
+  width: 100%;
+}
+
 ul li {
   list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+ul li div {
+  display: flex;
+  flex-flow: column;
+  gap: 1em;
+}
+
+label {
+  font-weight: 700;
+  font-size: 1dvw;
+  width: 50%;
+}
+
+p {
+  text-align: right;
+  font-size: 1dvw;
+}
+
+textarea {
+  text-align: left;
+  font-size: 1dvw;
+  padding: 0.5em;
+  width: 50%;
+  min-height: 75px;
+}
+
+ul li div {
+  display: flex;
+  flex-flow: column;
+}
+
+ul li div label {
+  width: 100% !important;
+}
+
+.forceLeftAlign {
+  text-align: left;
+}
+
+.buttonWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MODALE */
+
+#folderModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: 9999;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.5);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.folderAccess {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2em;
+}
+
+.folderAccess h2 {
+  font-size: 1.5dvw;
+  font-weight: 700;
+}
+
+.folderAccess p {
+  font-size: 2dvw;
+  font-weight: 700;
+}
+
+.folderAccess form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4em;
+  min-width: 30dvw;
+  min-height: 35dvh;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow:
+    rgba(0, 0, 0, 0.4) 0 2px 4px,
+    rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
+    rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
+}
+
+.btnWrapper {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
 }

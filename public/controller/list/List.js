@@ -7,7 +7,7 @@ class List {
     this.root = document.querySelector('#root')
     this.datas = [
       {
-        code: '782734',
+        code: '*782734*',
         societe: 'mockupSociete',
         statut: 'mockupStatut',
         libele: 'mockupLibele',
@@ -16,7 +16,7 @@ class List {
         stat: 'mockupStat',
       },
       {
-        code: '91284',
+        code: '*91284*',
         societe: 'mockupSociete2',
         statut: 'mockupStatut2',
         libele: 'mockupLibele2',
@@ -25,7 +25,7 @@ class List {
         stat: 'mockupStat2',
       },
       {
-        code: '01928',
+        code: '*01928*',
         societe: 'mockupSociete3',
         statut: 'mockupStatut3',
         libele: 'mockupLibele3',
