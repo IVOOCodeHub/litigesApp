@@ -24,3 +24,18 @@
 
     outline: 0;
 }
+
+footer {
+    min-height: 10dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonWrapper {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+}
