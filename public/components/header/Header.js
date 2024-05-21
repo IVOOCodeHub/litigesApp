@@ -33,6 +33,10 @@ class Header {
         this.pageName = 'Calendrier'
         break
       }
+      case url.pathname.endsWith('/folder.html'): {
+        this.pageName = 'Dossier'
+        break
+      }
       default: {
         this.pageName = ''
       }

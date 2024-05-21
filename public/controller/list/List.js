@@ -7,7 +7,7 @@ class List {
     this.root = document.querySelector('#root')
     this.datas = [
       {
-        code: 'mockupCode',
+        code: '782734',
         societe: 'mockupSociete',
         statut: 'mockupStatut',
         libele: 'mockupLibele',
@@ -16,7 +16,7 @@ class List {
         stat: 'mockupStat',
       },
       {
-        code: 'mockupCode2',
+        code: '91284',
         societe: 'mockupSociete2',
         statut: 'mockupStatut2',
         libele: 'mockupLibele2',
@@ -25,7 +25,7 @@ class List {
         stat: 'mockupStat2',
       },
       {
-        code: 'mockupCode3',
+        code: '01928',
         societe: 'mockupSociete3',
         statut: 'mockupStatut3',
         libele: 'mockupLibele3',
@@ -197,11 +197,24 @@ class List {
     )
   }
 
+  async openFolder() {
+    const tableBody = document.querySelector('table tbody')
+    const rows = tableBody.querySelectorAll('tr')
+
+    rows.forEach((row) => {
+      const code = row.querySelector('td:nth-child(1)').textContent
+      row.addEventListener('click', () => {
+        window.location.href = `folder.html?id=${code}`
+      })
+    })
+  }
+
   async initEventListeners() {
     await this.searchBySociety()
     await this.searchByStatut()
     await this.searchByUnit()
     await this.searchBySubUnit()
+    await this.openFolder()
 
     const createNewFolderButton = document.querySelector('.validButton')
     createNewFolderButton.addEventListener(
