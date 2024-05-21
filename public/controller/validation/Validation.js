@@ -3,8 +3,35 @@ class Validation {
     this.validationService = new ValidationService()
     this.utils = new Utils()
     this.footer = new Footer()
+    this.alert = new Alert()
     this.main = null
     this.root = document.querySelector('#root')
+    this.datas = [
+      {
+        ref: 'mockupRef',
+        dest: 'mockupDest',
+        emet: 'mockupEmet',
+        date: 'mockupDate',
+        piece: 'mockupPiece',
+        refDoc: 'mockupRefDoc',
+      },
+      {
+        ref: 'mockupRef2',
+        dest: 'mockupDest2',
+        emet: 'mockupEmet2',
+        date: 'mockupDate2',
+        piece: 'mockupPiece2',
+        refDoc: 'mockupRefDoc2',
+      },
+      {
+        ref: 'mockupRef3',
+        dest: 'mockupDest2',
+        emet: 'mockupEmet2',
+        date: 'mockupDate3',
+        piece: 'mockupPiece3',
+        refDoc: 'mockupRefDoc3',
+      },
+    ]
   }
 
   async initMain() {
@@ -18,25 +45,25 @@ class Validation {
 
     section.innerHTML = `
     <div class="inputWrapper">
-        <label>Destinataire: </label>
-        <select>
+        <label for="recipient">Destinataire: </label>
+        <select name="recipient">
           <option>Toutes</option>
-          <option>mockup1</option>
-          <option>mockup2</option>
-          <option>mockup3</option>
-          <option>mockup4</option>
-          <option>mockup5</option>
+          <option>mockupDest</option>
+          <option>mockupDest2</option>
+          <option>mockupDest3</option>
+          <option>mockupDest4</option>
+          <option>mockupDest5</option>
         </select>
     </div>
     <div class="inputWrapper">
-        <label>Émetteur: </label>
-        <select>
+        <label for="sender">Émetteur: </label>
+        <select name="sender">
           <option>Toutes</option>
-          <option>mockup1</option>
-          <option>mockup2</option>
-          <option>mockup3</option>
-          <option>mockup4</option>
-          <option>mockup5</option>
+          <option>mockupEmet</option>
+          <option>mockupEmet2</option>
+          <option>mockupEmet3</option>
+          <option>mockupEmet4</option>
+          <option>mockupEmet5</option>
         </select>
     </div>
     
@@ -64,38 +91,100 @@ class Validation {
                 <th>Sélectionner</th>
               </tr>
           </thead>
-          <tbody>
-            <tr>
-                <td>mockupRef</td>
-                <td>mockupDesti</td>
-                <td>mockupEmet</td>
-                <td>mockupDate</td>
-                <td>mockupPiece</td>
-                <td>mockupRefDoc</td>
-                <td><input type="checkbox"></td>
-            </tr>
-            <tr>
-                <td>mockupRef2</td>
-                <td>mockupDesti2</td>
-                <td>mockupEmet2</td>
-                <td>mockupDate2</td>
-                <td>mockupPiece2</td>
-                <td>mockupRefDoc2</td>
-                <td><input type="checkbox"></td>
-            </tr>
-          </tbody>
+          <tbody></tbody>
         </table>
     `
     this.main.appendChild(section)
   }
 
-  async initEventListeners() {}
+  async insertDatas(datas) {
+    const tableBody = document.querySelector('table tbody')
+    tableBody.innerHTML = ''
+    datas.forEach((row) => {
+      tableBody.innerHTML += `
+        <tr>
+          <td>${row.ref}</td>
+          <td>${row.dest}</td>
+          <td>${row.emet}</td>
+          <td>${row.date}</td>
+          <td>${row.piece}</td>
+          <td>${row.refDoc}</td>
+          <td><input type="checkbox"></td>
+        </tr>      
+      `
+    })
+  }
+
+  async submitValidation() {
+    const validatedLitiges = []
+    const allRows = document.querySelectorAll('tbody tr')
+    allRows.forEach((row) => {
+      const checkbox = row.querySelector('input[type="checkbox"]')
+      if (checkbox.checked) {
+        // get the ref of the row where the checkbox is checked and push it in validatedLitiges array
+        validatedLitiges.push(row.querySelector('td:nth-child(1)').textContent)
+      }
+    })
+
+    const isValidate = await this.alert.initAlert(
+      'Êtes-vous sur de vouloir valider ces litiges ?',
+    )
+    if (!isValidate) return
+
+    console.log('validatedLitiges —>', validatedLitiges)
+  }
+
+  async searchByRecipient() {
+    const select = document.querySelector('select[name="recipient"]')
+    select.addEventListener(
+      'change',
+      async () => await this.searchFromSelect(select),
+    )
+  }
+
+  async searchBySender() {
+    const select = document.querySelector('select[name="sender"]')
+    select.addEventListener(
+      'change',
+      async () => await this.searchFromSelect(select),
+    )
+  }
+
+  async searchFromSelect(htmlSelectElement) {
+    const selectedValue = htmlSelectElement.value
+    let newDatas = null
+
+    if (htmlSelectElement.name === 'recipient') {
+      if (selectedValue !== 'Toutes') {
+        newDatas = this.datas.filter((row) => row.dest === selectedValue)
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'sender') {
+      if (selectedValue !== 'Toutes') {
+        newDatas = this.datas.filter((row) => row.emet === selectedValue)
+      } else {
+        newDatas = this.datas
+      }
+    }
+
+    await this.insertDatas(newDatas)
+  }
+
+  async initEventListeners() {
+    await this.searchByRecipient()
+    await this.searchBySender()
+
+    const submitButton = document.querySelector('.validButton')
+    submitButton.addEventListener('click', () => this.submitValidation())
+  }
 
   async initValidation() {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.footer.initFooter()
+    await this.insertDatas(this.datas)
+    await this.footer.initFooter(true)
     await this.initEventListeners()
   }
 }

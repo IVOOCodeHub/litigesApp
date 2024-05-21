@@ -30,7 +30,7 @@ class MainMenu {
       },
       {
         title: 'Calendrier',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/calendrier.html',
       },
     ]
 
