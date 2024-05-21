@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'fr',
     initialDate: '2024-05-01',
-    editable: true,
-    selectable: true,
+    editable: false,
+    selectable: false,
     businessHours: true,
     dayMaxEvents: true, // allow "more" link when too many events
     titleFormat: {
@@ -17,58 +17,53 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     events: [
       {
-        title: 'All Day Event',
+        title: 'Huissier à prendre.',
         start: '2024-05-01',
       },
       {
-        title: 'Long Event',
+        title: "Cour administrative d'appel de Poitiers ",
         start: '2024-05-06',
         end: '2024-05-10',
       },
       {
         groupId: 999,
-        title: 'Repeating Event',
+        title: 'convocation recours',
         start: '2024-05-09T16:00:00',
       },
       {
         groupId: 999,
-        title: 'Repeating Event',
+        title: 'convocation recours',
         start: '2024-05-16T16:00:00',
       },
       {
-        title: 'Conference',
+        title: 'URSSAF',
         start: '2024-05-11',
         end: '2024-05-13',
       },
       {
-        title: 'Meeting',
+        title: 'Contestation mise en demeure',
         start: '2024-05-12T10:30:00',
         end: '2024-05-12T12:30:00',
       },
       {
-        title: 'Lunch',
+        title: 'AG2R',
         start: '2024-05-12T12:00:00',
       },
       {
-        title: 'Meeting',
+        title: 'avis de signification acte huissier',
         start: '2024-05-12T14:30:00',
       },
       {
-        title: 'Happy Hour',
+        title: 'Convocation tribunal',
         start: '2024-05-12T17:30:00',
       },
       {
-        title: 'Dinner',
+        title: 'Prudhommes',
         start: '2024-05-12T20:00:00',
       },
       {
-        title: 'Birthday Party',
+        title: 'DGFP La Rochelle',
         start: '2024-05-13T07:00:00',
-      },
-      {
-        title: 'Click for Google',
-        url: 'http://google.com/',
-        start: '2024-05-28',
       },
     ],
     eventSources: ['http://192.168.0.112/Public/ndecr_test/calendrier.php'],
