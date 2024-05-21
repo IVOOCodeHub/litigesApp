@@ -31,7 +31,7 @@ try {
   $sql2 = "SELECT cle, societe, action, dh_saisie, auteur_saisie, nom_fichier, service, action, commentaire, statut, nature, societe_emettrice FROM IVOO.dbo.courrier
             WHERE service='FINANCE' AND statut='DISTRIBUE' AND action='A TRAITER'
             AND cle_prevision=0 AND date_piece > '31/12/2017 23:59:59'
-            AND nature <> 'FACTUREC' AND nature <> 'CHEQUE' AND nature <> 'ACCORD PART' AND nature like '%LITIGE%'
+            AND nature <> 'FACTUREC' AND nature <> 'CHEQUE' AND nature <> 'ACCORD PART'
             ORDER BY cle;";
   $stmt2 = $conn->prepare($sql2);
   $stmt2->execute();
@@ -39,6 +39,7 @@ try {
 
   // Troisième requête
   $sql3 = "SELECT nature_piece FROM IVOO.dbo.courrier_profils_distribution
+            WHERE nature_piece like '%LITIGE%'
             GROUP BY nature_piece ORDER BY nature_piece;";
   $stmt3 = $conn->prepare($sql3);
   $stmt3->execute();
