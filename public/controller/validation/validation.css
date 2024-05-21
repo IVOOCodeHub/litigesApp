@@ -15,3 +15,7 @@
 #searchFolder .inputWrapper label {
   color: #ffffff;
 }
+
+#tableContainer {
+  margin-bottom: 2em;
+}

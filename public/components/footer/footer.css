@@ -7,6 +7,8 @@ footer {
 
 .buttonWrapper {
   display: flex;
+  flex-flow: row;
   align-items: center;
   justify-content: center;
+  gap: 2em;
 }
