@@ -76,4 +76,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const retrievedEvents = calendar.getEvents()
   console.log('évènements :', retrievedEvents)
   calendar.render()
+
+  // Ajouter le bouton de retour
+  var footerContainer = document.getElementById('footerContainer')
+  var goBackButton = document.createElement('button')
+  goBackButton.textContent = 'Retour'
+  goBackButton.classList.add('goBackButton')
+  goBackButton.addEventListener('click', function () {
+    window.history.back()
+  })
+
+  footerContainer.appendChild(goBackButton)
 })
