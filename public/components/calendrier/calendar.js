@@ -90,13 +90,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // Catégories et leurs couleurs
   var categories = [
     { name: 'Amauger', color: '#ff9f89' },
-    { name: 'Cial', color: '#ffa3a3' },
+    { name: 'Cial', color: '#00FFFF' },
     { name: 'Divers', color: '#a3ffa3' },
     { name: 'Fiscal', color: '#a3a3ff' },
-    { name: 'Pénal', color: '#ffca9f' },
+    { name: 'Pénal', color: '#FF00FF' },
     { name: 'RC', color: '#ffffa3' },
-    { name: 'Social', color: '#a3ffce' },
-    { name: 'Stenico', color: '#ffca9f' },
+    { name: 'Social', color: '#008080' },
+    { name: 'Stenico', color: '#FF0000' },
   ]
 
   categories.forEach(function (category) {
