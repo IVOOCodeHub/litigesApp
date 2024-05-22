@@ -182,9 +182,6 @@ class Folder {
     if (closeModalBtn) {
       closeModalBtn.addEventListener('click', () => this.closeFolderModal())
     }
-
-    const submitBtn = document.querySelector('.validButton')
-    submitBtn.addEventListener('click', () => this.submitDatas())
   }
 
   async closeFolderModal() {

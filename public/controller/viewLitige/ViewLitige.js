@@ -3,6 +3,7 @@ class ViewLitige {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
     this.footer = new Footer()
+    this.createNewFolder = new CreateNewFolder()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
@@ -94,66 +95,17 @@ class ViewLitige {
         </li>
          <li>
             <label for="status">Crée un dossier : </label>
-            <button class="button">Crée</button>
+            <button class="button createFolder">Crée</button>
         </li>
     </ul>
     `
   }
 
-  async submitDatas() {
-    const errorMessage = document.createElement('p')
-    errorMessage.classList.add('error') // TODO <—
-    const formValue = [
-      {
-        name: 'name',
-      },
-      {
-        name: 'comment',
-      },
-      {
-        name: 'pAction',
-      },
-      {
-        name: 'date',
-      },
-      {
-        name: 'status',
-      },
-      {
-        name: 'bindTo',
-      },
-    ]
-
-    formValue.forEach((element) => {
-      const value = document.querySelector(
-        `input[name='${element.name}']`,
-      ).value
-      if (!value) {
-        errorMessage.textContent = `Veuillez renseigné le champ ${element.name}`
-      }
-    })
-
-    const name = document.querySelector("input[name='name']").value
-    const comment = document.querySelector("input[name='comment']").value
-    const pAction = document.querySelector("select[name='pAction']").value
-    const date = document.querySelector("input[name='date']").value
-    const status = document.querySelector("select[name='status']").value
-    const bindTo = document.querySelector("input[name='bindTo']").value
-
-    const updatedDatas = {
-      nom: name,
-      commentaire: comment,
-      pAction: pAction,
-      date: date,
-      status: status,
-      bindTo: bindTo,
-    }
-
-    console.log('updatedDatas —>', updatedDatas)
-  }
-
   async initEventListeners() {
-
+    const createFolderBtn = document.querySelector('.createFolder')
+    createFolderBtn.addEventListener('click', () => {
+      this.createNewFolder.initCreateNewFolder()
+    })
   }
 
   async initViewMail() {

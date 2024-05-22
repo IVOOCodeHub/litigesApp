@@ -2,7 +2,7 @@ class MainMenu {
   constructor() {
     this.utils = new Utils()
     this.root = document.querySelector('#root')
-    this.pageName = null
+    this.footer = new Footer()
   }
 
   async render() {
@@ -111,6 +111,7 @@ class MainMenu {
 
   async initMainMenu() {
     await this.render()
+    await this.footer.initFooter()
   }
 }
 

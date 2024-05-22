@@ -45,31 +45,37 @@ class Validation {
 
     section.innerHTML = `
     <div class="inputWrapper">
-        <label for="recipient">Destinataire: </label>
-        <select name="recipient">
+        <label for="society">Société: </label>
+        <select name="society">
           <option>Toutes</option>
-          <option>mockupDest</option>
-          <option>mockupDest2</option>
-          <option>mockupDest3</option>
-          <option>mockupDest4</option>
-          <option>mockupDest5</option>
+          <option>societe</option>
+          <option>societe2</option>
+          <option>societe3</option>
+          <option>societe4</option>
+          <option>societe5</option>
         </select>
     </div>
     <div class="inputWrapper">
-        <label for="sender">Émetteur: </label>
-        <select name="sender">
-          <option>Toutes</option>
-          <option>mockupEmet</option>
-          <option>mockupEmet2</option>
-          <option>mockupEmet3</option>
-          <option>mockupEmet4</option>
-          <option>mockupEmet5</option>
+        <label for="theme">Thème: </label>
+        <select name="theme">
+          <option>Tous</option>
+          <option>theme</option>
+          <option>theme2</option>
+          <option>theme3</option>
+          <option>theme4</option>
+          <option>theme5</option>
         </select>
     </div>
-    
     <div class="inputWrapper">
-        <button class="button">Gérer les sortants</button>
-        <button class="button">Gérer les internes</button>
+        <label for="status">Statut: </label>
+        <select name="status">
+          <option>Tous</option>
+          <option>Status</option>
+          <option>Status2</option>
+          <option>Status3</option>
+          <option>Status4</option>
+          <option>Status5</option>
+        </select>
     </div>
     `
     this.main.appendChild(section)
@@ -82,12 +88,12 @@ class Validation {
         <table>
           <thead>
               <tr>
-                <th>Réf.</th>
-                <th>Destinataire</th>
-                <th>Émetteur</th>
-                <th>Date</th>
-                <th>Pièce</th>
-                <th>Réf.doc.</th>
+                <th>Clé</th>
+                <th>Nom</th>
+                <th>Date création</th>
+                <th>Prochaine action</th>
+                <th>Date prochaine action</th>
+                <th>Statut</th>
                 <th>Sélectionner</th>
               </tr>
           </thead>
