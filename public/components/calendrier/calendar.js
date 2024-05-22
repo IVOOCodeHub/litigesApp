@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
+  let eventColor = ''
+  let eventTextColor = ''
+
   var calendarEl = document.getElementById('calendar')
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -19,16 +22,22 @@ document.addEventListener('DOMContentLoaded', function () {
       {
         title: 'Huissier à prendre.',
         start: '2024-05-01',
+        color: 'yellow', // an option!
+        textColor: 'black', // an option!
       },
       {
         title: "Cour administrative d'appel de Poitiers ",
         start: '2024-05-06',
         end: '2024-05-10',
+        backgroundColor: 'red',
+        borderColor: 'red',
       },
       {
         groupId: 999,
         title: 'convocation recours',
         start: '2024-05-09T16:00:00',
+        color: 'yellow', // an option!
+        textColor: 'black', // an option!
       },
       {
         groupId: 999,
@@ -39,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         title: 'URSSAF',
         start: '2024-05-11',
         end: '2024-05-13',
+        backgroundColor: 'green',
       },
       {
         title: 'Contestation mise en demeure',
@@ -71,6 +81,41 @@ document.addEventListener('DOMContentLoaded', function () {
   const retrievedEvents = calendar.getEvents()
   console.log('évènements :', retrievedEvents)
   calendar.render()
+
+  // Ajouter la légende
+  var legendContainer = document.getElementById('legendContainer')
+  var legend = document.createElement('div')
+  legend.classList.add('legend')
+
+  // Catégories et leurs couleurs
+  var categories = [
+    { name: 'Amauger', color: '#ff9f89' },
+    { name: 'Cial', color: '#ffa3a3' },
+    { name: 'Divers', color: '#a3ffa3' },
+    { name: 'Fiscal', color: '#a3a3ff' },
+    { name: 'Pénal', color: '#ffca9f' },
+    { name: 'RC', color: '#ffffa3' },
+    { name: 'Social', color: '#a3ffce' },
+    { name: 'Stenico', color: '#ffca9f' },
+  ]
+
+  categories.forEach(function (category) {
+    var item = document.createElement('div')
+    item.classList.add('legend-item')
+
+    var color = document.createElement('div')
+    color.classList.add('legend-color')
+    color.style.backgroundColor = category.color
+
+    var text = document.createElement('span')
+    text.textContent = category.name
+
+    item.appendChild(color)
+    item.appendChild(text)
+    legend.appendChild(item)
+  })
+
+  legendContainer.appendChild(legend)
 
   // Ajouter le bouton de retour
   // var footerContainer = document.getElementById('footerContainer')
