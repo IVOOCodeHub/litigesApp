@@ -17,19 +17,19 @@ class MainMenu {
     // Les titres et les liens pour les boutons horizontaux
     const buttonsInfoH = [
       {
-        title: 'À Affecter',
+        title: 'Courrier a affecter',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
       },
       {
-        title: 'À Valider',
+        title: 'Dossier a valider',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
       },
       {
-        title: 'Liste',
+        title: 'Liste des dossiers',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
       },
       {
-        title: 'Calendrier',
+        title: 'Calendrier events',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/calendrier.html',
       },
     ]

@@ -4,6 +4,7 @@ class ViewLitige {
     this.utils = new Utils()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
+    this.createNewEvent = new CreateNewEvent()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
@@ -32,10 +33,32 @@ class ViewLitige {
   async title() {
     const titleWrapper = document.createElement('div')
     titleWrapper.setAttribute('class', 'titleWrapper')
-    const h2 = document.createElement('h2')
-    h2.textContent = this.datas['commentaire']
 
-    titleWrapper.appendChild(h2)
+    titleWrapper.innerHTML += `
+      <ul class="details">
+        <li>
+          <label>Clé : </label>
+          <p>${this.datas['cle']}</p>
+        </li>
+        <li>
+          <label>Nom : </label>
+          <p>${this.datas['societe_emettrice']} vs ${this.datas['societe']}</p>
+        </li>
+        <li>
+          <label>Statut : </label>
+          <p>${this.datas['statut']}</p>
+        </li>
+        <li>
+          <label>Date début : </label>
+          <p>${this.datas['dh_saisie']}</p>
+        </li>
+      </ul>
+      <div class="commentWrapper">
+        <label>Commentaire : </label>
+        <input type="text" value="${this.datas['commentaire']}"/>
+        <button class="validButton">MaJ commentaire</button>
+      </div>
+    `
     this.main.appendChild(titleWrapper)
   }
 
@@ -64,38 +87,26 @@ class ViewLitige {
   async editCourrier() {
     const rightArticle = document.querySelector('#rightArticle')
     rightArticle.innerHTML = `
-    <h2>Dossier : </h2>
-    <ul>
-        <li>
-            <label for="name">Nom : </label>
-            <p>${this.datas['societe']} VS ${this.datas['societe_emettrice']}</p>
-        </li>
-        <li>
-            <label for="comment">Commentaire : </label>
-            <p>${this.datas['commentaire']}</p>
-        </li>
-         <li>
-            <label for="pAction">Prochaine action : </label>
-            <p>${this.datas['action']}</p>
-        </li>
-         <li>
-            <label for="date">Date de prochaine action : </label>
-            <p>*Date pAction*</p>
-        </li>
-         <li>
-            <label for="status">Statut : </label>
-            <p>${this.datas['statut']}</p>
-        </li>
-    </ul>
-    <h2>Gestion du dossier :</h2>
+    <h2>Gestion du courier :</h2>
     <ul class="manageDossier">
         <li class="typeFile">
-            <label for="bindTo">Associer : </label>
-            <input name="bindTo" type="file"/>
+            <label for="bindTo">Associer à un dossier </label>
+            <select>
+              <option>Choisir un dossier</option>
+              <option>dossier1</option>
+              <option>dossier2</option>
+              <option>dossier3</option>
+              <option>dossier4</option>
+              <option>dossier5</option>
+            </select>
         </li>
          <li>
             <label for="status">Crée un dossier : </label>
             <button class="button createFolder">Crée</button>
+        </li>
+        <li>
+            <label for="status">Crée un évènement : </label>
+            <button class="button createEvent">Crée</button>
         </li>
     </ul>
     `
@@ -105,6 +116,10 @@ class ViewLitige {
     const createFolderBtn = document.querySelector('.createFolder')
     createFolderBtn.addEventListener('click', () => {
       this.createNewFolder.initCreateNewFolder()
+    })
+    const createEventBtn = document.querySelector('.createEvent')
+    createEventBtn.addEventListener('click', () => {
+      this.createNewEvent.initCreateNewEvent()
     })
   }
 
