@@ -1,38 +1,3 @@
-.titleWrapper {
-  background: #36395a;
-  padding: 1em;
-  display: flex;
-  flex-flow: column;
-  gap: 1em;
-  box-shadow: rgba(17, 17, 26, 0.1) 0 1px 0;
-  border-bottom: 4px solid #1191b7;
-}
-
-h2 {
-  color: #ffffff;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 1.3dvw;
-}
-
-h3 {
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 1.2dvw;
-  position: relative;
-}
-
-h3:after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12%;
-  height: 2px;
-  background: #1191b7;
-}
-
 #folderContainer {
   display: flex;
   align-items: center;
@@ -77,38 +42,38 @@ h3:after {
     rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
-ul {
+#folderContainer ul {
   display: flex;
   flex-flow: column;
   gap: 2em;
   width: 100%;
 }
 
-ul li {
+#folderContainer ul li {
   list-style: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-ul li div {
+#folderContainer ul li div {
   display: flex;
   flex-flow: column;
   gap: 1em;
 }
 
-label {
+#folderContainer label {
   font-weight: 700;
   font-size: 1dvw;
   width: 50%;
 }
 
-p {
+#folderContainer p {
   text-align: right;
   font-size: 1dvw;
 }
 
-textarea {
+#folderContainer textarea {
   text-align: left;
   font-size: 1dvw;
   padding: 0.5em;
@@ -116,12 +81,12 @@ textarea {
   min-height: 75px;
 }
 
-ul li div {
+#folderContainer ul li div {
   display: flex;
   flex-flow: column;
 }
 
-ul li div label {
+#folderContainer ul li div label {
   width: 100% !important;
 }
 
@@ -129,7 +94,7 @@ ul li div label {
   text-align: left;
 }
 
-.buttonWrapper {
+#folderContainer .buttonWrapper {
   display: flex;
   align-items: center;
   justify-content: center;

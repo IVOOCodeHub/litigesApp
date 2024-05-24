@@ -2,58 +2,6 @@ main {
   min-height: 70dvh;
 }
 
-.titleWrapper {
-  background: #36395a;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 4px solid #1191b7;
-}
-
-.titleWrapper h2 {
-  text-align: center;
-  padding: 1em;
-  color: #ffffff;
-}
-
-.details {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 1em;
-  width: 100%;
-}
-
-.details li {
-  display: flex;
-  gap: .5em;
-}
-
-.titleWrapper label,
-.titleWrapper p {
-  color: #ffffff;
-}
-
-.titleWrapper label {
-  font-weight: 700;
-}
-
-.commentWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .5em;
-  padding-bottom: 1em;
-  width: 100%;
-}
-
-.commentWrapper input {
-  width: 35%;
-  text-align: center;
-  padding: .3em;
-}
-
 #viewMail {
   display: flex;
   justify-content: space-between;

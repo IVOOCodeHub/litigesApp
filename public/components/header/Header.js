@@ -18,7 +18,7 @@ class Header {
         this.pageName = 'Courrier à affecter'
         break
       }
-      case this.url.pathname.endsWith('/viewLitige.html'): {
+      case this.url.pathname.endsWith('/viewMail.html'): {
         this.pageName = 'Consulter un courier'
         break
       }

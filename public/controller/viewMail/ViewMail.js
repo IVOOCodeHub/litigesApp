@@ -1,7 +1,8 @@
-class ViewLitige {
+class ViewMail {
   constructor() {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
+    this.folderHeader = new FolderHeader()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.createNewEvent = new CreateNewEvent()
@@ -28,38 +29,6 @@ class ViewLitige {
   async createViewMailDom() {
     this.main = document.createElement('main')
     this.root.appendChild(this.main)
-  }
-
-  async title() {
-    const titleWrapper = document.createElement('div')
-    titleWrapper.setAttribute('class', 'titleWrapper')
-
-    titleWrapper.innerHTML += `
-      <ul class="details">
-        <li>
-          <label>Clé : </label>
-          <p>${this.datas['cle']}</p>
-        </li>
-        <li>
-          <label>Nom : </label>
-          <p>${this.datas['societe_emettrice']} vs ${this.datas['societe']}</p>
-        </li>
-        <li>
-          <label>Statut : </label>
-          <p>${this.datas['statut']}</p>
-        </li>
-        <li>
-          <label>Date début : </label>
-          <p>${this.datas['dh_saisie']}</p>
-        </li>
-      </ul>
-      <div class="commentWrapper">
-        <label>Commentaire : </label>
-        <input type="text" value="${this.datas['commentaire']}"/>
-        <button class="validButton">MaJ commentaire</button>
-      </div>
-    `
-    this.main.appendChild(titleWrapper)
   }
 
   async createSections() {
@@ -127,7 +96,7 @@ class ViewLitige {
     await this.createViewMailDom()
     await this.getParams()
     await this.getDatas()
-    await this.title()
+    await this.folderHeader.initFolderHeader(this.datas)
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()
@@ -136,7 +105,7 @@ class ViewLitige {
   }
 }
 
-const viewMail = new ViewLitige()
+const viewMail = new ViewMail()
 viewMail
   .initViewMail()
   .then(() =>

@@ -1,5 +1,6 @@
 class Folder {
   constructor() {
+    this.folderHeader = new FolderHeader()
     this.footer = new Footer()
     this.utils = new Utils()
     this.folderHistory = new FolderHistory()
@@ -12,19 +13,20 @@ class Folder {
   async getParams() {
     const urlParams = new URLSearchParams(window.location.search)
     this.id = urlParams.get('id')
+    this.id = '52820' // DEV
+  }
+
+  async getDatas() {
+    this.datas = JSON.parse(localStorage.getItem('datas'))
+    this.datas = this.datas['courriers'].find(
+      (object) => object['cle'] === this.id,
+    )
+    console.log('this.datas —>', this.datas)
   }
 
   async createMain() {
     this.main = document.createElement('main')
     this.root.appendChild(this.main)
-  }
-
-  async renderFolderTitle() {
-    this.main.innerHTML = `
-      <div class="titleWrapper">
-        <h2>Dossier ${this.id} : *TITRE* </h2>
-      </div>
-    `
   }
 
   async renderFolder() {
@@ -216,8 +218,9 @@ class Folder {
 
   async initFolder() {
     await this.getParams()
+    await this.getDatas()
     await this.createMain()
-    await this.renderFolderTitle()
+    await this.folderHeader.initFolderHeader(this.datas)
     await this.renderFolder()
     await this.footer.initFooter(true, 'Sauvegarder les modifications')
     await this.initEventListeners()
