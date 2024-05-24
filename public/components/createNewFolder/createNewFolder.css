@@ -48,6 +48,10 @@
   width: 50%;
 }
 
+#createEvent .inputWrapper label {
+  font-weight: 700;
+}
+
 #createFolder .inputWrapper input,
 #createEvent .inputWrapper input {
   width: 50%;
@@ -84,4 +88,8 @@
 
 .bold {
   font-weight: 700;
+}
+
+.subSection {
+  margin-top: 4em;
 }

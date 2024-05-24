@@ -142,7 +142,6 @@ class CreateNewFolder {
       'click',
       async () => await this.handleSubmitFolderCreation(),
     )
-
   }
 
   async initCreateNewFolder() {
