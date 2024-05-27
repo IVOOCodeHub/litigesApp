@@ -27,6 +27,7 @@ class Affectation {
         courriers: res['courriers'],
       }
     }
+    localStorage.setItem('datas', JSON.stringify(this.datas))
   }
 
   async displayAffectation() {
@@ -88,7 +89,6 @@ class Affectation {
   }
 
   async goToViewMail(key) {
-    localStorage.setItem('datas', JSON.stringify(this.datas))
     window.location.href = `viewMail.html?id=${key}`
   }
 

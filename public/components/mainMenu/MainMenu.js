@@ -21,12 +21,12 @@ class MainMenu {
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
       },
       {
-        title: 'Dossier a valider',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
-      },
-      {
         title: 'Liste des dossiers',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
+      },
+      {
+        title: 'Dossier a valider',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
       },
       {
         title: 'Calendrier events',

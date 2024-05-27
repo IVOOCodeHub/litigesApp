@@ -7,32 +7,17 @@
   margin-top: 1em;
 }
 
-.leftArticle {
-  width: 46%;
-  padding: 2.5em;
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4em;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow:
-    rgba(0, 0, 0, 0.4) 0 2px 4px,
-    rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
-    rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
-}
-
+.leftArticle,
 .rightArticle {
   display: flex;
   width: 46%;
   flex-flow: column;
-  gap: 2em;
+  gap: 1em;
 }
 
 .element {
   width: 100%;
-  padding: 2.5em;
+  padding: 1.5em;
   gap: 3em;
   background: #ffffff;
   border-radius: 12px;
@@ -42,11 +27,18 @@
     rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
+.historySection {
+  padding: .5em !important;
+  width: fit-content !important;
+  display: flex;
+  flex-flow: row !important;
+  align-self: center;
+}
+
 #folderContainer ul {
   display: flex;
   flex-flow: column;
   gap: 2em;
-  width: 100%;
 }
 
 #folderContainer ul li {
@@ -66,6 +58,10 @@
   font-weight: 700;
   font-size: 1dvw;
   width: 50%;
+}
+
+#folderContainer input {
+  text-align: center;
 }
 
 #folderContainer p {
