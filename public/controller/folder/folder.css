@@ -15,6 +15,10 @@
   gap: 1em;
 }
 
+.leftArticle .element {
+  margin-top: 3.5em;
+}
+
 .element {
   width: 100%;
   padding: 1.5em;
@@ -28,7 +32,7 @@
 }
 
 .historySection {
-  padding: .5em !important;
+  padding: 0.5em !important;
   width: fit-content !important;
   display: flex;
   flex-flow: row !important;
@@ -56,7 +60,7 @@
 
 #folderContainer label {
   font-weight: 700;
-  font-size: 1dvw;
+  font-size: 0.9em;
   width: 50%;
 }
 
@@ -66,12 +70,12 @@
 
 #folderContainer p {
   text-align: right;
-  font-size: 1dvw;
+  font-size: 0.9em;
 }
 
 #folderContainer textarea {
   text-align: left;
-  font-size: 1dvw;
+  font-size: 0.9em;
   padding: 0.5em;
   width: 50%;
   min-height: 75px;

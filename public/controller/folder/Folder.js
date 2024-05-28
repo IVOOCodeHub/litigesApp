@@ -1,5 +1,6 @@
 class Folder {
   constructor() {
+    this.folderService = new FolderService()
     this.folderHeader = new FolderHeader()
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
@@ -14,19 +15,17 @@ class Folder {
   async getParams() {
     const urlParams = new URLSearchParams(window.location.search)
     this.id = urlParams.get('id')
-    this.id = '52820' // DEV
   }
 
   async getDatas() {
-    this.datas = JSON.parse(localStorage.getItem('datas'))
-    if (!this.datas) {
-      alert(
-        '*DEV : FETCH DATA A FAIRE —> COURRIER A AFFECTER A VISITER AVANT DE VENIR ICI*',
-      )
+    const user = await JSON.parse(localStorage.getItem('user'))
+    const userDatas = {
+      userID: user['matricule'],
+      password: user['mdp'],
     }
-    this.datas = this.datas['courriers'].find(
-      (object) => object['cle'] === this.id,
-    )
+    this.datas = await this.folderService.getFolder(userDatas)
+    this.datas = this.datas.find((folder) => folder['cle'] === this.id)
+
     console.log('this.datas —>', this.datas)
   }
 
@@ -59,7 +58,7 @@ class Folder {
               <label>Tièrs : </label>
               <select name="socity">
                 <option>Choisir</option>
-                <option selected="selected">${this.datas['societe_emettrice']}</option>
+                <option selected="selected">${this.datas['tiers']}</option>
                 <option>tiers2</option>
                 <option>tiers3</option>
                 <option>tiers5</option>
@@ -67,21 +66,21 @@ class Folder {
             </li>
             <li>
               <label for="comment">Commentaire : </label>
-              <textarea name="comment"></textarea>
+              <textarea name="comment">${this.datas['commentaire']}</textarea>
             </li>
             <li>
               <label>Ref. Source</label>
-              <input type="text" value="*refSource*">
+              <input type="text" value=${this.datas['cle']} />
             </li>
             <li>
               <label>Conseil</label>
-              <input type="text" value="*conseil*"/>
+              <input type="text" class="conseil" />
             </li>
             <li>
               <label>Thème</label>
               <select>
-                <option>theme1</option>
-                <option>theme2</option>
+                <option>Choisir</option>
+                <option selected="selected">${this.datas['theme']}</option>
                 <option>theme3</option>
                 <option>theme4</option>
                 <option>theme5</option>
@@ -89,12 +88,12 @@ class Folder {
             </li>     
             <li>
               <label>Multiple</label>
-              <input type="checkbox" />
+              <input type="checkbox" class="isMultiple"  />
             </li>
             <li>
               <label>Statut</label>
               <select>
-                <option>A valider</option>
+                <option selected="selected">${this.datas['statut']}</option>
                 <option>En cours</option>
                 <option>Ajourné</option>
                 <option>Cloturé</option>
@@ -102,7 +101,7 @@ class Folder {
             </li>
             <li>
               <label>Date de début</label>
-              <input type="date" />
+              <input type="date" class="startDate" />
             </li>
             <li class="buttonWrapper">
               <button class="validButton">Sauvegarder les modifications</button>
@@ -203,15 +202,31 @@ class Folder {
       this.createNewEvent.initCreateNewEvent(),
     )
 
-    const select = document.querySelector('select[name="listMails"]')
-    select.addEventListener('change', (event) => {
-      this.goToViewLitige(event.target)
-    })
-
     const displayHistory = document.querySelector('.displayHistory')
     displayHistory.addEventListener('click', () =>
       this.folderHistory.initFolderHistory(),
     )
+  }
+
+  async insertDatas() {
+    const conseilInput = document.querySelector('.conseil')
+    if (this.datas['conseil']) {
+      conseilInput.value = this.datas['conseil']
+    } else {
+      conseilInput.value = 'Aucun'
+    }
+
+    const isMultiple = this.datas['multiple']
+    if (isMultiple === '1') {
+      const checkBox = document.querySelector('.isMultiple')
+      checkBox.checked = true
+    }
+
+    if (this.datas['datedebut']) {
+      const startDate = new Date(this.datas['datedebut'])
+      const dateDebutInput = document.querySelector('.startDate')
+      dateDebutInput.value = startDate.toISOString().split('T')[0]
+    }
   }
 
   async initFolder() {
@@ -220,6 +235,7 @@ class Folder {
     await this.createMain()
     await this.folderHeader.initFolderHeader(this.datas)
     await this.renderFolder()
+    await this.insertDatas()
     await this.footer.initFooter()
     await this.initEventListeners()
   }

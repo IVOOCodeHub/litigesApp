@@ -15,3 +15,28 @@
 #searchList .inputWrapper label {
   color: #ffffff;
 }
+
+th[data-sort="code"] {
+  min-width: 100px;
+}
+
+th[data-sort]:hover {
+  cursor: pointer;
+}
+
+.chevron::before {
+  content: '▾'; /* Chevron down */
+  margin-left: 5px;
+  display: inline-block;
+  transform-origin: center;
+  transition: transform 0.2s;
+  color: #1191b7;
+}
+
+.th-sort-asc .chevron::before {
+  transform: rotate(180deg); /* Chevron up */
+}
+
+.th-sort-desc .chevron::before {
+  transform: rotate(0deg); /* Chevron down */
+}

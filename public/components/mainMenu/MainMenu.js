@@ -3,6 +3,14 @@ class MainMenu {
     this.utils = new Utils()
     this.root = document.querySelector('#root')
     this.footer = new Footer()
+    this.user = null
+  }
+
+  async isUserAlreadyConnected() {
+    this.user = await JSON.parse(localStorage.getItem('user'))
+    if (!this.user) {
+      window.location.href = `http://192.168.0.254:8080/usv_prod/menu0.asp`
+    }
   }
 
   async render() {
@@ -110,6 +118,7 @@ class MainMenu {
   }
 
   async initMainMenu() {
+    await this.isUserAlreadyConnected()
     await this.render()
     await this.footer.initFooter()
   }

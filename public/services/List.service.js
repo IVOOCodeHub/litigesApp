@@ -3,7 +3,13 @@ class ListService extends ApiCalls {
     super()
   }
 
-  async getList(url) {
-    return await this.getRequest(url)
+  async getList(user) {
+    const params = {
+      ...user,
+      request: 'read_litige_dossier',
+      args: null,
+    }
+    await this.postRequest(params)
+    return this.data['data']['rows']
   }
 }

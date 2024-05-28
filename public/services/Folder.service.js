@@ -3,7 +3,13 @@ class FolderService extends ApiCalls {
     super()
   }
 
-  async getFolder(url) {
-    return await this.getRequest(url)
+  async getFolder(user) {
+    const params = {
+      ...user,
+      request: 'read_litige_dossier',
+      args: null,
+    }
+    await this.postRequest(params)
+    return this.data['data']['rows']
   }
 }
