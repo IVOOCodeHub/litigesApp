@@ -32,34 +32,26 @@ class List {
         <label for="society">Société:</label>
         <select name="society">
           <option>Toutes</option>
-          <option>societe1</option>
-          <option>societe2</option>
-          <option>societe3</option>
-          <option>societe4</option>
-          <option>societe5</option>
+          
         </select>
     </div>
     <div class="inputWrapper">
         <label for="tiers">Tiers:</label>
         <select name="tiers">
           <option>Toutes</option>
-          <option>tiers1</option>
-          <option>tiers2</option>
-          <option>tiers3</option>
-          <option>tiers4</option>
-          <option>tiers5</option>
+          
         </select>
     </div>
     <div class="inputWrapper">
         <label for="theme">Theme :</label>
         <select name="theme">
           <option>Choisir</option>
-          <option>theme1</option>
-          <option>theme2</option>
-          <option>theme3</option>
-          <option>theme4</option>
-          <option>theme5</option>
+          
         </select>
+    </div>
+    <div class="inputWrapper">
+        <label for="searchStartDate">Date début :</label>
+        <input type="date" name="searchStartDate" />
     </div>
     <div class="inputWrapper">
         <label for="statut">Statut :</label>
@@ -70,10 +62,6 @@ class List {
           <option>Ajourné</option>
           <option>Cloturé</option>
         </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="searchDate">Date début :</label>
-        <input type="date" />
     </div>
     `
     this.main.appendChild(section)
@@ -86,11 +74,11 @@ class List {
     <table>
         <thead>
             <tr>
-              <th data-sort="code">Code <span class="chevron"></span></th>
-              <th data-sort="society">Société <span class="chevron"></span></th>
-              <th data-sort="label">Libéllé <span class="chevron"></span></th>
-              <th>Description</th>
-              <th data-sort="date">Date <span class="chevron"></span></th>
+              <th data-sort="cle">Cle <span class="chevron"></span></th>
+              <th data-sort="name">Nom <span class="chevron"></span></th>
+              <th>Commentaire</th>
+              <th data-sort="date">Date début<span class="chevron"></span></th>
+              <th data-sort="theme">Theme <span class="chevron"></span></th>
               <th data-sort="stat">Stat. <span class="chevron"></span></th>
             </tr>
         </thead>
@@ -107,10 +95,10 @@ class List {
       tableBody.innerHTML += `
         <tr>
           <td>${row['cle']}</td>
-          <td>${row['societe']}</td>
-          <td>${row['societe']} vs ${row['tiers']}</td>
+          <td>${row['tiers']} vs ${row['societe']}</td>
           <td>${row['commentaire']}</td>
-          <td>${this.utils.reformatDate(row['datedebut'])}</td>
+          <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
+          <td>${row['theme']}</td>
           <td>${row['statut']}</td>
         </tr>      
       `
@@ -119,7 +107,8 @@ class List {
   }
 
   async searchFromSelect(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value
+    const selectedValue = htmlSelectElement.value.toLowerCase().trim()
+    console.log('selectedValue —>', selectedValue)
     let newDatas = null
 
     if (htmlSelectElement.name === 'society') {
@@ -128,24 +117,24 @@ class List {
       } else {
         newDatas = this.datas
       }
-    } else if (htmlSelectElement.name === 'statut') {
+    } else if (htmlSelectElement.name === 'tiers') {
       if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row['statut'] === selectedValue)
-      } else {
-        newDatas = this.datas
+        newDatas = this.datas.filter((row) => row.description === selectedValue)
       }
-    } else if (htmlSelectElement.name === 'unit') {
-      if (selectedValue !== 'Toutes') {
+    } else if (htmlSelectElement.name === 'theme') {
+      if (selectedValue !== 'choisir') {
         newDatas = this.datas.filter((row) => row['libele'] === selectedValue)
       } else {
         newDatas = this.datas
       }
-    } else if (htmlSelectElement.name === 'subUnit') {
-      if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.description === selectedValue)
+    } else if (htmlSelectElement.name === 'statut') {
+      if (selectedValue !== 'choisir') {
+        newDatas = this.datas.filter((row) => row['statut'] === selectedValue)
       } else {
         newDatas = this.datas
       }
+    } else {
+      newDatas = this.datas
     }
 
     await this.insertDatas(newDatas)
@@ -159,24 +148,32 @@ class List {
     )
   }
 
+  async searchByTiers() {
+    const select = document.querySelector('select[name="tiers"]')
+    select.addEventListener(
+      'change',
+      async () => await this.searchFromSelect(select),
+    )
+  }
+
+  async searchByTheme() {
+    const select = document.querySelector('select[name="theme"]')
+    select.addEventListener(
+      'change',
+      async () => await this.searchFromSelect(select),
+    )
+  }
+
+  async searchByStartDate() {
+    const select = document.querySelector('input[name="searchStartDate"]')
+    select.addEventListener(
+      'change',
+      async () => await this.searchFromSelect(select),
+    )
+  }
+
   async searchByStatut() {
     const select = document.querySelector('select[name="statut"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByUnit() {
-    const select = document.querySelector('select[name="unit"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchBySubUnit() {
-    const select = document.querySelector('select[name="subUnit"]')
     select.addEventListener(
       'change',
       async () => await this.searchFromSelect(select),
@@ -208,23 +205,23 @@ class List {
     const direction = this.sortDirection[column] || 'asc'
     let sortedDatas = [...this.datas]
 
-    if (column === 'code') {
+    if (column === 'cle') {
       sortedDatas.sort((a, b) =>
         direction === 'asc'
           ? a['cle'].localeCompare(b['cle'])
           : b['cle'].localeCompare(a['cle']),
       )
-    } else if (column === 'society') {
+    } else if (column === 'name') {
       sortedDatas.sort((a, b) =>
         direction === 'asc'
           ? a['societe'].localeCompare(b['societe'])
           : b['cle'].localeCompare(b['societe']),
       )
-    } else if (column === 'label') {
+    } else if (column === 'theme') {
       sortedDatas.sort((a, b) =>
         direction === 'asc'
-          ? a['societe'].localeCompare(b['societe'])
-          : b['societe'].localeCompare(a['societe']),
+          ? a['theme'].localeCompare(b['theme'])
+          : b['theme'].localeCompare(a['theme']),
       )
     } else if (column === 'date') {
       sortedDatas.sort((a, b) =>
@@ -256,9 +253,10 @@ class List {
 
   async initEventListeners() {
     await this.searchBySociety()
+    await this.searchByTiers()
+    await this.searchByTheme()
+    await this.searchByStartDate()
     await this.searchByStatut()
-    await this.searchByUnit()
-    await this.searchBySubUnit()
     await this.dataSort()
 
     const createNewFolderButton = document.querySelector('.validButton')

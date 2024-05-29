@@ -16,7 +16,7 @@
   color: #ffffff;
 }
 
-th[data-sort="code"] {
+th[data-sort="cle"], th[data-sort="theme"] {
   min-width: 100px;
 }
 
