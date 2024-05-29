@@ -16,6 +16,7 @@ class List {
       password: user['mdp'],
     }
     this.datas = await this.listService.getList(userDatas)
+    console.log('datas —>', this.datas)
   }
 
   async initMain() {
@@ -28,42 +29,47 @@ class List {
     section.setAttribute('id', 'searchList')
 
     section.innerHTML = `
-     <div class="inputWrapper">
-        <label for="society">Société:</label>
-        <select name="society">
-          <option>Toutes</option>
-          
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="tiers">Tiers:</label>
-        <select name="tiers">
-          <option>Toutes</option>
-          
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="theme">Theme :</label>
-        <select name="theme">
-          <option>Choisir</option>
-          
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="searchStartDate">Date début :</label>
-        <input type="date" name="searchStartDate" />
-    </div>
-    <div class="inputWrapper">
-        <label for="statut">Statut :</label>
-        <select name="statut">
-          <option>Choisir</option>
-          <option>A valider</option>
-          <option>En cours</option>
-          <option>Ajourné</option>
-          <option>Cloturé</option>
-        </select>
-    </div>
-    `
+          <div class="inputWrapper">
+              <label for="society">Société:</label>
+              <select name="society">
+                <option value="toutes">Toutes</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="tiers">Tiers:</label>
+              <select name="tiers">
+                <option value="toutes">Toutes</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="theme">Theme :</label>
+              <select name="theme">
+                <option value="choisir">Choisir</option>
+                <option value="Amauger">Amauger</option>
+                <option value="Cial">Cial</option>
+                <option value="Divers">Divers</option>
+                <option value="Fiscal">Fiscal</option>
+                <option value="Penal">Penal</option>
+                <option value="RC">RC</option>
+                <option value="Social">Social</option>
+                <option value="Stenico">Stenico</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="searchStartDate">Date début :</label>
+              <input type="date" name="searchStartDate" />
+          </div>
+          <div class="inputWrapper">
+              <label for="statut">Statut :</label>
+              <select name="statut">
+                <option value="choisir">Choisir</option>
+                <option value="a_valider">A valider</option>
+                <option value="en_cours">En cours</option>
+                <option value="ajourne">Ajourné</option>
+                <option value="cloture">Cloturé</option>
+              </select>
+          </div>
+        `
     this.main.appendChild(section)
   }
 
@@ -100,10 +106,18 @@ class List {
           <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
           <td>${row['theme']}</td>
           <td>${row['statut']}</td>
-        </tr>      
+        </tr>
       `
     })
     await this.openFolder()
+
+    // // J'extrais les valeurs uniques pour les 2 select concernés
+    // const societies = [...new Set(datas.map((row) => row['societe']))]
+    // const tiers = [...new Set(datas.map((row) => row['tiers']))]
+    //
+    // // J'insert les options dans les 2 select
+    // this.insertOptions('select[name="society"]', ['Toutes', ...societies])
+    // this.insertOptions('select[name="tiers"]', ['Toutes', ...tiers])
   }
 
   async insertSelect() {
