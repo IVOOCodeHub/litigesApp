@@ -94,6 +94,16 @@ class List {
     this.main.appendChild(section)
   }
 
+  insertOptions(selector, options) {
+    const select = document.querySelector(selector)
+    select.innerHTML = options
+      .map(
+        (option) =>
+          `<option value="${option.toLowerCase()}">${option}</option>`,
+      )
+      .join('')
+  }
+
   async insertDatas(datas) {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
@@ -110,6 +120,14 @@ class List {
       `
     })
     await this.openFolder()
+
+    // J'extrais les valeurs uniques pour les 2 select concernés
+    const societies = [...new Set(datas.map((row) => row['societe']))]
+    const tiers = [...new Set(datas.map((row) => row['tiers']))]
+
+    // J'insert les options dans les 2 select
+    this.insertOptions('select[name="society"]', ['Toutes', ...societies])
+    this.insertOptions('select[name="tiers"]', ['Toutes', ...tiers])
   }
 
   async searchFromSelect(htmlSelectElement) {
