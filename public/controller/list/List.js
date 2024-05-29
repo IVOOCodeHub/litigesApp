@@ -106,6 +106,32 @@ class List {
     await this.openFolder()
   }
 
+  async insertSelect() {
+    const societySelectOption = []
+    const tiersSelectOption = []
+    this.datas.forEach((el) => {
+      if (!societySelectOption.includes(el['societe'])) {
+        societySelectOption.push(el['societe'])
+      }
+      if (!tiersSelectOption.includes(el['tiers'])) {
+        tiersSelectOption.push(el['tiers'])
+      }
+    })
+
+    const societySelect = document.querySelector('select[name="society"]')
+    societySelectOption.forEach((society) => {
+      societySelect.innerHTML += `
+        <option>${society}</option>
+      `
+    })
+    const tiersSelect = document.querySelector('select[name="tiers"]')
+    tiersSelectOption.forEach((tiers) => {
+      tiersSelect.innerHTML += `
+        <option>${tiers}</option>
+      `
+    })
+  }
+
   async searchFromSelect(htmlSelectElement) {
     const selectedValue = htmlSelectElement.value.toLowerCase().trim()
     console.log('selectedValue —>', selectedValue)
@@ -272,6 +298,7 @@ class List {
     await this.initForm()
     await this.initTable()
     await this.insertDatas(this.datas)
+    await this.insertSelect()
     await this.footer.initFooter(true, 'Créer un dossier vierge')
     await this.initEventListeners()
   }
