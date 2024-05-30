@@ -63,7 +63,7 @@ class MainMenu {
       },
       {
         title: 'Thèmes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/themeList.html',
       },
       {
         title: 'Conseils',

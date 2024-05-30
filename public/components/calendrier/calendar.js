@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+  let eventColor = ''
+  let eventTextColor = ''
+
   var calendarEl = document.getElementById('calendar')
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
     locale: 'fr',
     initialDate: '2024-05-01',
-    editable: true,
-    selectable: true,
+    editable: false,
+    selectable: false,
     businessHours: true,
     dayMaxEvents: true, // allow "more" link when too many events
     titleFormat: {
@@ -17,58 +20,60 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     events: [
       {
-        title: 'All Day Event',
+        title: 'Huissier à prendre.',
         start: '2024-05-01',
+        color: 'yellow', // an option!
+        textColor: 'black', // an option!
       },
       {
-        title: 'Long Event',
+        title: "Cour administrative d'appel de Poitiers ",
         start: '2024-05-06',
         end: '2024-05-10',
+        backgroundColor: 'red',
+        borderColor: 'red',
       },
       {
         groupId: 999,
-        title: 'Repeating Event',
+        title: 'convocation recours',
         start: '2024-05-09T16:00:00',
+        color: 'yellow', // an option!
+        textColor: 'black', // an option!
       },
       {
         groupId: 999,
-        title: 'Repeating Event',
+        title: 'convocation recours',
         start: '2024-05-16T16:00:00',
       },
       {
-        title: 'Conference',
+        title: 'URSSAF',
         start: '2024-05-11',
         end: '2024-05-13',
+        backgroundColor: 'green',
       },
       {
-        title: 'Meeting',
+        title: 'Contestation mise en demeure',
         start: '2024-05-12T10:30:00',
         end: '2024-05-12T12:30:00',
       },
       {
-        title: 'Lunch',
+        title: 'AG2R',
         start: '2024-05-12T12:00:00',
       },
       {
-        title: 'Meeting',
+        title: 'avis de signification acte huissier',
         start: '2024-05-12T14:30:00',
       },
       {
-        title: 'Happy Hour',
+        title: 'Convocation tribunal',
         start: '2024-05-12T17:30:00',
       },
       {
-        title: 'Dinner',
+        title: 'Prudhommes',
         start: '2024-05-12T20:00:00',
       },
       {
-        title: 'Birthday Party',
+        title: 'DGFP La Rochelle',
         start: '2024-05-13T07:00:00',
-      },
-      {
-        title: 'Click for Google',
-        url: 'http://google.com/',
-        start: '2024-05-28',
       },
     ],
     eventSources: ['http://192.168.0.112/Public/ndecr_test/calendrier.php'],
@@ -77,11 +82,52 @@ document.addEventListener('DOMContentLoaded', function () {
   console.log('évènements :', retrievedEvents)
   calendar.render()
 
+  // Ajouter la légende
+  var legendContainer = document.getElementById('legendContainer')
+  var legend = document.createElement('div')
+  legend.classList.add('legend')
+
+  // Catégories et leurs couleurs
+  var categories = [
+    { name: 'Amauger', color: '#ff9f89' },
+    { name: 'Cial', color: '#00FFFF' },
+    { name: 'Divers', color: '#a3ffa3' },
+    { name: 'Fiscal', color: '#a3a3ff' },
+    { name: 'Pénal', color: '#FF00FF' },
+    { name: 'RC', color: '#ffffa3' },
+    { name: 'Social', color: '#008080' },
+    { name: 'Stenico', color: '#FF0000' },
+  ]
+
+  categories.forEach(function (category) {
+    var item = document.createElement('div')
+    item.classList.add('legend-item')
+
+    var color = document.createElement('div')
+    color.classList.add('legend-color')
+    color.style.backgroundColor = category.color
+
+    var text = document.createElement('span')
+    text.textContent = category.name
+
+    item.appendChild(color)
+    item.appendChild(text)
+    legend.appendChild(item)
+  })
+
+  legendContainer.appendChild(legend)
+
   // Ajouter le bouton de retour
-  var footerContainer = document.getElementById('footerContainer')
-  var goBackButton = document.createElement('button')
-  goBackButton.textContent = 'Retour'
+  // var footerContainer = document.getElementById('footerContainer')
+  // var goBackButton = document.createElement('button')
+  // goBackButton.textContent = 'Retour'
+  // goBackButton.classList.add('goBackButton')
+  const container = document.createElement('div')
+  container.setAttribute('class', 'buttonWrapper')
+  const goBackButton = document.createElement('button')
   goBackButton.classList.add('goBackButton')
+  goBackButton.classList.add('errorButton')
+  goBackButton.textContent = 'Retour'
   goBackButton.addEventListener('click', function () {
     window.history.back()
   })
