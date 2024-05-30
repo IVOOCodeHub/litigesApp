@@ -188,40 +188,8 @@ class List {
     await this.insertDatas(newDatas)
   }
 
-  async searchBySociety() {
-    const select = document.querySelector('select[name="society"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByTiers() {
-    const select = document.querySelector('select[name="tiers"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByTheme() {
-    const select = document.querySelector('select[name="theme"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByStartDate() {
-    const select = document.querySelector('input[name="searchStartDate"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByStatut() {
-    const select = document.querySelector('select[name="statut"]')
+  async searchBy(elementName) {
+    const select = document.querySelector(`[name="${elementName}"]`)
     select.addEventListener(
       'change',
       async () => await this.searchFromSelect(select),
@@ -300,11 +268,11 @@ class List {
   }
 
   async initEventListeners() {
-    await this.searchBySociety()
-    await this.searchByTiers()
-    await this.searchByTheme()
-    await this.searchByStartDate()
-    await this.searchByStatut()
+    await this.searchBy('society')
+    await this.searchBy('tiers')
+    await this.searchBy('theme')
+    await this.searchBy('searchStartDate')
+    await this.searchBy('statut')
     await this.dataSort()
 
     const createNewFolderButton = document.querySelector('.validButton')
