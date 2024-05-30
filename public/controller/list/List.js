@@ -1,39 +1,21 @@
 class List {
   constructor() {
     this.utils = new Utils()
+    this.listService = new ListService()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.main = null
     this.root = document.querySelector('#root')
-    this.datas = [
-      {
-        code: '*782734*',
-        societe: 'mockupSociete',
-        statut: 'mockupStatut',
-        libele: 'mockupLibele',
-        description: 'mockupDescription',
-        date: 'mockupDate',
-        stat: 'mockupStat',
-      },
-      {
-        code: '*91284*',
-        societe: 'mockupSociete2',
-        statut: 'mockupStatut2',
-        libele: 'mockupLibele2',
-        description: 'mockupDescription2',
-        date: 'mockupDate2',
-        stat: 'mockupStat2',
-      },
-      {
-        code: '*01928*',
-        societe: 'mockupSociete3',
-        statut: 'mockupStatut3',
-        libele: 'mockupLibele3',
-        description: 'mockupDescription3',
-        date: 'mockupDate3',
-        stat: 'mockupStat3',
-      },
-    ]
+    this.sortDirection = {}
+  }
+
+  async getData() {
+    const user = await JSON.parse(localStorage.getItem('user'))
+    const userDatas = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
+    this.datas = await this.listService.getList(userDatas)
   }
 
   async initMain() {
@@ -46,51 +28,51 @@ class List {
     section.setAttribute('id', 'searchList')
 
     section.innerHTML = `
-     <div class="inputWrapper">
-        <label for="society">Société:</label>
-        <select name="society">
-          <option>Toutes</option>
-          <option>mockupSociete</option>
-          <option>mockupSociete2</option>
-          <option>mockupSociete3</option>
-          <option>mockupSociete4</option>
-          <option>mockupSociete5</option>
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="statut">Statut:</label>
-        <select name="statut">
-          <option>Toutes</option>
-          <option>mockupStatut</option>
-          <option>mockupStatut2</option>
-          <option>mockupStatut3</option>
-          <option>mockupStatut4</option>
-          <option>mockupStatut5</option>
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="unit">Unité org. :</label>
-        <select name="unit">
-          <option>Toutes</option>
-          <option>mockupLibele</option>
-          <option>mockupLibele2</option>
-          <option>mockupLibele3</option>
-          <option>mockupLibele4</option>
-          <option>mockupLibele5</option>
-        </select>
-    </div>
-    <div class="inputWrapper">
-        <label for="subUnit">SS Unité org. :</label>
-        <select name="subUnit">
-          <option>Toutes</option>
-          <option>mockupDescription</option>
-          <option>mockupDescription2</option>
-          <option>mockupDescription3</option>
-          <option>mockupDescription4</option>
-          <option>mockupDescription5</option>
-        </select>
-    </div>
-    `
+          <div class="inputWrapper">
+              <label for="cle">Clé:</label>
+              <input type="text" name="cle" />
+          </div>
+          <div class="inputWrapper">
+              <label for="society">Société:</label>
+              <select name="society">
+                <option value="Toutes">Toutes</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="tiers">Tiers:</label>
+              <select name="tiers">
+                <option value="Toutes">Toutes</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="theme">Theme:</label>
+              <select name="theme">
+                <option value="Choisir">Choisir</option>
+                <option value="Amauger">Amauger</option>
+                <option value="Cial">Cial</option>
+                <option value="Divers">Divers</option>
+                <option value="Fiscal">Fiscal</option>
+                <option value="Penal">Penal</option>
+                <option value="RC">RC</option>
+                <option value="Social">Social</option>
+                <option value="Stenico">Stenico</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="searchStartDate">Date début:</label>
+              <input type="date" name="searchStartDate" />
+          </div>
+          <div class="inputWrapper">
+              <label for="statut">Statut:</label>
+              <select name="statut">
+                <option value="Choisir">Choisir</option>
+                <option value="A VALIDER">A valider</option>
+                <option value="EN COURS">En cours</option>
+                <option value="AJOURNE">Ajourné</option>
+                <option value="TERMINE">Terminé</option>
+              </select>
+          </div>
+        `
     this.main.appendChild(section)
   }
 
@@ -101,12 +83,12 @@ class List {
     <table>
         <thead>
             <tr>
-              <th>Code</th>
-              <th>Société</th>
-              <th>Libéllé</th>
-              <th>Description</th>
-              <th>Date</th>
-              <th>Stat.</th>
+              <th data-sort="cle">Cle <span class="chevron"></span></th>
+              <th data-sort="name">Nom <span class="chevron"></span></th>
+              <th>Commentaire</th>
+              <th data-sort="date">Date début<span class="chevron"></span></th>
+              <th data-sort="theme">Theme <span class="chevron"></span></th>
+              <th data-sort="stat">Stat. <span class="chevron"></span></th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -118,16 +100,43 @@ class List {
   async insertDatas(datas) {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
-    datas.forEach((row) => {
+    datas?.forEach((row) => {
       tableBody.innerHTML += `
         <tr>
-          <td>${row.code}</td>
-          <td>${row.societe}</td>
-          <td>${row.libele}</td>
-          <td>${row.description}</td>
-          <td>${row.date}</td>
-          <td>${row.stat}</td>
-        </tr>      
+          <td>${row['cle']}</td>
+          <td>${row['tiers']} vs ${row['societe']}</td>
+          <td>${row['commentaire']}</td>
+          <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
+          <td>${row['theme']}</td>
+          <td>${row['statut']}</td>
+        </tr>
+      `
+    })
+    await this.openFolder()
+  }
+
+  async insertSelect() {
+    const societySelectOption = []
+    const tiersSelectOption = []
+    this.datas.forEach((el) => {
+      if (!societySelectOption.includes(el['societe'])) {
+        societySelectOption.push(el['societe'])
+      }
+      if (!tiersSelectOption.includes(el['tiers'])) {
+        tiersSelectOption.push(el['tiers'])
+      }
+    })
+
+    const societySelect = document.querySelector('select[name="society"]')
+    societySelectOption.forEach((society) => {
+      societySelect.innerHTML += `
+        <option>${society}</option>
+      `
+    })
+    const tiersSelect = document.querySelector('select[name="tiers"]')
+    tiersSelectOption.forEach((tiers) => {
+      tiersSelect.innerHTML += `
+        <option>${tiers}</option>
       `
     })
   }
@@ -135,62 +144,63 @@ class List {
   async searchFromSelect(htmlSelectElement) {
     const selectedValue = htmlSelectElement.value
     let newDatas = null
-
-    if (htmlSelectElement.name === 'society') {
+    if (htmlSelectElement.name === 'cle') {
+      if (selectedValue !== '') {
+        newDatas = this.datas.filter(
+          (row) => row['cle'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'society') {
       if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.societe === selectedValue)
+        newDatas = this.datas.filter(
+          (row) => row['societe'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'tiers') {
+      if (selectedValue !== 'Toutes') {
+        newDatas = this.datas.filter(
+          (row) => row['tiers'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'theme') {
+      if (selectedValue !== 'Choisir') {
+        newDatas = this.datas.filter(
+          (row) => row['theme'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'searchStartDate') {
+      if (selectedValue !== '') {
+        newDatas = this.datas.filter(
+          (row) =>
+            this.utils.reformatDate(row['datedebut']).split(' ')[0] ===
+            this.utils.reformatDate(selectedValue).split(' ')[0],
+        )
       } else {
         newDatas = this.datas
       }
     } else if (htmlSelectElement.name === 'statut') {
-      if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.statut === selectedValue)
+      if (selectedValue !== 'Choisir') {
+        newDatas = this.datas.filter((row) => row['statut'] === selectedValue)
       } else {
         newDatas = this.datas
       }
-    } else if (htmlSelectElement.name === 'unit') {
-      if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.libele === selectedValue)
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'subUnit') {
-      if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.description === selectedValue)
-      } else {
-        newDatas = this.datas
-      }
+    } else {
+      newDatas = this.datas
     }
 
     await this.insertDatas(newDatas)
   }
 
-  async searchBySociety() {
-    const select = document.querySelector('select[name="society"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByStatut() {
-    const select = document.querySelector('select[name="statut"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchByUnit() {
-    const select = document.querySelector('select[name="unit"]')
-    select.addEventListener(
-      'change',
-      async () => await this.searchFromSelect(select),
-    )
-  }
-
-  async searchBySubUnit() {
-    const select = document.querySelector('select[name="subUnit"]')
+  async searchBy(elementName) {
+    const select = document.querySelector(`[name="${elementName}"]`)
     select.addEventListener(
       'change',
       async () => await this.searchFromSelect(select),
@@ -209,12 +219,73 @@ class List {
     })
   }
 
+  async dataSort() {
+    const headers = document.querySelectorAll('th[data-sort]')
+    headers.forEach((header) => {
+      header.addEventListener('click', () => {
+        this.sortTable(header.getAttribute('data-sort'))
+      })
+    })
+  }
+
+  async sortTable(column) {
+    const direction = this.sortDirection[column] || 'asc'
+    let sortedDatas = [...this.datas]
+
+    if (column === 'cle') {
+      sortedDatas.sort((a, b) =>
+        direction === 'asc'
+          ? a['cle'].localeCompare(b['cle'])
+          : b['cle'].localeCompare(a['cle']),
+      )
+    } else if (column === 'name') {
+      sortedDatas.sort((a, b) =>
+        direction === 'asc'
+          ? a['societe'].localeCompare(b['societe'])
+          : b['cle'].localeCompare(b['societe']),
+      )
+    } else if (column === 'theme') {
+      sortedDatas.sort((a, b) =>
+        direction === 'asc'
+          ? a['theme'].localeCompare(b['theme'])
+          : b['theme'].localeCompare(a['theme']),
+      )
+    } else if (column === 'date') {
+      sortedDatas.sort((a, b) =>
+        direction === 'asc'
+          ? new Date(a['datedebut']) - new Date(b['datedebut'])
+          : new Date(b['datedebut']) - new Date(a['datedebut']),
+      )
+    } else if (column === 'stat') {
+      sortedDatas.sort((a, b) => {
+        direction === 'asc'
+          ? a['statut'].localeCompare(b['statut'])
+          : b['statut'].localeCompare(a['statut'])
+      })
+    }
+
+    this.sortDirection[column] = direction === 'asc' ? 'desc' : 'asc'
+    await this.insertDatas(sortedDatas)
+
+    // update the sort icon (chevron) if the sort is called
+    const headers = document.querySelectorAll('th[data-sort]')
+    headers.forEach((header) => {
+      header.classList.remove('th-sort-asc', 'th-sort-desc')
+    })
+    const header = document.querySelector(`th[data-sort="${column}"]`)
+    header.classList.add(
+      this.sortDirection[column] === 'asc' ? 'th-sort-asc' : 'th-sort-desc',
+    )
+  }
+
   async initEventListeners() {
-    await this.searchBySociety()
-    await this.searchByStatut()
-    await this.searchByUnit()
-    await this.searchBySubUnit()
-    await this.openFolder()
+    await this.searchBy('cle')
+    await this.searchBy('society')
+    await this.searchBy('tiers')
+    await this.searchBy('theme')
+    await this.searchBy('searchStartDate')
+    await this.searchBy('statut')
+    await this.dataSort()
 
     const createNewFolderButton = document.querySelector('.validButton')
     createNewFolderButton.addEventListener(
@@ -224,10 +295,12 @@ class List {
   }
 
   async initList() {
+    await this.getData()
     await this.initMain()
     await this.initForm()
     await this.initTable()
     await this.insertDatas(this.datas)
+    await this.insertSelect()
     await this.footer.initFooter(true, 'Créer un dossier vierge')
     await this.initEventListeners()
   }

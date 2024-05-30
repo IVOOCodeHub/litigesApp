@@ -13,25 +13,59 @@ class CreateNewFolder {
       <form>
         <h2>Crée un nouveau dossier</h2>
         <div class="inputWrapper">
-          <label for="name">Nom du dossier:</label>
-          <input name="name" type="text" />
+          <label for="society">Société:</label>
+          <input name="society" type="text" />
         </div>
         <div class="inputWrapper">
-          <label for="sender">Expéditeur:</label>
-          <input name="sender" type="text" />
+          <label for="tiers">Tiers:</label>
+          <input name="tiers" type="text" />
         </div>
         <div class="inputWrapper">
-          <label for="recipient">Destinataire:</label>
-          <input name="recipient" type="text" />
+          <label for="comment">Descriptif:</label>
+          <textarea name="comment"></textarea>
         </div>
         <div class="inputWrapper">
-          <label for="comment">Commentaire:</label>
-          <input name="comment" type="text" />
+          <label for="file">Theme:</label>
+          <select>
+            <option>Choisir</option>
+            <option>theme2</option>
+            <option>theme2</option>
+            <option>theme3</option>
+            <option>theme4</option>
+            <option>theme5</option>
+          </select>
         </div>
+        <div class="inputWrapper checkBoxWrapper">
+          <label for="file">Multiples:</label>
+          <input type="checkbox" class="isMultiple"/>
+        </div>
+        
         <div class="inputWrapper">
-          <label for="file">Pièce:</label>
-          <input name="file" type="file" />
-        </div>
+          <label for="file">Conseil:</label>
+          <select>
+            <option>Choisir</option>
+            <option>conseil2</option>
+            <option>conseil2</option>
+            <option>conseil3</option>
+            <option>conseil4</option>
+            <option>conseil5</option>
+          </select>
+        </div>      
+        <div class="inputWrapper">
+          <label for="file">Date de début:</label>
+          <input type="date" />
+        </div>   
+        <div class="inputWrapper">
+          <label for="file">Statut:</label>
+          <select>
+            <option>Choisir</option>
+            <option>Statut1</option>
+            <option>Statut2</option>
+            <option>Statut3</option>
+            <option>Statut4</option>
+            <option>Statut5</option>
+          </select>
+        </div>       
       </form>
       <div class="btnWrapper">
         <button class="validButton submitFolderCreation">Crée le dossier</button>
@@ -60,7 +94,7 @@ class CreateNewFolder {
       })
 
       console.log('datas —>', datas)
-      // await this.destroyComponent()      }
+      // await this.destroyComponent()
     }
   }
 
@@ -69,7 +103,36 @@ class CreateNewFolder {
     section.remove()
   }
 
+  async isMultiples() {
+    const checkBox = document.querySelector('.isMultiple')
+    checkBox.addEventListener('change', (event) => {
+      event.preventDefault()
+      const isChecked = checkBox.checked
+      if (isChecked) {
+        const newElement = document.createElement('div')
+        newElement.setAttribute('class', 'inputWrapper multipleFolder')
+        newElement.innerHTML += `
+          <label>Liste de dossier : </label>
+          <select>
+            <option>Choisir le dossier à associé</option>
+            <option>Dossier1</option>
+            <option>Dossier2</option>
+            <option>Dossier3</option>
+            <option>Dossier4</option>
+            <option>Dossier5</option>
+          </select>
+        `
+        const checkBoxWrapper = document.querySelector('.checkBoxWrapper')
+        checkBoxWrapper.insertAdjacentElement('afterend', newElement)
+      } else {
+        const selectMultipleFolder = document.querySelector('.multipleFolder')
+        selectMultipleFolder.remove()
+      }
+    })
+  }
+
   async initEventListeners() {
+    await this.isMultiples()
     const cancelButton = document.querySelector('.errorButton')
     cancelButton.addEventListener('click', async () => this.destroyComponent())
     await this.handleSubmitFolderCreation

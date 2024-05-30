@@ -2,7 +2,15 @@ class MainMenu {
   constructor() {
     this.utils = new Utils()
     this.root = document.querySelector('#root')
-    this.pageName = null
+    this.footer = new Footer()
+    this.user = null
+  }
+
+  async isUserAlreadyConnected() {
+    this.user = await JSON.parse(localStorage.getItem('user'))
+    if (!this.user) {
+      window.location.href = `http://192.168.0.254:8080/usv_prod/menu0.asp`
+    }
   }
 
   async render() {
@@ -17,19 +25,19 @@ class MainMenu {
     // Les titres et les liens pour les boutons horizontaux
     const buttonsInfoH = [
       {
-        title: 'À Affecter',
+        title: 'Courrier a affecter',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
       },
       {
-        title: 'À Valider',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
-      },
-      {
-        title: 'Liste',
+        title: 'Liste des dossiers',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
       },
       {
-        title: 'Calendrier',
+        title: 'Liste des évènements',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/event.html',
+      },
+      {
+        title: 'Calendrier events',
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/calendrier.html',
       },
     ]
@@ -110,7 +118,9 @@ class MainMenu {
   }
 
   async initMainMenu() {
+    await this.isUserAlreadyConnected()
     await this.render()
+    await this.footer.initFooter()
   }
 }
 

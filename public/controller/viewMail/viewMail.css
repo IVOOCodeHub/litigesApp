@@ -2,20 +2,6 @@ main {
   min-height: 70dvh;
 }
 
-.titleWrapper {
-  background: #36395a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 4px solid #1191b7;
-}
-
-.titleWrapper h2 {
-  text-align: center;
-  padding: 1em;
-  color: #ffffff;
-}
-
 #viewMail {
   display: flex;
   justify-content: space-between;
@@ -23,7 +9,6 @@ main {
 
 #leftArticle,
 #rightArticle {
-  min-height: 70dvh;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
@@ -31,6 +16,10 @@ main {
 }
 
 /* LEFT CONTAINER */
+
+#leftArticle {
+  min-height: 70dvh;
+}
 
 #leftArticle {
   border-radius: 0 0 8px 0;
@@ -56,7 +45,7 @@ main {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5em;
+  gap: 5em;
   box-shadow:
     rgba(0, 0, 0, 0.4) 0 2px 4px,
     rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
@@ -66,7 +55,18 @@ main {
 
 #rightArticle h2 {
   text-transform: uppercase;
-  font-size: 1.3dvw;
+  position: relative;
+}
+
+#rightArticle h2:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 2px;
+  background: #1191b7;
 }
 
 #rightArticle ul {
@@ -89,7 +89,6 @@ main {
 
 #rightArticle label {
   font-weight: 700;
-  font-size: 1dvw;
   width: 50%;
 }
 

@@ -3,37 +3,38 @@ class Header {
     this.utils = new Utils()
     this.root = document.querySelector('#root')
     this.pageName = null
+    this.url = null
   }
 
   async getPageName() {
-    const url = new URL(window.location.href)
+    this.url = new URL(window.location.href)
 
     switch (true) {
-      case url.pathname.endsWith('/index.html'): {
-        this.pageName = 'Litiges'
+      case this.url.pathname.endsWith('/index.html'): {
+        this.pageName = 'Gestion des Litiges'
         break
       }
-      case url.pathname.endsWith('/affectation.html'): {
-        this.pageName = 'Litiges à affecter'
+      case this.url.pathname.endsWith('/affectation.html'): {
+        this.pageName = 'Courrier à affecter'
         break
       }
-      case url.pathname.endsWith('/viewLitige.html'): {
-        this.pageName = 'Consulté un courier'
+      case this.url.pathname.endsWith('/viewMail.html'): {
+        this.pageName = 'Consulter un courier'
         break
       }
-      case url.pathname.endsWith('/validation.html'): {
-        this.pageName = 'Dossier a valider'
+      case this.url.pathname.endsWith('/event.html'): {
+        this.pageName = 'Liste des évènements'
         break
       }
-      case url.pathname.endsWith('/list.html'): {
+      case this.url.pathname.endsWith('/list.html'): {
         this.pageName = 'Liste des dossiers'
         break
       }
-      case url.pathname.endsWith('/calendrier.html'): {
+      case this.url.pathname.endsWith('/calendrier.html'): {
         this.pageName = 'Calendrier des litiges'
         break
       }
-      case url.pathname.endsWith('/folder.html'): {
+      case this.url.pathname.endsWith('/folder.html'): {
         this.pageName = 'Dossier'
         break
       }
@@ -56,7 +57,7 @@ class Header {
     const brandingLogo = document.createElement('img')
     brandingLogo.classList.add('logoWrapper__logo')
 
-    this.pageName === 'Litiges'
+    this.url.pathname.endsWith('/index.html')
       ? (brandingLogo.src = './public/assets/brandingLogo.png')
       : (brandingLogo.src = '../assets/brandingLogo.png')
 

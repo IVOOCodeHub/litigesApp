@@ -1,5 +1,8 @@
 class Folder {
   constructor() {
+    this.folderService = new FolderService()
+    this.folderHeader = new FolderHeader()
+    this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
     this.utils = new Utils()
     this.folderHistory = new FolderHistory()
@@ -14,93 +17,144 @@ class Folder {
     this.id = urlParams.get('id')
   }
 
+  async getDatas() {
+    const user = await JSON.parse(localStorage.getItem('user'))
+    const userDatas = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
+    this.datas = await this.folderService.getFolder(userDatas)
+    this.datas = this.datas.find((folder) => folder['cle'] === this.id)
+
+    console.log('this.datas —>', this.datas)
+  }
+
   async createMain() {
     this.main = document.createElement('main')
     this.root.appendChild(this.main)
   }
 
-  async renderFolderTitle() {
-    this.main.innerHTML = `
-      <div class="titleWrapper">
-        <h2>Dossier ${this.id} : *TITRE* </h2>
-      </div>
-    `
-  }
-
   async renderFolder() {
     this.main.innerHTML += `
       <section id="folderContainer">
+       
+       <!-- LEFT SIDE -->
+
         <article class="leftArticle">
-          <ul>
+          <ul class="element">
             <h3>Détails du dossier</h3>
             <li>
-              <label>Reférence dossier :</label>
-              <p>${this.id}</p>
-            </li>
-            <li>
-              <label>Nom du dossier : </label>
-              <p>*societe* VS *tiers*</p>
-            </li>            
-            <li>
-              <label>Suivis par : </label>
-              <p>*"conseil"*</p>
-            </li>
-            <li>
-              <label for="comment">Commentaire : </label>
-              <textarea name="comment"></textarea>
-            </li>
-            <li>
-              <div>
-                <label>Date création</label>
-                <p>*jj/mm/yyyy*</p>
-              </div>
-              <div>
-                <label>Date dernière mise à jour</label>
-                <p>*jj/mm/yyyy*</p>
-              </div>              
-            </li>
-            <li>
-              <div>
-                <label>Prochaine action</label>
-                <p class="forceLeftAlign">*pAction*</p>
-              </div>
-              <div>
-                <label for="dpaction">Date de prochaine action</label>
-                <p>*jj/mm/yyyy*</p>
-              </div>        
-            </li>
-            <li>
-              <div>
-                <label>Statut</label>
-                <p>*Statut*</p>
-              </div>
-              <div>
-                <label>Histo Statut</label>
-                <p>*Statut*</p>
-              </div>              
-            </li>
-          </ul>
-        </article>
-        <article class="rightArticle">
-          <ul class="element">
-            <h3>Gestion du dossier</h3>
-            <li>
-              <label>Ajouté un courrier au dossier : </label>
-              <input name="addMail" type="file"/>
-            </li>
-            <li>
-              <label>Ajouté une tache au dossier : </label>
-              <select name="addTask">
+              <label>Société :</label>
+              <select name="socity">
                 <option>Choisir</option>
-                <option>Task1</option>
-                <option>Task2</option>
-                <option>Task3</option>
-                <option>Task4</option>
-                <option>Task5</option>
+                <option selected="selected">${this.datas['societe']}</option>
+                <option>society2</option>
+                <option>society3</option>
+                <option>society4</option>
+                <option>society5</option>
               </select>
             </li>
             <li>
-              <label>Rattacher à un dossier : </label>
+              <label>Tièrs : </label>
+              <select name="socity">
+                <option>Choisir</option>
+                <option selected="selected">${this.datas['tiers']}</option>
+                <option>tiers2</option>
+                <option>tiers3</option>
+                <option>tiers5</option>
+              </select>
+            </li>
+            <li>
+              <label for="comment">Commentaire : </label>
+              <textarea name="comment">${this.datas['commentaire']}</textarea>
+            </li>
+            <li>
+              <label>Ref. Source</label>
+              <input type="text" value=${this.datas['cle']} />
+            </li>
+            <li>
+              <label>Conseil</label>
+              <input type="text" class="conseil" />
+            </li>
+            <li>
+              <label>Thème</label>
+              <select>
+                <option>Choisir</option>
+                <option selected="selected">${this.datas['theme']}</option>
+                <option>theme3</option>
+                <option>theme4</option>
+                <option>theme5</option>
+              </select>
+            </li>     
+            <li>
+              <label>Multiple</label>
+              <input type="checkbox" class="isMultiple"  />
+            </li>
+            <li>
+              <label>Statut</label>
+              <select>
+                <option selected="selected">${this.datas['statut']}</option>
+                <option>En cours</option>
+                <option>Ajourné</option>
+                <option>Cloturé</option>
+              </select>
+            </li>
+            <li>
+              <label>Date de début</label>
+              <input type="date" class="startDate" />
+            </li>
+            <li class="buttonWrapper">
+              <button class="validButton">Sauvegarder les modifications</button>
+            </li>
+          </ul>
+        </article>        
+        
+        <!-- RIGHT SIDE -->        
+        
+        <article class="rightArticle">
+          <!-- HISTORY  -->
+          <ul class="historySection">
+            <li class="buttonWrapper">
+              <button class="button displayMailHistory">Liste des courriers</button>
+            </li>
+            <li class="buttonWrapper">
+              <button class="button displayHistory">Liste des dossiers associers</button>
+            </li>
+             <li class="buttonWrapper">
+              <button class="button ">Historique des évènements</button>
+            </li>
+          </ul>             
+          <!-- PREVIOUS EVENT -->        
+          <ul class="element">
+            <h3>Dernier historique évènement</h3>
+            <li>
+              <label>Dernier évèment : </label>
+              <p>DD/MM/YYYY</p>
+            </li>
+            <li>
+              <label>Etat : </label>
+              <p>Pré-contentntieux / Contentieux / Éxécution</p>
+            </li>
+            <li>
+              <label>Type d'évènement : </label>
+              <p>*type d'évènement*</p>
+            </li>
+            <li>
+              <label>Type de juridiction : </label>
+              <p>*type de juridiction*</p>
+            </li>
+            <li>
+              <label>Commentaire : </label>
+              <p>*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi asperiores consectetur corporis fuga nam quasi sapiente tempore. Ad consequatur libero natus nihil tempora! Mollitia, quae.*</p>
+            </li>
+          </ul>
+          
+          <!-- GEST DOSSIER  -->
+        
+          <ul class="element">
+            <h3>Gestion du dossier</h3>
+            <li>
+              <label>Rattacher : </label>
               <select name="add folder">
                 <option>Choisir</option>
                 <option>Folder1</option>
@@ -116,82 +170,20 @@ class Folder {
               </select>
             </li>
             <li>
-              <label for="status">Prochaine action : </label>
-              <button class="button folderAccess">Modifier</button> 
+              <label>Ajouter un évènement : </label>
+              <button class="button displayCreateEventModal">Créer un évènement</button>
             </li>
-          </ul>
-          <ul class="element">
-            <h3>Historique</h3>
             <li>
-              <label>Liste des courriers du dossier : </label>
-              <select name="listMails">
-                <option value="-1">Choisir</option>  
-                <option value="52876">Réglement frais de procédure</option>
-                <option>Courrier2</option>
-                <option>Courrier3</option>
-                <option>Courrier4</option>
-                <option>Courrier5</option>
-                <option>Courrier6</option>
-                <option>Courrier7</option>
-              </select>
+              <label>Ajouter une pièce écrite par téléchargement : </label>
+              <input name="addMail" type="file"/>
             </li>
             <li class="buttonWrapper">
-              <button class="button displayHistory">Consulter l'historique des statuts</button>
+              <button class="validButton">Sauvegarder les modifications</button>
             </li>
           </ul>
         </article>
       </section>
     `
-  }
-
-  async displayFolderModal() {
-    const section = document.createElement('section')
-    section.setAttribute('id', 'folderModal')
-
-    section.innerHTML += `
-        <div class="folderAccess">
-            <h2>Dossier relatif à la pièce :</h2>
-            <p>*TITRE DU DOSSIER*</p>
-            <form>
-                <div class="inputWrapper">
-                    <label for="name">Prochaine action : </label>
-                    <select>
-                        <option>Choisir</option>
-                        <option>pAction 1</option>
-                        <option>pAction 2</option>
-                        <option>pAction 3</option>
-                    </select>
-                </div>
-                <div class="inputWrapper">
-                    <label for="name">Date de prochaine action : </label>
-                    <input type="date" />
-                </div>
-                <div class="btnWrapper">
-                    <button class="button validButton">Valider</button>
-                    <button class="errorButton closeModal">Fermer</button>
-                </div>
-            </form>
-        </div>
-    `
-    this.main.appendChild(section)
-    this.attachModalListeners()
-  }
-
-  attachModalListeners() {
-    const closeModalBtn = document.querySelector('.closeModal')
-    if (closeModalBtn) {
-      closeModalBtn.addEventListener('click', () => this.closeFolderModal())
-    }
-
-    const submitBtn = document.querySelector('.validButton')
-    submitBtn.addEventListener('click', () => this.submitDatas())
-  }
-
-  async closeFolderModal() {
-    const modal = document.querySelector('#folderModal')
-    if (modal) {
-      modal.remove()
-    }
   }
 
   async goToViewLitige(htmlSelectElement) {
@@ -203,13 +195,12 @@ class Folder {
   }
 
   async initEventListeners() {
-    const select = document.querySelector('select[name="listMails"]')
-    select.addEventListener('change', (event) => {
-      this.goToViewLitige(event.target)
-    })
-
-    const folderAccess = document.querySelector('.folderAccess')
-    folderAccess.addEventListener('click', () => this.displayFolderModal())
+    const createNewEventButton = document.querySelector(
+      '.displayCreateEventModal',
+    )
+    createNewEventButton.addEventListener('click', () =>
+      this.createNewEvent.initCreateNewEvent(),
+    )
 
     const displayHistory = document.querySelector('.displayHistory')
     displayHistory.addEventListener('click', () =>
@@ -217,12 +208,35 @@ class Folder {
     )
   }
 
+  async insertDatas() {
+    const conseilInput = document.querySelector('.conseil')
+    if (this.datas['conseil']) {
+      conseilInput.value = this.datas['conseil']
+    } else {
+      conseilInput.value = 'Aucun'
+    }
+
+    const isMultiple = this.datas['multiple']
+    if (isMultiple === '1') {
+      const checkBox = document.querySelector('.isMultiple')
+      checkBox.checked = true
+    }
+
+    if (this.datas['datedebut']) {
+      const startDate = new Date(this.datas['datedebut'])
+      const dateDebutInput = document.querySelector('.startDate')
+      dateDebutInput.value = startDate.toISOString().split('T')[0]
+    }
+  }
+
   async initFolder() {
     await this.getParams()
+    await this.getDatas()
     await this.createMain()
-    await this.renderFolderTitle()
+    await this.folderHeader.initFolderHeader(this.datas)
     await this.renderFolder()
-    await this.footer.initFooter(true, 'Sauvegarder les modifications')
+    await this.insertDatas()
+    await this.footer.initFooter()
     await this.initEventListeners()
   }
 }

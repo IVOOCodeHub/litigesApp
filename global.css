@@ -17,7 +17,8 @@ button:hover,
 select:hover,
 input[type='checkbox']:hover,
 input[type='file']:hover,
-input[type='date']:hover {
+input[type='date']:hover,
+input[type='radio']:hover {
   cursor: pointer;
 }
 
