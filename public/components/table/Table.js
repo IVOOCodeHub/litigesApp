@@ -1,6 +1,7 @@
 class Table {
   constructor() {
     this.main = null
+    this.utils = new Utils()
     this.section = null
   }
 
@@ -31,12 +32,12 @@ class Table {
       tbody.innerHTML += `
         <tr>
           <td>${data['cle']}</td>
-          <td>${data['dh_saisie']}</td>
+          <td>${this.utils.reformatDate(data['dh_saisie']).split(' ')[0]}</td>
           <td>${data['societe_emettrice']}</td>
           <td>${data['societe']}</td>
           <td>${data['nature']}</td>
-          <td>${data['statut']}</td>
           <td>${data['commentaire']}</td>
+        </tr>
       `
     })
   }

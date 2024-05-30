@@ -1,3 +1,26 @@
 main {
   min-height: 70dvh;
 }
+
+#searchMailAffectation {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background: #36395a;
+  padding: 1em;
+  border-bottom: 4px solid #1191b7;
+}
+
+#searchMailAffectation .inputWrapper {
+  display: flex;
+  gap: 0.2em;
+}
+
+#searchMailAffectation .inputWrapper input[type='text'] {
+  max-width: 50px;
+  text-align: center;
+}
+
+#searchMailAffectation .inputWrapper label {
+  color: #ffffff;
+}

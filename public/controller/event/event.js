@@ -137,7 +137,7 @@ class Event {
     } else if (htmlSelectElement.name === 'type') {
       if (selectedValue !== 'Tous') {
         newDatas = this.datas.filter(
-          (row) => row['tiers'].trim() === selectedValue,
+          (row) => row['type'].trim() === selectedValue,
         )
       } else {
         newDatas = this.datas

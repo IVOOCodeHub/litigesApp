@@ -1,8 +1,8 @@
 class Affectation {
   constructor() {
-    this.searchBar = new SearchBar()
     this.affectationService = new AffectationService()
     this.endpoint = `http://192.168.0.112/Public/ndecr_test/aAffecter.php`
+    this.main = null
     this.datas = null
     this.table = new Table()
     this.utils = new Utils()
@@ -10,67 +10,54 @@ class Affectation {
     this.footer = new Footer()
   }
 
-  async getAffectations() {
-    const res = await this.affectationService.getAffectations(this.endpoint)
-    res['courriers'].sort((a, b) => {
-      return new Date(b['dh_saisie']) - new Date(a['dh_saisie'])
-    })
-    res['courriers'].map((object) => {
-      object['dh_saisie'] = this.utils.reformatDate(object['dh_saisie'])
-      return object
-    })
-
-    if (!this.datas) this.datas = res
-    else {
-      this.datas = {
-        ...this.datas,
-        courriers: res['courriers'],
-      }
+  async getData() {
+    const user = await JSON.parse(localStorage.getItem('user'))
+    const userCredentials = {
+      userID: user['matricule'],
+      password: user['mdp'],
     }
+    this.datas = await this.affectationService.getMail(userCredentials)
     localStorage.setItem('datas', JSON.stringify(this.datas))
+    console.log('this.datas —>', this.datas)
   }
 
-  async displayAffectation() {
-    const main = document.createElement('main')
-    this.root.appendChild(main)
+  async initMain() {
+    this.main = document.createElement('main')
+    this.root.appendChild(this.main)
   }
 
-  async displaySearchBar() {
-    const societes = this.datas['societes'].map((societe) => societe['societe'])
-    societes.unshift('Toutes')
+  async initForm() {
+    const section = document.createElement('section')
+    section.setAttribute('id', 'searchMailAffectation')
 
-    const natures = this.datas['nature_pieces'].map(
-      (nature) => nature['nature_piece'],
-    )
-    natures.unshift('Toutes')
-
-    const inputs = [
-      {
-        label: 'Société:',
-        select: true,
-        options: societes,
-      },
-      {
-        label: 'Nature:',
-        select: true,
-        options: natures,
-      },
-      {
-        label: 'Clé courrier:',
-        input: true,
-        placeholder: 'Référence du courrier...',
-      },
-    ]
-
-    await this.searchBar.initSearchBar(inputs)
-    const h2 = document.querySelector('h2')
-    h2.textContent = 'Filtre courrier'
-
-    const searchBtn = document.querySelector('#searchBar button')
-    searchBtn.remove()
+    section.innerHTML = `
+          <div class="inputWrapper">
+              <label for="key">Clé du courrier:</label>
+              <input type="text" name="key" />
+          </div>
+          <div class="inputWrapper">
+              <label for="type">Clé du courrier:</label>
+              <select name="type">
+                <option value="Choisir">Choisir</option>
+                <option value="inbox">Entrant</option>
+                <option value="outbox">Sortant</option>
+              </select>
+          </div>
+          <div class="inputWrapper">
+              <label for="receptionDate">Date du récéption:</label>
+              <input type="date" name="receptionDate" />
+          </div>
+          <div class="inputWrapper">
+              <label for="society">Société:</label>
+              <select name="society">
+                <option value="Toutes">Toutes</option>
+              </select>
+          </div>
+        `
+    this.main.appendChild(section)
   }
 
-  async displayTable(isOnLoad) {
+  async renderTable(isOnLoad) {
     if (!isOnLoad) {
       const tableContainer = document.querySelector('#tableContainer')
       tableContainer.remove()
@@ -82,52 +69,13 @@ class Affectation {
       'Émetteur',
       'Déstinataire',
       'Pièce',
-      'Action',
       'Commentaire',
     ]
-    await this.table.initTable(columnsNames, this.datas['courriers'])
+    await this.table.initTable(columnsNames, this.datas)
   }
 
   async goToViewMail(key) {
     window.location.href = `viewMail.html?id=${key}`
-  }
-
-  async changeListener(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value
-
-    await this.getAffectations()
-
-    if (htmlSelectElement.name === 'Société:') {
-      if (selectedValue !== 'Toutes') {
-        this.datas = {
-          ...this.datas,
-          courriers: this.datas['courriers'].filter(
-            (object) => object['societe'] === selectedValue,
-          ),
-        }
-      }
-    } else if (htmlSelectElement.name === 'Nature:') {
-      if (selectedValue !== 'Toutes') {
-        this.datas = {
-          ...this.datas,
-          courriers: this.datas['courriers'].filter(
-            (object) => object['nature'] === selectedValue,
-          ),
-        }
-      }
-    } else if (htmlSelectElement.name === 'Clé courrier:') {
-      if (selectedValue !== '') {
-        this.datas = {
-          ...this.datas,
-          courriers: this.datas['courriers'].filter(
-            (object) => object['cle'] === selectedValue,
-          ),
-        }
-      }
-    }
-
-    await this.displayTable(false)
-    await this.initEventListeners()
   }
 
   async initEventListeners() {
@@ -139,21 +87,13 @@ class Affectation {
         await this.goToViewMail(key)
       })
     })
-
-    const searchById = document.querySelector('#searchBar input')
-    const selects = document.querySelectorAll('select')
-
-    selects.forEach((select) => {
-      select.addEventListener('change', () => this.changeListener(select))
-    })
-    searchById.addEventListener('change', () => this.changeListener(searchById))
   }
 
   async initAffectation() {
-    await this.displayAffectation()
-    await this.getAffectations()
-    await this.displaySearchBar()
-    await this.displayTable(true)
+    await this.getData()
+    await this.initMain()
+    await this.initForm()
+    await this.renderTable(true)
     await this.footer.initFooter()
     await this.initEventListeners()
   }

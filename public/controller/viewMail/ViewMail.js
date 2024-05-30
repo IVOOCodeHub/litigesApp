@@ -20,7 +20,7 @@ class ViewMail {
 
   async getDatas() {
     this.datas = JSON.parse(localStorage.getItem('datas'))
-    this.datas = this.datas['courriers'].find(
+    this.datas = this.datas.find(
       (object) => object['cle'] === this.id,
     )
     console.log('this.datas —>', this.datas)
