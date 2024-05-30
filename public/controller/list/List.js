@@ -16,7 +16,6 @@ class List {
       password: user['mdp'],
     }
     this.datas = await this.listService.getList(userDatas)
-    console.log('datas —>', this.datas)
   }
 
   async initMain() {
@@ -32,19 +31,19 @@ class List {
           <div class="inputWrapper">
               <label for="society">Société:</label>
               <select name="society">
-                <option value="toutes">Toutes</option>
+                <option value="Toutes">Toutes</option>
               </select>
           </div>
           <div class="inputWrapper">
               <label for="tiers">Tiers:</label>
               <select name="tiers">
-                <option value="toutes">Toutes</option>
+                <option value="Toutes">Toutes</option>
               </select>
           </div>
           <div class="inputWrapper">
               <label for="theme">Theme :</label>
               <select name="theme">
-                <option value="choisir">Choisir</option>
+                <option value="Choisir">Choisir</option>
                 <option value="Amauger">Amauger</option>
                 <option value="Cial">Cial</option>
                 <option value="Divers">Divers</option>
@@ -62,11 +61,11 @@ class List {
           <div class="inputWrapper">
               <label for="statut">Statut :</label>
               <select name="statut">
-                <option value="choisir">Choisir</option>
-                <option value="a_valider">A valider</option>
-                <option value="en_cours">En cours</option>
-                <option value="ajourne">Ajourné</option>
-                <option value="cloture">Cloturé</option>
+                <option value="Choisir">Choisir</option>
+                <option value="A VALIDER">A valider</option>
+                <option value="EN COURS">En cours</option>
+                <option value="AJOURNE">Ajourné</option>
+                <option value="TERMINE">Terminé</option>
               </select>
           </div>
         `
@@ -110,14 +109,6 @@ class List {
       `
     })
     await this.openFolder()
-
-    // // J'extrais les valeurs uniques pour les 2 select concernés
-    // const societies = [...new Set(datas.map((row) => row['societe']))]
-    // const tiers = [...new Set(datas.map((row) => row['tiers']))]
-    //
-    // // J'insert les options dans les 2 select
-    // this.insertOptions('select[name="society"]', ['Toutes', ...societies])
-    // this.insertOptions('select[name="tiers"]', ['Toutes', ...tiers])
   }
 
   async insertSelect() {
@@ -147,28 +138,45 @@ class List {
   }
 
   async searchFromSelect(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value.toLowerCase().trim()
-    console.log('selectedValue —>', selectedValue)
+    const selectedValue = htmlSelectElement.value
     let newDatas = null
 
     if (htmlSelectElement.name === 'society') {
       if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row['societe'] === selectedValue)
+        newDatas = this.datas.filter(
+          (row) => row['societe'].trim() === selectedValue,
+        )
       } else {
         newDatas = this.datas
       }
     } else if (htmlSelectElement.name === 'tiers') {
       if (selectedValue !== 'Toutes') {
-        newDatas = this.datas.filter((row) => row.description === selectedValue)
+        newDatas = this.datas.filter(
+          (row) => row['tiers'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
       }
     } else if (htmlSelectElement.name === 'theme') {
-      if (selectedValue !== 'choisir') {
-        newDatas = this.datas.filter((row) => row['libele'] === selectedValue)
+      if (selectedValue !== 'Choisir') {
+        newDatas = this.datas.filter(
+          (row) => row['theme'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'searchStartDate') {
+      if (selectedValue !== '') {
+        newDatas = this.datas.filter(
+          (row) =>
+            this.utils.reformatDate(row['datedebut']).split(' ')[0] ===
+            this.utils.reformatDate(selectedValue).split(' ')[0],
+        )
       } else {
         newDatas = this.datas
       }
     } else if (htmlSelectElement.name === 'statut') {
-      if (selectedValue !== 'choisir') {
+      if (selectedValue !== 'Choisir') {
         newDatas = this.datas.filter((row) => row['statut'] === selectedValue)
       } else {
         newDatas = this.datas
