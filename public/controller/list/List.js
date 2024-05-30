@@ -115,7 +115,7 @@ class List {
     // const societies = [...new Set(datas.map((row) => row['societe']))]
     // const tiers = [...new Set(datas.map((row) => row['tiers']))]
     //
-    // // J'insert les options dans les 2 select
+    // // J'insers les options dans les 2 select
     // this.insertOptions('select[name="society"]', ['Toutes', ...societies])
     // this.insertOptions('select[name="tiers"]', ['Toutes', ...tiers])
   }
