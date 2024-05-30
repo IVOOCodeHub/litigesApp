@@ -1,9 +1,9 @@
-class ValidationService extends ApiCalls {
+class EventService extends ApiCalls {
   constructor() {
     super()
   }
 
-  async getValidation(url) {
+  async getEvent(url) {
     return await this.getRequest(url)
   }
 }

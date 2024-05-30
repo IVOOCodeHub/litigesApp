@@ -6481,7 +6481,7 @@ var FullCalendar = (function (exports) {
         }
         return true;
     }
-    // Moving Event Validation
+    // Moving Event Event
     // ------------------------------------------------------------------------------------------------------------------------
     function isInteractionPropsValid(state, context, dateSpanMeta, filterConfig) {
         let currentState = context.getCurrentData();
@@ -6550,7 +6550,7 @@ var FullCalendar = (function (exports) {
         }
         return true;
     }
-    // Date Selection Validation
+    // Date Selection Event
     // ------------------------------------------------------------------------------------------------------------------------
     function isDateSelectionPropsValid(state, context, dateSpanMeta, filterConfig) {
         let relevantEventStore = state.eventStore;

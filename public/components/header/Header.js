@@ -22,8 +22,8 @@ class Header {
         this.pageName = 'Consulter un courier'
         break
       }
-      case this.url.pathname.endsWith('/validation.html'): {
-        this.pageName = 'Dossier a valider'
+      case this.url.pathname.endsWith('/event.html'): {
+        this.pageName = 'Liste des évènements'
         break
       }
       case this.url.pathname.endsWith('/list.html'): {

@@ -29,6 +29,10 @@ class List {
 
     section.innerHTML = `
           <div class="inputWrapper">
+              <label for="cle">Clé:</label>
+              <input type="text" name="cle" />
+          </div>
+          <div class="inputWrapper">
               <label for="society">Société:</label>
               <select name="society">
                 <option value="Toutes">Toutes</option>
@@ -41,7 +45,7 @@ class List {
               </select>
           </div>
           <div class="inputWrapper">
-              <label for="theme">Theme :</label>
+              <label for="theme">Theme:</label>
               <select name="theme">
                 <option value="Choisir">Choisir</option>
                 <option value="Amauger">Amauger</option>
@@ -55,11 +59,11 @@ class List {
               </select>
           </div>
           <div class="inputWrapper">
-              <label for="searchStartDate">Date début :</label>
+              <label for="searchStartDate">Date début:</label>
               <input type="date" name="searchStartDate" />
           </div>
           <div class="inputWrapper">
-              <label for="statut">Statut :</label>
+              <label for="statut">Statut:</label>
               <select name="statut">
                 <option value="Choisir">Choisir</option>
                 <option value="A VALIDER">A valider</option>
@@ -140,8 +144,15 @@ class List {
   async searchFromSelect(htmlSelectElement) {
     const selectedValue = htmlSelectElement.value
     let newDatas = null
-
-    if (htmlSelectElement.name === 'society') {
+    if (htmlSelectElement.name === 'cle') {
+      if (selectedValue !== '') {
+        newDatas = this.datas.filter(
+          (row) => row['cle'].trim() === selectedValue,
+        )
+      } else {
+        newDatas = this.datas
+      }
+    } else if (htmlSelectElement.name === 'society') {
       if (selectedValue !== 'Toutes') {
         newDatas = this.datas.filter(
           (row) => row['societe'].trim() === selectedValue,
@@ -268,6 +279,7 @@ class List {
   }
 
   async initEventListeners() {
+    await this.searchBy('cle')
     await this.searchBy('society')
     await this.searchBy('tiers')
     await this.searchBy('theme')

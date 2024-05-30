@@ -1,4 +1,4 @@
-#searchFolder {
+#searchEvent {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -7,13 +7,18 @@
   border-bottom: 4px solid #1191b7;
 }
 
-#searchFolder .inputWrapper {
+#searchEvent .inputWrapper {
   display: flex;
-  gap: 1em;
+  gap: .3em;
 }
 
-#searchFolder .inputWrapper label {
+#searchEvent .inputWrapper label {
   color: #ffffff;
+}
+
+#searchEvent .inputWrapper input[type='text'] {
+  max-width: 50px;
+  text-align: center;
 }
 
 #tableContainer {

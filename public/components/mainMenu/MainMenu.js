@@ -33,8 +33,8 @@ class MainMenu {
         href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
       },
       {
-        title: 'Dossier a valider',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/validation.html',
+        title: 'Liste des évènements',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/event.html',
       },
       {
         title: 'Calendrier events',
