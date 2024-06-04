@@ -2,6 +2,8 @@ class ViewMail {
   constructor() {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
+    this.affectationService = new AffectationService()
+    this.folderService = new FolderService()
     this.folderHeader = new FolderHeader()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
@@ -10,6 +12,7 @@ class ViewMail {
     this.root = document.querySelector('#root')
     this.id = null
     this.datas = null
+    this.folderDatas = null
     this.mailFolder = 'http://192.168.0.254:8080/usv_prod/courriers/'
   }
 
@@ -20,10 +23,23 @@ class ViewMail {
 
   async getDatas() {
     this.datas = JSON.parse(localStorage.getItem('datas'))
-    this.datas = this.datas.find(
-      (object) => object['cle'] === this.id,
-    )
+    const user = await JSON.parse(localStorage.getItem('user'))
+    const userDatas = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
+    if (!this.datas) {
+      this.datas = await this.affectationService.getMail(userDatas)
+      localStorage.setItem('datas', JSON.stringify(this.datas))
+    }
+
+    this.datas = this.datas.find((object) => object['cle'] === this.id)
     console.log('this.datas —>', this.datas)
+
+    this.folderDatas = await this.folderService.getFolder(userDatas)
+    this.folderDatas = this.folderDatas.find(
+      (object) => object['cle'] === this.datas['cle_litige_dossier'],
+    )
   }
 
   async createViewMailDom() {
@@ -96,7 +112,8 @@ class ViewMail {
     await this.createViewMailDom()
     await this.getParams()
     await this.getDatas()
-    await this.folderHeader.initFolderHeader(this.datas)
+    if (this.folderDatas)
+      await this.folderHeader.initFolderHeader(this.folderDatas)
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()

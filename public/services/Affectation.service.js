@@ -12,7 +12,4 @@ class AffectationService extends ApiCalls {
     await this.postRequest(params)
     return this.data['data']['rows']
   }
-  async getAffectations(url) {
-    return await this.getRequest(url)
-  }
 }

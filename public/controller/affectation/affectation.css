@@ -24,3 +24,37 @@ main {
 #searchMailAffectation .inputWrapper label {
   color: #ffffff;
 }
+
+.loader {
+  min-width: 100dvw;
+  min-height: 65dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.loader::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: " ";
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 5px solid #1191b7;
+  border-color: #1191b7 transparent #1191b7 transparent;
+  animation: loader 1.2s linear infinite;
+}
+
+@keyframes loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

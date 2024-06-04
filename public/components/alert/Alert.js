@@ -2,6 +2,7 @@ class Alert {
   constructor() {
     this.utils = new Utils()
     this.main = null
+    this.resolvePromise = null
   }
 
   async displayAlert(message) {
@@ -30,19 +31,30 @@ class Alert {
   }
 
   async initEventListeners() {
-    const cancelButton = document.querySelector('.alertCancel')
-    const validButton = document.querySelector('.alertValidation')
-    if (cancelButton) {
-      cancelButton.addEventListener('click', () => this.closeAlert())
-      return false
-    }
-    if (validButton) {
-      return true
-    }
+    return new Promise((resolve) => {
+      const cancelButton = document.querySelector('.alertCancel')
+      const validButton = document.querySelector('.alertValidation')
+
+      if (cancelButton) {
+        cancelButton.addEventListener('click', (event) => {
+          event.preventDefault()
+          this.closeAlert()
+          resolve(false)
+        })
+      }
+
+      if (validButton) {
+        validButton.addEventListener('click', (event) => {
+          event.preventDefault()
+          this.closeAlert()
+          resolve(true)
+        })
+      }
+    })
   }
 
   async initAlert(message) {
     await this.displayAlert(message)
-    await this.initEventListeners()
+    return this.initEventListeners()
   }
 }

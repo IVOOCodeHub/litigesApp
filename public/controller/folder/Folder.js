@@ -5,6 +5,7 @@ class Folder {
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
     this.utils = new Utils()
+    this.mailHistory = new MailHistory()
     this.folderHistory = new FolderHistory()
     this.main = null
     this.root = document.querySelector('#root')
@@ -186,12 +187,11 @@ class Folder {
     `
   }
 
-  async goToViewLitige(htmlSelectElement) {
-    const id = htmlSelectElement.value
-    if (id === '-1') {
-      return
-    }
-    window.location.href = `viewLitige.html?id=${id}`
+  async displayLinkedMail() {
+    const goToLinkedMail = document.querySelector('.displayMailHistory')
+    goToLinkedMail.addEventListener('click', () =>
+      this.mailHistory.initMailHistory(this.id),
+    )
   }
 
   async initEventListeners() {
@@ -206,6 +206,7 @@ class Folder {
     displayHistory.addEventListener('click', () =>
       this.folderHistory.initFolderHistory(),
     )
+    await this.displayLinkedMail()
   }
 
   async insertDatas() {
