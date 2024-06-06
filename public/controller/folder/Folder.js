@@ -49,10 +49,21 @@ class Folder {
               <select name="socity">
                 <option>Choisir</option>
                 <option selected="selected">${this.datas['societe']}</option>
-                <option>society2</option>
-                <option>society3</option>
-                <option>society4</option>
-                <option>society5</option>
+                <option>BB</option>
+                <option>ECOASSIS</option>
+                <option>FLEURIAU</option>
+                <option>GEAS</option>
+                <option>GELS</option>
+                <option>GEMP</option>
+                <option>GEMV</option>
+                <option>IVOB</option>
+                <option>IVOO</option>
+                <option>IVOS</option>
+                <option>IVOT</option>
+                <option>PVF</option>
+                <option>SCI_IMMO_BECQUET</option>
+                <option>SITAP</option>
+                <option>STENICO_RE</option>
               </select>
             </li>
             <li>
@@ -68,10 +79,6 @@ class Folder {
             <li>
               <label for="comment">Commentaire : </label>
               <textarea name="comment">${this.datas['commentaire']}</textarea>
-            </li>
-            <li>
-              <label>Ref. Source</label>
-              <input type="text" value=${this.datas['cle']} />
             </li>
             <li>
               <label>Conseil</label>
