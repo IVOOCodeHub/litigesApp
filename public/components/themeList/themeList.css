@@ -1,4 +1,4 @@
-#themeListModal {
+#themeModal {
     position: fixed;
     top: 0;
     left: 0;
@@ -14,7 +14,7 @@
     backdrop-filter: blur(10px);
 }
 
-.themeListWrapper {
+.modalWrapper {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -29,71 +29,51 @@
         rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
 
-.themeListWrapper h2 {
+.modalWrapper h2 {
     font-size: 1.5dvw;
     font-weight: 700;
     color: #36395a;
     text-align: center;
 }
 
-.themeListWrapper ul {
-    list-style: none;
-    display: flex;
-    flex-flow: column;
-    gap: 1em;
-    width: 100%;
-}
-
-.themeListWrapper ul li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5em 1em;
-    background: #f5f5f5;
-    border-radius: 8px;
-    box-shadow:
-        rgba(0, 0, 0, 0.1) 0 1px 2px;
-}
-
-.themeListWrapper ul li button {
-    background: #ff5e5e;
-    color: #ffffff;
-    border: none;
-    padding: 0.5em 1em;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.themeListWrapper ul li button:hover {
-    background: #ff3b3b;
-}
-
 .inputWrapper {
     display: flex;
+    flex-direction: column;
     gap: 1em;
     width: 100%;
 }
 
+.inputWrapper label {
+    font-weight: bold;
+}
+
+.inputWrapper select,
 .inputWrapper input {
-    flex-grow: 1;
     padding: 0.5em 1em;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 1dvw;
 }
 
-.inputWrapper button {
+.btnWrapper {
+    display: flex;
+    gap: 1em;
+}
+
+button {
     padding: 0.5em 1em;
-    background: #1191b7;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
     cursor: pointer;
+    border-radius: 8px;
     transition: background 0.3s;
 }
 
-.inputWrapper button:hover {
+.validButton {
+    background: #1191b7;
+    color: #ffffff;
+    border: none;
+}
+
+.validButton:hover {
     background: #0f7ba7;
 }
 
@@ -101,11 +81,6 @@
     background: #ff5e5e;
     color: #ffffff;
     border: none;
-    padding: 0.5em 1em;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s;
-    margin-top: 1em;
 }
 
 .closeModal:hover {

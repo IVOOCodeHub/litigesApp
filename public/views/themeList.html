@@ -1,46 +1,40 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Gestion des litiges" />
-    <link rel="icon" type="image/png" href="../assets/favicon.ico" />
-    <!-- Inclure les fichiers CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Thèmes</title>
     <link rel="stylesheet" href="../components/header/header.css" />
-    <link rel="stylesheet" href="../components/footer/footer.css" />
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="../components/alert/alert.css" />
     <link rel="stylesheet" href="../components/themeList/themeList.css" />
-    <title>Litiges — À affecter</title>
+    <link rel="stylesheet" href="../components/table/table.css" />
+    <link rel="stylesheet" href="../components/footer/footer.css" />
 </head>
 
-<body id="root" class="root">
-    <!-- Inclure les éléments Header et Footer ici -->
-    <header id="header"></header>
-    <main></main>
-    <footer id="footer"></footer>
+<body id="root" class="root"></body>
+<script lang="application/javascript" src="../scripts/utils/Utils.js"></script>
+<script lang="application/javascript" src="../components/alert/Alert.js"></script>
+<script lang="application/javascript" src="../scripts/api/ApiCalls.js"></script>
+<script lang="application/javascript" src="../services/ThemeService.js"></script>
+<script lang="application/javascript" src="../components/header/Header.js"></script>
+<script lang="application/javascript" src="../components/footer/Footer.js"></script>
+<script lang="application/javascript" src="../components/themeList/ThemeList.js"></script>
 
-    <!-- Inclure les scripts JavaScript -->
-    <script lang="application/javascript" src="../scripts/utils/Utils.js"></script>
-    <script lang="application/javascript" src="../scripts/api/ApiCalls.js"></script>
-    <script lang="application/javascript" src="../components/header/Header.js"></script>
-    <script lang="application/javascript" src="../components/footer/Footer.js"></script>
-    <script lang="application/javascript" src="../components/themeList/ThemeList.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialisation du header
+        const header = new Header();
+        header.init();
 
-    <!-- Initialisation des composants Header et Footer -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialisation du header
-            const header = new Header();
-            header.init();
+        // Initialisation du footer
+        const footer = new Footer();
+        footer.init();
 
-            // Initialisation du footer
-            const footer = new Footer();
-            footer.init();
-
-            // Initialisation du composant de liste de thèmes
-            new ThemeList().initThemeList();
-        });
-    </script>
-</body>
+        // Initialisation de la liste des thèmes
+        new ThemeList().initList();
+    });
+</script>
 
 </html>
