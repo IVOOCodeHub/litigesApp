@@ -92,11 +92,10 @@
 //   new ThemeList().initThemeList()
 // })
 
-
 class ThemeList {
   constructor() {
     this.utils = new Utils()
-    this.themeService = new ThemeService()
+    this.themeService = new ThemeListService()
     this.footer = new Footer()
     this.main = null
     this.root = document.querySelector('#root')
