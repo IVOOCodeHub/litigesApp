@@ -59,6 +59,6 @@ class ThemeListService extends ApiCalls {
       args: null,
     }
     await this.postRequest(params)
-    return this.data['data']['rows']
+    return this.data['data']['data']['themes']['rows']
   }
 }
