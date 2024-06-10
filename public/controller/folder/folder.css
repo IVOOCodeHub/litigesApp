@@ -42,7 +42,7 @@
 #folderContainer ul {
   display: flex;
   flex-flow: column;
-  gap: 2em;
+  gap: 1.5em;
 }
 
 #folderContainer ul li {

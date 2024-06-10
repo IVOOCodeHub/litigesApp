@@ -14,6 +14,7 @@
     backdrop-filter: blur(10px);
 }
 
+
 .modalWrapper {
     display: flex;
     flex-flow: column;
@@ -28,6 +29,7 @@
         rgba(0, 0, 0, 0.3) 0 7px 13px -3px,
         rgba(0, 0, 0, 0.2) 0 -3px 0 inset;
 }
+
 
 .modalWrapper h2 {
     font-size: 1.5dvw;
@@ -82,7 +84,7 @@ button {
     color: #ffffff;
     border: none;
 }
-
+  
 .closeModal:hover {
     background: #ff3b3b;
 }

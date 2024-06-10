@@ -10,6 +10,15 @@ class FolderService extends ApiCalls {
       args: null,
     }
     await this.postRequest(params)
-    return this.data['data']['rows']
+    return this.data['data']['data']['data']['rows']
+  }
+
+  async createEditFolder(user, datas) {
+    const params = {
+      ...user,
+      request: 'create_edit_litige_dossier',
+      args: datas,
+    }
+    await this.postRequest(params)
   }
 }

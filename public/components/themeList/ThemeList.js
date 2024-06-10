@@ -177,7 +177,6 @@ class ThemeList {
         </div>
       </div>
     `
-
     document.body.appendChild(modal)
 
     modal
@@ -273,6 +272,16 @@ class ThemeList {
     await this.initMain()
     await this.initTable()
     await this.insertDatas(this.datas)
+  }
+
+  async initEventListeners() {
+    const closeBtn = document.querySelector('.closeModal')
+    closeBtn.addEventListener('click', () => this.closeModal())
+  }
+
+  async initThemeList() {
+    await this.renderThemeList()
+    await this.initEventListeners()
   }
 }
 

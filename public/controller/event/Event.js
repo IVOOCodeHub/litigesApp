@@ -3,6 +3,7 @@ class Event {
     this.eventService = new EventService()
     this.utils = new Utils()
     this.footer = new Footer()
+    this.createNewEvent = new CreateNewEvent()
     this.alert = new Alert()
     this.main = null
     this.root = document.querySelector('#root')
@@ -177,7 +178,6 @@ class Event {
     const nameSelectOption = []
     const typeSelectOption = []
     this.datas.forEach((el) => {
-      console.log('el =>', el)
       if (!nameSelectOption.includes(el['name'])) {
         nameSelectOption.push(el['name'])
       }
@@ -199,6 +199,18 @@ class Event {
     })
   }
 
+  async createNewEventButton() {
+    const btnWrapper = document.querySelector('footer .buttonWrapper')
+    const createdBtn = document.createElement('button')
+    createdBtn.classList.add('validButton')
+    createdBtn.textContent = 'Crée un évènement'
+    createdBtn.addEventListener('click', () =>
+      this.createNewEvent.initCreateNewEvent(),
+    )
+
+    btnWrapper.appendChild(createdBtn)
+  }
+
   async initEventListeners() {
     await this.searchBy('key')
     await this.searchBy('name')
@@ -214,6 +226,7 @@ class Event {
     await this.insertDatas(this.datas)
     await this.insertSelect()
     await this.footer.initFooter()
+    await this.createNewEventButton()
     await this.initEventListeners()
   }
 }

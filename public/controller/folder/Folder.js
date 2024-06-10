@@ -5,11 +5,14 @@ class Folder {
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
     this.utils = new Utils()
+    this.mailHistory = new MailHistory()
     this.folderHistory = new FolderHistory()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
     this.datas = null
+    this.credentials = null
+    this.isMultiple = 0
   }
 
   async getParams() {
@@ -19,11 +22,11 @@ class Folder {
 
   async getDatas() {
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
+    this.credentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    this.datas = await this.folderService.getFolder(userDatas)
+    this.datas = await this.folderService.getFolder(this.credentials)
     this.datas = this.datas.find((folder) => folder['cle'] === this.id)
 
     console.log('this.datas —>', this.datas)
@@ -45,40 +48,27 @@ class Folder {
             <h3>Détails du dossier</h3>
             <li>
               <label>Société :</label>
-              <select name="socity">
-                <option>Choisir</option>
-                <option selected="selected">${this.datas['societe']}</option>
-                <option>society2</option>
-                <option>society3</option>
-                <option>society4</option>
-                <option>society5</option>
-              </select>
+              <p>${this.datas['societe']}</p>
             </li>
             <li>
-              <label>Tièrs : </label>
-              <select name="socity">
-                <option>Choisir</option>
-                <option selected="selected">${this.datas['tiers']}</option>
-                <option>tiers2</option>
-                <option>tiers3</option>
-                <option>tiers5</option>
-              </select>
+              <label for="tiers">Tièrs : </label>
+              <p>${this.datas['tiers']}</p>
+            </li>
+            <li>
+              <label for="tiers">Nom : </label>
+              <p>${this.datas['tiers']} vs ${this.datas['societe']}</p>
             </li>
             <li>
               <label for="comment">Commentaire : </label>
               <textarea name="comment">${this.datas['commentaire']}</textarea>
             </li>
             <li>
-              <label>Ref. Source</label>
-              <input type="text" value=${this.datas['cle']} />
+              <label for="conseil">Conseil</label>
+              <input name="conseil" type="text" class="conseil" />
             </li>
             <li>
-              <label>Conseil</label>
-              <input type="text" class="conseil" />
-            </li>
-            <li>
-              <label>Thème</label>
-              <select>
+              <label for="theme">Thème</label>
+              <select name="theme">
                 <option>Choisir</option>
                 <option selected="selected">${this.datas['theme']}</option>
                 <option>theme3</option>
@@ -86,13 +76,13 @@ class Folder {
                 <option>theme5</option>
               </select>
             </li>     
-            <li>
-              <label>Multiple</label>
-              <input type="checkbox" class="isMultiple"  />
+            <li class="checkBoxWrapper">
+              <label for="isMultiple">Multiple</label>
+              <input name="isMultiple" type="checkbox" class="isMultiple"  />
             </li>
             <li>
-              <label>Statut</label>
-              <select>
+              <label for="statut">Statut</label>
+              <select name="statut">
                 <option selected="selected">${this.datas['statut']}</option>
                 <option>En cours</option>
                 <option>Ajourné</option>
@@ -100,11 +90,15 @@ class Folder {
               </select>
             </li>
             <li>
-              <label>Date de début</label>
-              <input type="date" class="startDate" />
+              <label for="startDate">Date de début</label>
+              <input name="startDate" type="date" class="startDate" />
+            </li>
+            <li>
+              <label for="endDate">Date de fin</label>
+              <input name="endDate" type="date" class="endDate" />
             </li>
             <li class="buttonWrapper">
-              <button class="validButton">Sauvegarder les modifications</button>
+              <button class="validButton submitUpdateFolder">Sauvegarder les modifications</button>
             </li>
           </ul>
         </article>        
@@ -186,25 +180,10 @@ class Folder {
     `
   }
 
-  async goToViewLitige(htmlSelectElement) {
-    const id = htmlSelectElement.value
-    if (id === '-1') {
-      return
-    }
-    window.location.href = `viewLitige.html?id=${id}`
-  }
-
-  async initEventListeners() {
-    const createNewEventButton = document.querySelector(
-      '.displayCreateEventModal',
-    )
-    createNewEventButton.addEventListener('click', () =>
-      this.createNewEvent.initCreateNewEvent(),
-    )
-
-    const displayHistory = document.querySelector('.displayHistory')
-    displayHistory.addEventListener('click', () =>
-      this.folderHistory.initFolderHistory(),
+  async displayLinkedMail() {
+    const goToLinkedMail = document.querySelector('.displayMailHistory')
+    goToLinkedMail.addEventListener('click', () =>
+      this.mailHistory.initMailHistory(this.id),
     )
   }
 
@@ -218,15 +197,130 @@ class Folder {
 
     const isMultiple = this.datas['multiple']
     if (isMultiple === '1') {
+      this.isMultiple = 1
       const checkBox = document.querySelector('.isMultiple')
       checkBox.checked = true
+
+      const isChecked = checkBox.checked
+      if (isChecked) {
+        const newElement = document.createElement('li')
+        newElement.setAttribute('class', 'inputWrapper multipleFolder')
+        newElement.innerHTML += `
+          <label>Dossier rattaché : </label>
+          <input type="text" name="linkedFolder" value="${this.datas['cle_parent']}" />
+        `
+
+        const checkBoxWrapper = document.querySelector('.checkBoxWrapper')
+        checkBoxWrapper.insertAdjacentElement('afterend', newElement)
+      }
     }
 
     if (this.datas['datedebut']) {
       const startDate = new Date(this.datas['datedebut'])
       const dateDebutInput = document.querySelector('.startDate')
+      console.log('dateDebutInput —>', dateDebutInput)
       dateDebutInput.value = startDate.toISOString().split('T')[0]
     }
+  }
+
+  async isMultiples() {
+    const checkBox = document.querySelector('.isMultiple')
+    checkBox.addEventListener('change', (event) => {
+      event.preventDefault()
+
+      const isChecked = checkBox.checked
+      if (isChecked) {
+        this.isMultiple = 1
+        const newElement = document.createElement('li')
+        newElement.setAttribute('class', 'inputWrapper multipleFolder')
+        newElement.innerHTML += `
+          <label>Dossier rattaché : </label>
+          <input type="text" name="linkedFolder" />
+        `
+
+        const checkBoxWrapper = document.querySelector('.checkBoxWrapper')
+        checkBoxWrapper.insertAdjacentElement('afterend', newElement)
+      } else {
+        this.isMultiple = 0
+        const selectMultipleFolder = document.querySelector('.multipleFolder')
+        selectMultipleFolder.remove()
+      }
+    })
+  }
+
+  async submitUpdateFolder() {
+    const newDatas = {
+      cle: this.datas['cle'],
+      ...this.datas,
+    }
+
+    const societeSelect = document.querySelector('select[name="socity"]')
+    if (societeSelect.value !== this.datas['societe']) {
+      newDatas['societe'] = societeSelect.value
+    }
+
+    const tiersSelect = document.querySelector('select[name="tiers"]')
+    if (tiersSelect.value !== this.datas['tiers']) {
+      newDatas['tiers'] = tiersSelect.value
+    }
+
+    const commentaireInput = document.querySelector('textarea[name="comment"]')
+    if (commentaireInput.value !== this.datas['commentaire']) {
+      newDatas['commentaire'] = commentaireInput.value
+    }
+
+    const conseilInput = document.querySelector('input[name="conseil"]')
+    if (conseilInput.value !== this.datas['conseil']) {
+      newDatas['conseil'] = conseilInput.value
+    }
+
+    const themeSelect = document.querySelector('select[name="theme"]')
+    if (themeSelect.value !== this.datas['theme']) {
+      newDatas['theme'] = themeSelect.value
+    }
+
+    const isMultipleCheckbox = document.querySelector(
+      'input[name="isMultiple"]',
+    )
+    const isMultipleValue = isMultipleCheckbox.checked ? '1' : '0'
+    if (isMultipleValue !== this.datas['multiple']) {
+      newDatas['multiple'] = isMultipleValue
+    }
+
+    const statutSelect = document.querySelector('select[name="statut"]')
+    if (statutSelect.value !== this.datas['statut']) {
+      newDatas['statut'] = statutSelect.value
+    }
+
+    const dateDebutInput = document.querySelector('input[name="startDate"]')
+    if (dateDebutInput.value !== this.datas['datedebut']) {
+      newDatas['datedebut'] = dateDebutInput.value
+    }
+
+    console.log('newDatas =>', newDatas)
+    await this.folderService.createEditFolder(this.credentials, newDatas)
+  }
+
+  async initEventListeners() {
+    await this.isMultiples()
+
+    const submitUpdateFolderBtn = document.querySelector('.submitUpdateFolder')
+    submitUpdateFolderBtn.addEventListener('click', async () => {
+      await this.submitUpdateFolder()
+    })
+
+    const createNewEventButton = document.querySelector(
+      '.displayCreateEventModal',
+    )
+    createNewEventButton.addEventListener('click', () =>
+      this.createNewEvent.initCreateNewEvent(),
+    )
+
+    const displayHistory = document.querySelector('.displayHistory')
+    displayHistory.addEventListener('click', () =>
+      this.folderHistory.initFolderHistory(),
+    )
+    await this.displayLinkedMail()
   }
 
   async initFolder() {

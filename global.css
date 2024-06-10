@@ -93,6 +93,7 @@ textarea {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  order: 1;
 }
 
 .validButton:focus {
@@ -120,6 +121,7 @@ textarea {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  order: 2;
 }
 
 .errorButton:focus {
