@@ -195,7 +195,8 @@ class CreateNewFolder {
 
     console.log('datas —>', datas)
     await this.destroyComponent()
-    await this.folderService.createFolder(user, datas)
+    await this.folderService.createEditFolder(user, datas)
+    window.location.reload()
   }
 
   async initEventListeners() {

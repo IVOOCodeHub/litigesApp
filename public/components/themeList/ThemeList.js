@@ -1,5 +1,6 @@
-class ThemeListComponent {
+class ThemeList {
   constructor() {
+    this.main = null
     this.themes = [
       'Amauger',
       'Cial',
@@ -10,19 +11,15 @@ class ThemeListComponent {
       'Social',
       'Stenico',
     ]
-    this.root = document.getElementById('root')
   }
 
-  init() {
-    this.displayThemeListModal()
-  }
-
-  displayThemeListModal() {
+  async renderThemeList() {
+    this.main = document.querySelector('main')
     const section = document.createElement('section')
     section.setAttribute('id', 'themeListModal')
 
-    section.innerHTML = `
-      <div class="themeListContainer">
+    section.innerHTML += `
+      <div class="themeListWrapper">
         <h2>Liste des Thèmes</h2>
         <ul id="themeList"></ul>
         <div class="inputWrapper">
@@ -32,8 +29,7 @@ class ThemeListComponent {
         <button class="closeModal">Fermer</button>
       </div>
     `
-
-    this.root.appendChild(section)
+    this.main.appendChild(section)
 
     this.themeListElement = section.querySelector('#themeList')
     this.newThemeInput = section.querySelector('#newThemeInput')
@@ -79,9 +75,19 @@ class ThemeListComponent {
     const modal = document.getElementById('themeListModal')
     modal.remove()
   }
+
+  async initEventListeners() {
+    const closeBtn = document.querySelector('.closeModal')
+    closeBtn.addEventListener('click', () => this.closeModal())
+  }
+
+  async initThemeList() {
+    await this.renderThemeList()
+    await this.initEventListeners()
+  }
 }
 
 // Initialiser le composant après le chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
-  new ThemeListComponent()
+  new ThemeList().initThemeList()
 })
