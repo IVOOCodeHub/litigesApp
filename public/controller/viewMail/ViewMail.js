@@ -8,6 +8,8 @@ class ViewMail {
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.createNewEvent = new CreateNewEvent()
+    this.folderList = new FolderList()
+    this.selectedFolderID = null
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
@@ -74,16 +76,9 @@ class ViewMail {
     rightArticle.innerHTML = `
     <h2>Gestion du courier :</h2>
     <ul class="manageDossier">
-        <li class="typeFile">
+        <li class="bindFolderWrapper">
             <label for="bindTo">Associer à un dossier </label>
-            <select>
-              <option>Choisir un dossier</option>
-              <option>dossier1</option>
-              <option>dossier2</option>
-              <option>dossier3</option>
-              <option>dossier4</option>
-              <option>dossier5</option>
-            </select>
+            <button class="button displayFolder">Sélectionner</button>
         </li>
          <li>
             <label for="status">Crée un dossier : </label>
@@ -93,11 +88,41 @@ class ViewMail {
             <label for="status">Crée un évènement : </label>
             <button class="button createEvent">Crée</button>
         </li>
+        <li>
+          <label for="litigeComment">Commentaire : </label>
+          <textarea name="litigeComment"></textarea>
+        </li>
     </ul>
+    <div>
+        <button class="validButton submitForm">Sauvegarder les informations</button>
+    </div>
     `
   }
 
+  async submitMailUpdate() {
+    const newDatas = {
+      mailID: this.datas['cle'],
+      linkedFolderID: this.selectedFolderID,
+      mailComment: document.querySelector('textarea[name="litigeComment"]')
+        .value,
+    }
+    console.log('newDatas —>', newDatas)
+  }
+
   async initEventListeners() {
+    const displayFolderBtn = document.querySelector('.displayFolder')
+    displayFolderBtn.addEventListener('click', () =>
+      this.folderList.initFolderList(),
+    )
+    document.addEventListener('folderSelected', (event) => {
+      this.selectedFolderID = event.detail.folderID
+    })
+
+    const submitButton = document.querySelector('.submitForm')
+    submitButton.addEventListener('click', () => {
+      this.submitMailUpdate()
+    })
+
     const createFolderBtn = document.querySelector('.createFolder')
     createFolderBtn.addEventListener('click', () => {
       this.createNewFolder.initCreateNewFolder()
@@ -112,8 +137,9 @@ class ViewMail {
     await this.createViewMailDom()
     await this.getParams()
     await this.getDatas()
-    if (this.folderDatas)
+    if (this.folderDatas) {
       await this.folderHeader.initFolderHeader(this.folderDatas)
+    }
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()

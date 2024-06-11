@@ -1,40 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Liste des Thèmes</title>
     <link rel="stylesheet" href="../components/header/header.css" />
-    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="../../global.css" />
     <link rel="stylesheet" href="../components/alert/alert.css" />
     <link rel="stylesheet" href="../components/themeList/themeList.css" />
     <link rel="stylesheet" href="../components/table/table.css" />
     <link rel="stylesheet" href="../components/footer/footer.css" />
-</head>
+  </head>
 
-<body id="root" class="root"></body>
-<script lang="application/javascript" src="../scripts/utils/Utils.js"></script>
-<script lang="application/javascript" src="../components/alert/Alert.js"></script>
-<script lang="application/javascript" src="../scripts/api/ApiCalls.js"></script>
-<script lang="application/javascript" src="../services/ThemeService.js"></script>
-<script lang="application/javascript" src="../components/header/Header.js"></script>
-<script lang="application/javascript" src="../components/footer/Footer.js"></script>
-<script lang="application/javascript" src="../components/themeList/ThemeList.js"></script>
+  <body id="root" class="root"></body>
+  <script
+    lang="application/javascript"
+    src="../scripts/utils/Utils.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../components/alert/Alert.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../scripts/api/ApiCalls.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../services/ThemeListService.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../components/header/Header.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../components/footer/Footer.js"
+  ></script>
+  <script
+    lang="application/javascript"
+    src="../components/themeList/ThemeList.js"
+  ></script>
 
-<script>
+  <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Initialisation du header
-        const header = new Header();
-        header.init();
+      // Initialisation du header
+      const header = new Header()
+      header.init()
 
-        // Initialisation du footer
-        const footer = new Footer();
-        footer.init();
+      // Initialisation du footer
+      const footer = new Footer()
+      footer.init()
 
-        // Initialisation de la liste des thèmes
-        new ThemeList().initList();
-    });
-</script>
-
+      // Initialisation de la liste des thèmes
+      new ThemeList().initList()
+    })
+  </script>
 </html>

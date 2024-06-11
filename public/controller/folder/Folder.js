@@ -6,7 +6,6 @@ class Folder {
     this.footer = new Footer()
     this.utils = new Utils()
     this.mailHistory = new MailHistory()
-    this.folderHistory = new FolderHistory()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
@@ -316,10 +315,6 @@ class Folder {
       this.createNewEvent.initCreateNewEvent(),
     )
 
-    const displayHistory = document.querySelector('.displayHistory')
-    displayHistory.addEventListener('click', () =>
-      this.folderHistory.initFolderHistory(),
-    )
     await this.displayLinkedMail()
   }
 
