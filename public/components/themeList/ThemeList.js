@@ -145,7 +145,7 @@ class ThemeList {
     datas?.forEach((row) => {
       tableBody.innerHTML += `
         <tr data-id="${row['id']}">
-          <td>${row['name']}</td>
+          <td>${row['theme']}</td>
           <td>${row['active'] ? 'Oui' : 'Non'}</td>
           <td><button class="editButton">Modifier</button></td>
         </tr>
