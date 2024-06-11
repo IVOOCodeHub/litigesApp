@@ -24,7 +24,7 @@ class Utils {
     const heures = date.getHours().toString().padStart(2, '0')
     const minutes = date.getMinutes().toString().padStart(2, '0')
 
-    return `${jour}/${mois}/${annee} ${heures}:${minutes}`
+    return `${jour}/${mois}/${annee}`
   }
 
   trapFocus = (el) => {
