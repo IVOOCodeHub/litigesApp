@@ -3,6 +3,7 @@ class ViewMail {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
     this.affectationService = new AffectationService()
+    this.bindMailService = new BindMailService()
     this.folderService = new FolderService()
     this.folderHeader = new FolderHeader()
     this.footer = new Footer()
@@ -14,6 +15,7 @@ class ViewMail {
     this.root = document.querySelector('#root')
     this.id = null
     this.datas = null
+    this.credentials = null
     this.folderDatas = null
     this.mailFolder = 'http://192.168.0.254:8080/usv_prod/courriers/'
   }
@@ -26,22 +28,24 @@ class ViewMail {
   async getDatas() {
     this.datas = JSON.parse(localStorage.getItem('datas'))
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
+    this.credentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
     if (!this.datas) {
-      this.datas = await this.affectationService.getMail(userDatas)
+      this.datas = await this.affectationService.getMail(this.credentials)
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
-
     this.datas = this.datas.find((object) => object['cle'] === this.id)
-    console.log('this.datas —>', this.datas)
 
-    this.folderDatas = await this.folderService.getFolder(userDatas)
-    this.folderDatas = this.folderDatas.find(
-      (object) => object['cle'] === this.datas['cle_litige_dossier'],
-    )
+    this.folderDatas = await this.folderService.getFolder(this.credentials)
+    this.folderDatas = this.folderDatas.find((folder) => {
+      if (folder['courriers']) {
+        return folder['courriers']['rows'].find(
+          (mail) => mail['cle_courrier'] === this.id,
+        )
+      }
+    })
   }
 
   async createViewMailDom() {
@@ -99,14 +103,24 @@ class ViewMail {
     `
   }
 
+  async insertComment() {
+    const comment = document.querySelector('textarea[name="litigeComment"]')
+    comment.value = this.datas['litiges_commentaire']
+  }
+
   async submitMailUpdate() {
+    if (!this.selectedFolderID) {
+      // if we came from the folder view, we got the id from the header.
+      this.selectedFolderID = document.querySelector('.headerKey').textContent
+    }
+    // if not, we got it from the form.
     const newDatas = {
-      mailID: this.datas['cle'],
-      linkedFolderID: this.selectedFolderID,
-      mailComment: document.querySelector('textarea[name="litigeComment"]')
+      cle_courrier: this.datas['cle'],
+      cle_dossier: this.selectedFolderID,
+      commentaire: document.querySelector('textarea[name="litigeComment"]')
         .value,
     }
-    console.log('newDatas —>', newDatas)
+    await this.bindMailService.setBindMail(this.credentials, newDatas)
   }
 
   async initEventListeners() {
@@ -143,6 +157,7 @@ class ViewMail {
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()
+    await this.insertComment()
     await this.footer.initFooter()
     await this.initEventListeners()
   }

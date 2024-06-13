@@ -3,9 +3,9 @@ class FolderService extends ApiCalls {
     super()
   }
 
-  async getFolder(user) {
+  async getFolder(credentials) {
     const params = {
-      ...user,
+      ...credentials,
       request: 'read_litige_dossier',
       args: null,
     }
@@ -13,9 +13,19 @@ class FolderService extends ApiCalls {
     return this.data['data']['data']['data']['rows']
   }
 
-  async createEditFolder(user, datas) {
+  async getBindCourrier(credentials) {
     const params = {
-      ...user,
+      ...credentials,
+      request: 'read_litige_dossier',
+      args: null,
+    }
+    await this.postRequest(params)
+    return this.data['data']['data']['data']['rows']
+  }
+
+  async createEditFolder(credentials, datas) {
+    const params = {
+      ...credentials,
       request: 'create_edit_litige_dossier',
       args: datas,
     }
