@@ -3,15 +3,19 @@ class ViewMail {
     this.searchBar = new SearchBar()
     this.utils = new Utils()
     this.affectationService = new AffectationService()
+    this.bindMailService = new BindMailService()
     this.folderService = new FolderService()
     this.folderHeader = new FolderHeader()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.createNewEvent = new CreateNewEvent()
+    this.folderList = new FolderList()
+    this.selectedFolderID = null
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
     this.datas = null
+    this.credentials = null
     this.folderDatas = null
     this.mailFolder = 'http://192.168.0.254:8080/usv_prod/courriers/'
   }
@@ -24,22 +28,24 @@ class ViewMail {
   async getDatas() {
     this.datas = JSON.parse(localStorage.getItem('datas'))
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
+    this.credentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
     if (!this.datas) {
-      this.datas = await this.affectationService.getMail(userDatas)
+      this.datas = await this.affectationService.getMail(this.credentials)
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
-
     this.datas = this.datas.find((object) => object['cle'] === this.id)
-    console.log('this.datas —>', this.datas)
 
-    this.folderDatas = await this.folderService.getFolder(userDatas)
-    this.folderDatas = this.folderDatas.find(
-      (object) => object['cle'] === this.datas['cle_litige_dossier'],
-    )
+    this.folderDatas = await this.folderService.getFolder(this.credentials)
+    this.folderDatas = this.folderDatas.find((folder) => {
+      if (folder['courriers']) {
+        return folder['courriers']['rows'].find(
+          (mail) => mail['cle_courrier'] === this.id,
+        )
+      }
+    })
   }
 
   async createViewMailDom() {
@@ -74,16 +80,9 @@ class ViewMail {
     rightArticle.innerHTML = `
     <h2>Gestion du courier :</h2>
     <ul class="manageDossier">
-        <li class="typeFile">
+        <li class="bindFolderWrapper">
             <label for="bindTo">Associer à un dossier </label>
-            <select>
-              <option>Choisir un dossier</option>
-              <option>dossier1</option>
-              <option>dossier2</option>
-              <option>dossier3</option>
-              <option>dossier4</option>
-              <option>dossier5</option>
-            </select>
+            <button class="button displayFolder">Sélectionner</button>
         </li>
          <li>
             <label for="status">Crée un dossier : </label>
@@ -93,11 +92,51 @@ class ViewMail {
             <label for="status">Crée un évènement : </label>
             <button class="button createEvent">Crée</button>
         </li>
+        <li>
+          <label for="litigeComment">Commentaire : </label>
+          <textarea name="litigeComment"></textarea>
+        </li>
     </ul>
+    <div>
+        <button class="validButton submitForm">Sauvegarder les informations</button>
+    </div>
     `
   }
 
+  async insertComment() {
+    const comment = document.querySelector('textarea[name="litigeComment"]')
+    comment.value = this.datas['litiges_commentaire']
+  }
+
+  async submitMailUpdate() {
+    if (!this.selectedFolderID) {
+      // if we came from the folder view, we got the id from the header.
+      this.selectedFolderID = document.querySelector('.headerKey').textContent
+    }
+    // if not, we got it from the form.
+    const newDatas = {
+      cle_courrier: this.datas['cle'],
+      cle_dossier: this.selectedFolderID,
+      commentaire: document.querySelector('textarea[name="litigeComment"]')
+        .value,
+    }
+    await this.bindMailService.setBindMail(this.credentials, newDatas)
+  }
+
   async initEventListeners() {
+    const displayFolderBtn = document.querySelector('.displayFolder')
+    displayFolderBtn.addEventListener('click', () =>
+      this.folderList.initFolderList(),
+    )
+    document.addEventListener('folderSelected', (event) => {
+      this.selectedFolderID = event.detail.folderID
+    })
+
+    const submitButton = document.querySelector('.submitForm')
+    submitButton.addEventListener('click', () => {
+      this.submitMailUpdate()
+    })
+
     const createFolderBtn = document.querySelector('.createFolder')
     createFolderBtn.addEventListener('click', () => {
       this.createNewFolder.initCreateNewFolder()
@@ -112,11 +151,13 @@ class ViewMail {
     await this.createViewMailDom()
     await this.getParams()
     await this.getDatas()
-    if (this.folderDatas)
+    if (this.folderDatas) {
       await this.folderHeader.initFolderHeader(this.folderDatas)
+    }
     await this.createSections()
     await this.displayCourrier()
     await this.editCourrier()
+    await this.insertComment()
     await this.footer.initFooter()
     await this.initEventListeners()
   }

@@ -3,7 +3,7 @@ class MailHistory {
     this.main = null
     this.datas = null
     this.section = null
-    this.affectationService = new AffectationService()
+    this.folderService = new FolderService()
   }
 
   async getDatas(folderID) {
@@ -12,14 +12,14 @@ class MailHistory {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    const mails = await this.affectationService.getMail(userCredentials)
-    const mailLinkedToFolder = []
-    mails.forEach((mail) => {
-      if (mail['cle_litige_dossier'] === folderID) {
-        mailLinkedToFolder.push(mail)
+    const mails = await this.folderService.getBindCourrier(userCredentials)
+    mails.forEach((folder) => {
+      if (folder['cle'] === folderID) {
+        if (folder['courriers']) {
+          this.datas = folder['courriers']['rows']
+        }
       }
     })
-    this.datas = mailLinkedToFolder
   }
 
   async initMain() {
@@ -30,7 +30,7 @@ class MailHistory {
     this.section = document.createElement('section')
     this.section.setAttribute('id', 'mailHistory')
 
-    if (this.datas.length === 0) {
+    if (!this.datas) {
       this.section.innerHTML += `
         <div class="tableContainer">
           <h2>Aucun courrier dans ce dossier</h2>
@@ -60,15 +60,15 @@ class MailHistory {
   }
 
   async insertDatas(datas) {
-    datas.forEach((mail) => {
+    datas?.forEach((mail) => {
       const tableBody = document.querySelector('table tbody')
       tableBody.innerHTML += `
         <tr>
-          <td>${mail['cle']}</td>
+          <td>${mail['cle_courrier']}</td>
           <td>${mail['societe_emettrice']}</td>
           <td>${mail['societe']}</td>
           <td>${mail['nature']}</td>
-          <td>${mail['commentaire']}</td>
+          <td>${mail['litiges_commentaire']}</td>
         </tr>
       `
     })
@@ -97,6 +97,7 @@ class MailHistory {
       row.addEventListener('click', async (e) => {
         e.preventDefault()
         const id = row.firstElementChild.textContent
+        await localStorage.setItem('datas', JSON.stringify(this.datas))
         await this.goToViewMail(id)
       })
     })
