@@ -199,13 +199,13 @@ class ThemeList {
         <h2>Modifier le Thème</h2>
         <div class="inputWrapper">
           <label for="themeName">Nom du Thème :</label>
-          <input type="text" id="themeName" value="${theme['name']}" />
+          <input type="text" id="themeName" value="${theme['theme']}" />
         </div>
         <div class="inputWrapper">
           <label for="themeActive">Actif :</label>
           <select id="themeActive">
-            <option value="true" ${theme['active'] ? 'selected' : ''}>Oui</option>
-            <option value="false" ${!theme['active'] ? 'selected' : ''}>Non</option>
+            <option value="1" ${theme['actif'] ? 'selected' : ''}>Oui</option>
+            <option value="0" ${!theme['actif'] ? 'selected' : ''}>Non</option>
           </select>
         </div>
         <div class="btnWrapper">
