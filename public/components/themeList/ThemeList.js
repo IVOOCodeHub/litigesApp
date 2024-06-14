@@ -146,7 +146,7 @@ class ThemeList {
       tableBody.innerHTML += `
         <tr data-id="${row['id']}">
           <td>${row['theme']}</td>
-          <td>${row['active'] ? 'Oui' : 'Non'}</td>
+          <td>${row['actif'] ? 'Oui' : 'Non'}</td>
           <td><button class="editButton">Modifier</button></td>
         </tr>
       `
