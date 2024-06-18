@@ -36,14 +36,18 @@ class ViewMail {
       this.datas = await this.affectationService.getMail(this.credentials)
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
+
     this.datas = this.datas.find((object) => object['cle'] === this.id)
 
     this.folderDatas = await this.folderService.getFolder(this.credentials)
+
     this.folderDatas = this.folderDatas.find((folder) => {
       if (folder['courriers']) {
-        return folder['courriers']['rows'].find(
-          (mail) => mail['cle_courrier'] === this.id,
-        )
+        const mails = folder['courriers']['rows']
+        if (!Array.isArray(mails)) {
+          return [mails]
+        }
+        return mails.find((mail) => mail['cle_courrier'] === this.id)
       }
     })
   }

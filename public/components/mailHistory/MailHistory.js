@@ -17,6 +17,9 @@ class MailHistory {
       if (folder['cle'] === folderID) {
         if (folder['courriers']) {
           this.datas = folder['courriers']['rows']
+          if (!Array.isArray(this.datas)) {
+            this.datas = [this.datas]
+          }
         }
       }
     })
