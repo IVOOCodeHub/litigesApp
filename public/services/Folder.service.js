@@ -20,7 +20,11 @@ class FolderService extends ApiCalls {
       args: null,
     }
     await this.postRequest(params)
-    return this.data['data']['data']['data']['rows']
+    const res = this.data['data']['data']['data']['rows']
+    if (!Array.isArray(res)) {
+      return [res]
+    }
+    return res
   }
 
   async createEditFolder(credentials, datas) {

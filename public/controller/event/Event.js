@@ -9,6 +9,7 @@ class Event {
     this.root = document.querySelector('#root')
     this.credentials = null
     this.datas = null
+    this.eventsDictionary = JSON.parse(localStorage.getItem('eventTypes')) // events dictionary
   }
 
   async getDatas() {
@@ -18,8 +19,6 @@ class Event {
       password: user['mdp'],
     }
     this.datas = await this.eventService.getEvent(this.credentials)
-
-    console.log('this.datas —>', this.datas)
   }
 
   async initMain() {
@@ -68,7 +67,7 @@ class Event {
           <thead>
               <tr>
                 <th>Clé</th>
-                <th>Nom</th>
+                <th>Commentaire</th>
                 <th>Type d'évènement</th>
                 <th>Date dernier évènement</th>
                 <th>État</th>
@@ -82,19 +81,29 @@ class Event {
     this.main.appendChild(section)
   }
 
-  async insertDatas(datas) {
+  async insertDatas() {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
-    datas?.forEach((row) => {
+
+    this.datas?.forEach((event) => {
+      const findEventType = this.eventsDictionary.find(
+        (type) => type['type'] === event['event_type'],
+      )
+      const findNextEventType = this.eventsDictionary.find(
+        (type) => type['type'] === event['next_event'],
+      )
+      const eventTypeConverted = findEventType['libelle']
+      const nextEventTypeConverted = findNextEventType['libelle']
+
       tableBody.innerHTML += `
         <tr>
-          <td>${row['key']}</td>
-          <td>${row['name']}</td>
-          <td>${row['type']}</td>
-          <td>${row['previousEventDate']}</td>
-          <td>${row['statut']}</td>
-          <td>${row['nextEvent']}</td>
-          <td>${row['nextEventDate']}</td>
+          <td>${event['cle']}</td>
+          <td>${event['commentaire']}</td>
+          <td>${eventTypeConverted}</td>
+          <td>${this.utils.reformatDate(event['datederevent'])}</td>
+          <td>${''}</td>
+          <td>${nextEventTypeConverted}</td>
+          <td>${this.utils.reformatDate(event['datenextevent'])}</td>
         </tr>      
       `
     })
@@ -208,7 +217,7 @@ class Event {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.insertDatas(this.datas)
+    await this.insertDatas()
     await this.insertSelect()
     await this.footer.initFooter()
     await this.createNewEventButton()

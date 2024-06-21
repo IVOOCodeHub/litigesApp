@@ -10,6 +10,18 @@ class EventService extends ApiCalls {
       args: null,
     }
     await this.postRequest(params)
-    return this.data['data']['data']['data']['rows']
+
+    const res = this.data['data']['data']['data']['rows']
+
+    const events = []
+    res.forEach((folder) => {
+      const row = folder['events']
+      if (row) {
+        if (row['rows']) {
+          events.push(row['rows'])
+        }
+      }
+    })
+    return events
   }
 }
