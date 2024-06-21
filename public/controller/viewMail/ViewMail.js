@@ -37,18 +37,20 @@ class ViewMail {
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
 
+    console.log('this.id —>', this.id)
     this.datas = this.datas.find((object) => object['cle'] === this.id)
 
     this.folderDatas = await this.folderService.getFolder(this.credentials)
 
     this.folderDatas = this.folderDatas.find((folder) => {
       if (folder['courriers']) {
-        const mails = folder['courriers']['rows']
+        let mails = folder['courriers']['rows']
         if (!Array.isArray(mails)) {
-          return [mails]
+          mails = [mails]
         }
-        return mails.find((mail) => mail['cle_courrier'] === this.id)
+        return mails.some((mail) => mail['cle_courrier'] === this.id)
       }
+      return false
     })
   }
 
@@ -109,7 +111,9 @@ class ViewMail {
 
   async insertComment() {
     const comment = document.querySelector('textarea[name="litigeComment"]')
-    comment.value = this.datas['litiges_commentaire']
+    const litigeComment = this.datas['litiges_commentaire']
+      ? (comment.value = litigeComment)
+      : (comment.value = '')
   }
 
   async submitMailUpdate() {
