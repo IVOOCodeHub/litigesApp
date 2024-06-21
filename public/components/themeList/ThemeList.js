@@ -109,6 +109,7 @@ class ThemeList {
     }
     this.datas = await this.themeService.getList(userDatas)
     console.log('data: ', this.datas)
+    await this.insertDatas(this.datas) // Insert data after fetching
   }
 
   async initMain() {
@@ -241,47 +242,36 @@ class ThemeList {
     }
 
     const newTheme = {
-      name: themeName,
-      active: true,
+      theme: themeName,
+      actif: true,
     }
 
     // Make an API call to add the new theme to the database
     await this.themeService.addTheme(newTheme)
     this.closeModal()
-    this.getData() // Refresh the list
+    await this.getData() // Refresh the list
   }
 
   async updateTheme(themeId) {
     const themeName = document.getElementById('themeName').value
-    const themeActive = document.getElementById('themeActive').value === 'true'
+    const themeActive = document.getElementById('themeActive').value === '1'
 
     const updatedTheme = {
       id: themeId,
-      name: themeName,
-      active: themeActive,
+      theme: themeName,
+      actif: themeActive,
     }
 
     // Make an API call to update the theme in the database
     await this.themeService.updateTheme(updatedTheme)
     this.closeModal()
-    this.getData() // Refresh the list
+    await this.getData() // Refresh the list
   }
 
   async initList() {
     await this.getData()
     await this.initMain()
     await this.initTable()
-    await this.insertDatas(this.datas)
-  }
-
-  async initEventListeners() {
-    const closeBtn = document.querySelector('.closeModal')
-    closeBtn.addEventListener('click', () => this.closeModal())
-  }
-
-  async initThemeList() {
-    await this.renderThemeList()
-    await this.initEventListeners()
   }
 }
 
