@@ -6,12 +6,13 @@ class Folder {
     this.footer = new Footer()
     this.utils = new Utils()
     this.mailHistory = new MailHistory()
-    this.folderHistory = new FolderHistory()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
     this.datas = null
     this.credentials = null
+    this.eventTypes = null
+    this.juridictionTypes = null
     this.isMultiple = 0
   }
 
@@ -28,8 +29,6 @@ class Folder {
     }
     this.datas = await this.folderService.getFolder(this.credentials)
     this.datas = this.datas.find((folder) => folder['cle'] === this.id)
-
-    console.log('this.datas —>', this.datas)
   }
 
   async createMain() {
@@ -71,9 +70,6 @@ class Folder {
               <select name="theme">
                 <option>Choisir</option>
                 <option selected="selected">${this.datas['theme']}</option>
-                <option>theme3</option>
-                <option>theme4</option>
-                <option>theme5</option>
               </select>
             </li>     
             <li class="checkBoxWrapper">
@@ -119,27 +115,23 @@ class Folder {
             </li>
           </ul>             
           <!-- PREVIOUS EVENT -->        
-          <ul class="element">
+          <ul class="element" id="lastEventSection">
             <h3>Dernier historique évènement</h3>
-            <li>
+            <li class="date">
               <label>Dernier évèment : </label>
-              <p>DD/MM/YYYY</p>
+              <p>Aucun évènement</p>
             </li>
-            <li>
-              <label>Etat : </label>
-              <p>Pré-contentntieux / Contentieux / Éxécution</p>
-            </li>
-            <li>
+            <li class="eventType">
               <label>Type d'évènement : </label>
-              <p>*type d'évènement*</p>
+              <p>Aucun évènement</p>
             </li>
-            <li>
+            <li class="juridictionType">
               <label>Type de juridiction : </label>
-              <p>*type de juridiction*</p>
+              <p>Aucun évènement</p>
             </li>
-            <li>
+            <li class="comment">
               <label>Commentaire : </label>
-              <p>*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi asperiores consectetur corporis fuga nam quasi sapiente tempore. Ad consequatur libero natus nihil tempora! Mollitia, quae.*</p>
+              <p>Aucun évènement</p>
             </li>
           </ul>
           
@@ -151,16 +143,6 @@ class Folder {
               <label>Rattacher : </label>
               <select name="add folder">
                 <option>Choisir</option>
-                <option>Folder1</option>
-                <option>Folder2</option>
-                <option>Folder3</option>
-                <option>Folder4</option>
-                <option>Folder5</option>
-                <option>Folder6</option>
-                <option>Folder7</option>
-                <option>Folder8</option>
-                <option>Folder9</option>
-                <option>Folder10</option>
               </select>
             </li>
             <li>
@@ -221,6 +203,36 @@ class Folder {
       console.log('dateDebutInput —>', dateDebutInput)
       dateDebutInput.value = startDate.toISOString().split('T')[0]
     }
+  }
+
+  async insertLastEventDatas(datas) {
+    await this.readDictionary()
+
+    const lastEventDate = document.querySelector('#lastEventSection .date p')
+    lastEventDate.textContent = this.utils.reformatDate(datas['datederevent'])
+
+    const eventType = document.querySelector('#lastEventSection .eventType p')
+    const getEventType = this.eventTypes.find(
+      (eventType) => eventType['type'] === datas['event_type'],
+    )
+    eventType.textContent = getEventType['libelle']
+
+    const juridictionType = document.querySelector(
+      '#lastEventSection .juridictionType p',
+    )
+    const getJuridictionType = this.juridictionTypes.find(
+      (juridictionType) =>
+        juridictionType['type'] === datas['juridiction_type'],
+    )
+    juridictionType.textContent = getJuridictionType['libelle']
+
+    const comment = document.querySelector('#lastEventSection .comment p')
+    comment.textContent = datas['commentaire']
+  }
+
+  async readDictionary() {
+    this.eventTypes = JSON.parse(localStorage.getItem('eventTypes'))
+    this.juridictionTypes = JSON.parse(localStorage.getItem('juridictionTypes'))
   }
 
   async isMultiples() {
@@ -316,10 +328,6 @@ class Folder {
       this.createNewEvent.initCreateNewEvent(),
     )
 
-    const displayHistory = document.querySelector('.displayHistory')
-    displayHistory.addEventListener('click', () =>
-      this.folderHistory.initFolderHistory(),
-    )
     await this.displayLinkedMail()
   }
 
@@ -330,6 +338,9 @@ class Folder {
     await this.folderHeader.initFolderHeader(this.datas)
     await this.renderFolder()
     await this.insertDatas()
+    if (this.datas['last_event']) {
+      await this.insertLastEventDatas(this.datas['last_event'])
+    }
     await this.footer.initFooter()
     await this.initEventListeners()
   }

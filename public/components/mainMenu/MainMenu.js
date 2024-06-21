@@ -1,16 +1,28 @@
 class MainMenu {
   constructor() {
     this.utils = new Utils()
+    this.mainMenuService = new MainMenuService()
     this.root = document.querySelector('#root')
     this.footer = new Footer()
     this.user = null
+    this.credentials = null
   }
 
   async isUserAlreadyConnected() {
     this.user = await JSON.parse(localStorage.getItem('user'))
+    this.credentials = {
+      userID: this.user['matricule'],
+      password: this.user['mdp'],
+    }
     if (!this.user) {
       window.location.href = `http://192.168.0.254:8080/usv_prod/menu0.asp`
     }
+  }
+
+  async getLitigesDictionary() {
+    const datas = await this.mainMenuService.getDictionary(this.credentials)
+    localStorage.setItem('eventTypes', JSON.stringify(datas['event_types']['rows']))
+    localStorage.setItem('juridictionTypes', JSON.stringify(datas['juridiction_types']['rows']))
   }
 
   async render() {
@@ -119,6 +131,7 @@ class MainMenu {
 
   async initMainMenu() {
     await this.isUserAlreadyConnected()
+    await this.getLitigesDictionary()
     await this.render()
     await this.footer.initFooter()
   }

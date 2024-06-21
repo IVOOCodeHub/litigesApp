@@ -1,15 +1,15 @@
-class EventService extends ApiCalls {
+class MainMenuService extends ApiCalls {
   constructor() {
     super()
   }
 
-  async getEvent(credentials) {
+  async getDictionary (credentials) {
     const params = {
       ...credentials,
       request: 'read_litige_dossier',
       args: null,
     }
     await this.postRequest(params)
-    return this.data['data']['data']['data']['rows']
+    return this.data['data']['data']
   }
 }

@@ -7,35 +7,19 @@ class Event {
     this.alert = new Alert()
     this.main = null
     this.root = document.querySelector('#root')
-    this.datas = [
-      {
-        key: '001',
-        name: 'lorem',
-        type: 'dolor',
-        previousEventDate: 'dd/mm/yyyy',
-        statut: 'état',
-        nextEvent: 'prochain évènement',
-        nextEventDate: 'dd/mm/yyyy',
-      },
-      {
-        key: '002',
-        name: 'ipsum',
-        type: 'ipsum',
-        previousEventDate: 'dd/mm/yyyy',
-        statut: 'état',
-        nextEvent: 'prochain évènement',
-        nextEventDate: 'dd/mm/yyyy',
-      },
-      {
-        key: '003',
-        name: 'dolor',
-        type: 'lorem',
-        previousEventDate: 'dd/mm/yyyy',
-        statut: 'état',
-        nextEvent: 'prochain évènement',
-        nextEventDate: 'dd/mm/yyyy',
-      },
-    ]
+    this.credentials = null
+    this.datas = null
+  }
+
+  async getDatas() {
+    const user = await JSON.parse(localStorage.getItem('user'))
+    this.credentials = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
+    this.datas = await this.eventService.getEvent(this.credentials)
+
+    console.log('this.datas —>', this.datas)
   }
 
   async initMain() {
@@ -101,7 +85,7 @@ class Event {
   async insertDatas(datas) {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
-    datas.forEach((row) => {
+    datas?.forEach((row) => {
       tableBody.innerHTML += `
         <tr>
           <td>${row['key']}</td>
@@ -220,6 +204,7 @@ class Event {
   }
 
   async initValidation() {
+    await this.getDatas()
     await this.initMain()
     await this.initForm()
     await this.initTable()

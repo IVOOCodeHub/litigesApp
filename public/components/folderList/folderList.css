@@ -1,4 +1,4 @@
-#mailHistory {
+#folderListModal {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,14 +14,18 @@
   backdrop-filter: blur(10px);
 }
 
-#mailHistory h2 {
+#folderListModal .tableContainer h2 {
   text-align: center;
   margin-bottom: 2em;
 }
 
-#mailHistory .tableContainer {
+#folderListModal .tableContainer {
   max-width: 75%;
   max-height: 67dvh;
   overflow-y: scroll;
   margin-bottom: 2em;
+}
+
+.buttonWrapper {
+  margin-top: 2em;
 }
