@@ -2,20 +2,23 @@ class List {
   constructor() {
     this.utils = new Utils()
     this.listService = new ListService()
+    this.themeListService = new ThemeListService()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.main = null
     this.root = document.querySelector('#root')
     this.sortDirection = {}
+    this.themeList = null
   }
 
   async getData() {
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
+    const userCredentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    this.datas = await this.listService.getList(userDatas)
+    this.datas = await this.listService.getList(userCredentials)
+    this.themeList = await this.themeListService.getList(userCredentials)
   }
 
   async initMain() {
@@ -48,14 +51,6 @@ class List {
               <label for="theme">Theme:</label>
               <select name="theme">
                 <option value="Choisir">Choisir</option>
-                <option value="Amauger">Amauger</option>
-                <option value="Cial">Cial</option>
-                <option value="Divers">Divers</option>
-                <option value="Fiscal">Fiscal</option>
-                <option value="Penal">Penal</option>
-                <option value="RC">RC</option>
-                <option value="Social">Social</option>
-                <option value="Stenico">Stenico</option>
               </select>
           </div>
           <div class="inputWrapper">
@@ -118,12 +113,20 @@ class List {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
+    const themeSelectOption = []
+
     this.datas.forEach((el) => {
       if (!societySelectOption.includes(el['societe'])) {
         societySelectOption.push(el['societe'])
       }
       if (!tiersSelectOption.includes(el['tiers'])) {
         tiersSelectOption.push(el['tiers'])
+      }
+    })
+
+    this.themeList.forEach((el) => {
+      if (!themeSelectOption.includes(el['theme'] && el['actif'] === '1')) {
+        themeSelectOption.push(el['theme'])
       }
     })
 
@@ -137,6 +140,12 @@ class List {
     tiersSelectOption.forEach((tiers) => {
       tiersSelect.innerHTML += `
         <option>${tiers}</option>
+      `
+    })
+    const themeSelect = document.querySelector('select[name="theme"]')
+    themeSelectOption.forEach((theme) => {
+      themeSelect.innerHTML += `
+        <option>${theme}</option>
       `
     })
   }

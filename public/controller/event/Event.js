@@ -67,11 +67,11 @@ class Event {
           <thead>
               <tr>
                 <th>Clé</th>
+                <th>Dossier de l'évènement</th>
                 <th>Commentaire</th>
                 <th>Type d'évènement</th>
                 <th>Date dernier évènement</th>
                 <th>État</th>
-                <th>Prochain évènement</th>
                 <th>Date prochain évènement</th>
               </tr>
           </thead>
@@ -98,10 +98,10 @@ class Event {
       tableBody.innerHTML += `
         <tr>
           <td>${event['cle']}</td>
+          <td>${event['cle_litige_dossier']}</td>
           <td>${event['commentaire']}</td>
           <td>${eventTypeConverted}</td>
           <td>${this.utils.reformatDate(event['datederevent'])}</td>
-          <td>${''}</td>
           <td>${nextEventTypeConverted}</td>
           <td>${this.utils.reformatDate(event['datenextevent'])}</td>
         </tr>      
@@ -109,61 +109,77 @@ class Event {
     })
   }
 
-  async searchFromSelect(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value
+  async searchFromSelect(htmlElement) {
+    const htmlElementName = htmlElement.name
+    const htmlElementValue = htmlElement.value
     let newDatas = null
-    if (htmlSelectElement.name === 'key') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) => row['key'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'name') {
-      if (selectedValue !== 'Choisir') {
-        newDatas = this.datas.filter(
-          (row) => row['name'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'type') {
-      if (selectedValue !== 'Tous') {
-        newDatas = this.datas.filter(
-          (row) => row['type'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'previousEventDate') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) => row['previousEventDate'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'nextEventDate') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) =>
-            this.utils.reformatDate(row['nextEventDate']).split(' ')[0] ===
-            this.utils.reformatDate(selectedValue).split(' ')[0],
-        )
-      } else {
-        newDatas = this.datas
-      }
+
+    switch (htmlElementName) {
+      case 'key':
+        if (htmlElementValue !== '') {
+          const resultFromValue = await this.datas.filter(
+            (row) => row['cle'].trim() === htmlElementValue,
+          )
+          resultFromValue
+            ? (newDatas = resultFromValue)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'name':
+        if (htmlElementValue !== 'Choisir') {
+          const resultFromName = await this.datas.filter(
+            (row) => row['name'].trim() === htmlElementValue,
+          )
+          resultFromName ? (newDatas = resultFromName) : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'type':
+        if (htmlElementValue !== 'Tous') {
+          const resultFromType = await this.datas.filter(
+            (row) => row['type'].trim() === htmlElementValue,
+          )
+          resultFromType ? (newDatas = resultFromType) : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'lastEventDate':
+        if (htmlElementValue !== '') {
+          const resultFromLastEventDate = await this.datas.filter(
+            (row) => row['datederevent'].trim() === htmlElementValue,
+          )
+          resultFromLastEventDate
+            ? (newDatas = resultFromLastEventDate)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'nextEventDate':
+        if (htmlElementValue !== '') {
+          const resultFromNextEventDate = await this.datas.filter(
+            (row) => row['datenextevent'].trim() === htmlElementValue,
+          )
+          resultFromNextEventDate
+            ? (newDatas = resultFromNextEventDate)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
     }
 
     await this.insertDatas(newDatas)
   }
 
   async searchBy(elementName) {
-    const select = document.querySelector(`[name="${elementName}"]`)
-    select.addEventListener(
+    const htmlElement = document.querySelector(`[name="${elementName}"]`)
+    htmlElement.addEventListener(
       'change',
-      async () => await this.searchFromSelect(select),
+      async () => await this.searchFromSelect(htmlElement),
     )
   }
 

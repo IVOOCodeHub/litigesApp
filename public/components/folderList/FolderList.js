@@ -1,10 +1,12 @@
 class FolderList {
   constructor() {
     this.folderService = new FolderService()
+    this.themeListService = new ThemeListService()
     this.utils = new Utils()
     this.userCredentials = null
     this.foldersDatas = null
     this.main = null
+    this.themeList = null
   }
 
   async getDatas() {
@@ -15,7 +17,7 @@ class FolderList {
     }
 
     this.foldersDatas = await this.folderService.getFolder(this.userCredentials)
-    console.log('this.foldersDatas —>', this.foldersDatas)
+    this.themeList = await this.themeListService.getList(this.userCredentials)
   }
 
   async initMain() {
@@ -49,14 +51,6 @@ class FolderList {
           <label for="theme">Theme:</label>
           <select id="theme" name="theme">
             <option value="Choisir">Choisir</option>
-            <option value="Amauger">Amauger</option>
-            <option value="Cial">Cial</option>
-            <option value="Divers">Divers</option>
-            <option value="Fiscal">Fiscal</option>
-            <option value="Penal">Penal</option>
-            <option value="RC">RC</option>
-            <option value="Social">Social</option>
-            <option value="Stenico">Stenico</option>
           </select>
         </div>
         <div class="inputWrapper">
@@ -83,6 +77,7 @@ class FolderList {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
+    const themeSelectOption = []
 
     this.foldersDatas.forEach((el) => {
       if (!societySelectOption.includes(el['societe'])) {
@@ -90,6 +85,12 @@ class FolderList {
       }
       if (!tiersSelectOption.includes(el['tiers'])) {
         tiersSelectOption.push(el['tiers'])
+      }
+    })
+
+    this.themeList.forEach((el) => {
+      if (!themeSelectOption.includes(el['theme'] && el['actif'] === '1')) {
+        themeSelectOption.push(el['theme'])
       }
     })
 
@@ -103,6 +104,12 @@ class FolderList {
     tiersSelectOption.forEach((tiers) => {
       tiersSelect.innerHTML += `
         <option>${tiers}</option>
+      `
+    })
+    const themeSelect = document.querySelector('select[name="theme"]')
+    themeSelectOption.forEach((theme) => {
+      themeSelect.innerHTML += `
+        <option>${theme}</option>
       `
     })
   }
