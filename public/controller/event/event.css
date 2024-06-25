@@ -9,7 +9,7 @@
 
 #searchEvent .inputWrapper {
   display: flex;
-  gap: .3em;
+  gap: 0.3em;
 }
 
 #searchEvent .inputWrapper label {

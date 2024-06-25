@@ -6,6 +6,7 @@ class Folder {
     this.footer = new Footer()
     this.utils = new Utils()
     this.mailHistory = new MailHistory()
+    this.eventList = new EventList()
     this.main = null
     this.root = document.querySelector('#root')
     this.id = null
@@ -14,6 +15,7 @@ class Folder {
     this.eventTypes = null
     this.juridictionTypes = null
     this.isMultiple = 0
+    this.bindMailcount = null
   }
 
   async getParams() {
@@ -29,6 +31,12 @@ class Folder {
     }
     this.datas = await this.folderService.getFolder(this.credentials)
     this.datas = this.datas.find((folder) => folder['cle'] === this.id)
+  }
+
+  async bindMailCountIncrementer() {
+    this.datas['courriers']
+      ? (this.bindMailCount = this.datas['courriers']['rows'].length)
+      : (this.bindMailCount = 0)
   }
 
   async createMain() {
@@ -105,7 +113,7 @@ class Folder {
           <!-- HISTORY  -->
           <ul class="historySection">
             <li class="buttonWrapper">
-              <button class="button displayMailHistory">Liste des courriers</button>
+              <button class="button displayMailHistory">Liste des courriers (${this.bindMailCount})</button>
             </li>
             <li class="buttonWrapper">
               <button class="button displayHistory">Liste des dossiers associers</button>
@@ -140,10 +148,8 @@ class Folder {
           <ul class="element">
             <h3>Gestion du dossier</h3>
             <li>
-              <label>Rattacher : </label>
-              <select name="add folder">
-                <option>Choisir</option>
-              </select>
+              <label>Attacher un évènement : </label>
+              <button class="button displayBindEventModal">Attacher un évènement</button>
             </li>
             <li>
               <label>Ajouter un évènement : </label>
@@ -166,6 +172,13 @@ class Folder {
     const goToLinkedMail = document.querySelector('.displayMailHistory')
     goToLinkedMail.addEventListener('click', () =>
       this.mailHistory.initMailHistory(this.id),
+    )
+  }
+
+  async linkEvent() {
+    const goToLinkEvent = document.querySelector('.displayBindEventModal')
+    goToLinkEvent.addEventListener('click', () =>
+      this.eventList.initEventList(this.id),
     )
   }
 
@@ -200,7 +213,6 @@ class Folder {
     if (this.datas['datedebut']) {
       const startDate = new Date(this.datas['datedebut'])
       const dateDebutInput = document.querySelector('.startDate')
-      console.log('dateDebutInput —>', dateDebutInput)
       dateDebutInput.value = startDate.toISOString().split('T')[0]
     }
   }
@@ -329,11 +341,13 @@ class Folder {
     )
 
     await this.displayLinkedMail()
+    await this.linkEvent()
   }
 
   async initFolder() {
     await this.getParams()
     await this.getDatas()
+    await this.bindMailCountIncrementer()
     await this.createMain()
     await this.folderHeader.initFolderHeader(this.datas)
     await this.renderFolder()

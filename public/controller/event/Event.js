@@ -9,7 +9,7 @@ class Event {
     this.root = document.querySelector('#root')
     this.credentials = null
     this.datas = null
-    this.eventsDictionary = JSON.parse(localStorage.getItem('eventTypes')) // events dictionary
+    this.eventsDictionary = JSON.parse(localStorage.getItem('eventTypes'))
   }
 
   async getDatas() {

@@ -39,9 +39,9 @@ class Affectation {
           <div class="inputWrapper">
               <label for="type">Type du courrier:</label>
               <select name="type">
-                <option value="Choisir">Choisir</option>
-                <option value="inbox">Entrant</option>
-                <option value="outbox">Sortant</option>
+                <option>Tous</option>
+                <option value="LITIGE REÇU">Entrant</option>
+                <option value="LITIGE EMIS">Sortant</option>
               </select>
           </div>
           <div class="inputWrapper">
@@ -51,7 +51,7 @@ class Affectation {
           <div class="inputWrapper">
               <label for="society">Société:</label>
               <select name="society">
-                <option value="Toutes">Toutes</option>
+                <option>Toutes</option>
               </select>
           </div>
         `
@@ -92,6 +92,22 @@ class Affectation {
     })
   }
 
+  async insertSelect() {
+    const societySelectOption = []
+    this.datas.forEach((el) => {
+      if (!societySelectOption.includes(el['societe'])) {
+        societySelectOption.push(el['societe'])
+      }
+    })
+
+    const societySelect = document.querySelector('select[name="society"]')
+    societySelectOption.forEach((society) => {
+      societySelect.innerHTML += `
+        <option>${society}</option>
+      `
+    })
+  }
+
   async goToViewMail(key) {
     window.location.href = `viewMail.html?id=${key}`
   }
@@ -103,25 +119,82 @@ class Affectation {
     this.main.appendChild(loader)
   }
 
-  async searchFromSelect(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value
+  async searchFromForm(htmlElement) {
+    const htmlElementName = htmlElement.name
+    const htmlElementValue = htmlElement.value
     let newDatas = null
-    if (htmlSelectElement.name === 'cle') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) => row['cle'].trim() === selectedValue,
-        )
-      } else {
+
+    switch (htmlElementName) {
+      case 'key':
+        if (htmlElementValue !== '') {
+          console.log('here !')
+          const resultFromValue = await this.datas.filter(
+            (row) => row['cle'].trim() === htmlElementValue,
+          )
+          resultFromValue
+            ? (newDatas = resultFromValue)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'type':
+        if (htmlElementValue !== 'Tous') {
+          const resultFromType = await this.datas.filter(
+            (row) => row['type'].trim() === htmlElementValue,
+          )
+          resultFromType ? (newDatas = resultFromType) : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'receptionDate':
+        if (htmlElementValue !== '') {
+          const resultFromReceptionDate = await this.datas.filter((row) => {
+            return (
+              this.utils.reformatDate(row['dh_saisie']).split(' ')[0] ===
+              this.utils.reformatDate(htmlElementValue).split(' ')[0]
+            )
+          })
+          resultFromReceptionDate.length > 0
+            ? (newDatas = resultFromReceptionDate)
+            : (newDatas = this.datas)
+        }
+        break
+      case 'society':
+        if (htmlElementValue !== 'Toutes') {
+          const resultFromSociety = await this.datas.filter(
+            (row) => row['societe'].trim() === htmlElementValue,
+          )
+          resultFromSociety.length > 0
+            ? (newDatas = resultFromSociety)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+
+      default:
         newDatas = this.datas
-      }
-    } else {
-      newDatas = this.datas
     }
 
     await this.insertDatas(newDatas)
   }
 
+  async searchBy(elementName) {
+    const htmlElement = document.querySelector(`[name="${elementName}"]`)
+    htmlElement.addEventListener(
+      'change',
+      async () => await this.searchFromForm(elementName),
+    )
+  }
+
   async initEventListeners() {
+    await this.searchBy('key')
+    await this.searchBy('type')
+    await this.searchBy('receptionDate')
+    await this.searchBy('society')
+
     const rows = document.querySelectorAll('tr')
     rows.forEach((row) => {
       row.addEventListener('click', async (event) => {
@@ -137,6 +210,7 @@ class Affectation {
     await this.getData()
     await this.initForm()
     await this.renderTable(true)
+    await this.insertSelect()
     await this.footer.initFooter()
     await this.initEventListeners()
   }
