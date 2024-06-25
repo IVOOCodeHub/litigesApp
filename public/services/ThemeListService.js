@@ -62,33 +62,23 @@ class ThemeListService extends ApiCalls {
     return this.data['data']['data']['themes']['rows']
   }
 
-  async addTheme(theme) {
+  async addTheme(user, theme) {
     // Make an API call to add a new theme
-    const response = await fetch('/api/themes/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(theme),
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to add theme')
+    const params = {
+      ...user,
+      request: 'read_litige_dossier',
+      args: theme,
     }
+    await this.postRequest(params)
   }
 
-  async updateTheme(theme) {
+  async updateTheme(user, theme) {
     // Make an API call to update an existing theme
-    const response = await fetch(`/api/themes/update/${theme.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(theme),
-    })
-
-    if (!response.ok) {
-      throw new Error('Failed to update theme')
+    const params = {
+      ...user,
+      request: 'read_litige_dossier',
+      args: theme,
     }
+    await this.postRequest(params)
   }
 }
