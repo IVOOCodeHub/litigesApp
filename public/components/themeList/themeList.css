@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px;
+    /* Ajout d'une marge pour espacer le bouton du tableau */
 }
 
 #addThemeButton {
@@ -12,6 +14,8 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
+    align-self: center;
+    /* Centrer le bouton */
 }
 
 #addThemeButton:hover {

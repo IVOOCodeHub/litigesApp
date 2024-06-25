@@ -144,7 +144,7 @@ class ThemeList {
     tableBody.innerHTML = ''
     datas?.forEach((row) => {
       tableBody.innerHTML += `
-        <tr data-id="${row['id']}">
+        <tr data-id="${row['cle']}">
           <td>${row['theme']}</td>
           <td>${row['actif'] ? 'Oui' : 'Non'}</td>
           <td><button class="editButton">Modifier</button></td>
@@ -189,7 +189,12 @@ class ThemeList {
 
   openEditModal(row) {
     const themeId = row.dataset.id
-    const theme = this.datas.find((t) => t['id'] === themeId)
+    const theme = this.datas.find((t) => t['cle'] == themeId)
+
+    if (!theme) {
+      console.error('Thème non trouvé:', themeId)
+      return
+    }
 
     const modal = document.createElement('div')
     modal.setAttribute('id', 'themeModal')
@@ -199,7 +204,7 @@ class ThemeList {
         <h2>Modifier le Thème</h2>
         <div class="inputWrapper">
           <label for="themeName">Nom du Thème :</label>
-          <input type="text" id="themeName" value="${theme['theme']}" />
+          <input type="text" id="themeName" value="${theme['theme'] || ''}" />
         </div>
         <div class="inputWrapper">
           <label for="themeActive">Actif :</label>
@@ -256,7 +261,7 @@ class ThemeList {
     const themeActive = document.getElementById('themeActive').value === '1'
 
     const updatedTheme = {
-      id: themeId,
+      cle: themeId,
       theme: themeName,
       actif: themeActive,
     }
