@@ -109,6 +109,7 @@ class ThemeList {
     }
     this.datas = await this.themeService.getList(userDatas)
     console.log('data: ', this.datas)
+    await this.insertDatas(this.datas) // Insert data after fetching
   }
 
   async initMain() {
@@ -214,7 +215,7 @@ class ThemeList {
           </select>
         </div>
         <div class="btnWrapper">
-          <button class="validButton">Valider</button>
+          <button class="validButton" data-id="${themeId}">Valider</button>
           <button class="closeModal">Fermer</button>
         </div>
       </div>
@@ -225,9 +226,10 @@ class ThemeList {
     modal
       .querySelector('.closeModal')
       .addEventListener('click', () => this.closeModal())
-    modal
-      .querySelector('.validButton')
-      .addEventListener('click', () => this.updateTheme(themeId))
+    modal.querySelector('.validButton').addEventListener('click', (event) => {
+      const id = event.target.getAttribute('data-id')
+      this.updateTheme(id)
+    })
   }
 
   closeModal() {
@@ -276,7 +278,6 @@ class ThemeList {
     await this.getData()
     await this.initMain()
     await this.initTable()
-    await this.insertDatas(this.datas) // Insert data after fetching
   }
 }
 
