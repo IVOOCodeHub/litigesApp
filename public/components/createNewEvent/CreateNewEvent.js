@@ -3,6 +3,10 @@ class CreateNewEvent {
     this.utils = new Utils()
     this.alert = new Alert()
     this.main = null
+    this.eventDictionary = JSON.parse(localStorage.getItem('eventTypes'))
+    this.juridictionDictionary = JSON.parse(
+      localStorage.getItem('juridictionTypes'),
+    )
   }
 
   async renderSection() {
@@ -31,24 +35,14 @@ class CreateNewEvent {
         </div>
         <div class="inputWrapper">
           <label>Évènement</label>
-          <select>
-            <option>Choisir un évènement</option>
-            <option>Évènement1</option>
-            <option>Évènement2</option>
-            <option>Évènement3</option>
-            <option>Évènement4</option>
-            <option>Évènement5</option>
+          <select name="eventSelection">
+            <option>Choisir</option>
           </select>
         </div>
         <div class="inputWrapper">
           <label>Juridiction</label>
-          <select>
-            <option>Choisir une juridiction</option>
-            <option>Juridiction1</option>
-            <option>Juridiction2</option>
-            <option>Juridiction3</option>
-            <option>Juridiction4</option>
-            <option>Juridiction5</option>
+          <select name="juridictionSelection">
+            <option>Choisir</option>
           </select>
         </div>
         <div class="inputWrapper">
@@ -65,24 +59,14 @@ class CreateNewEvent {
         </div>
         <div class="inputWrapper subSection">
           <label>Évènement suivant</label>
-          <select>
-            <option>Choisir un évènement</option>
-            <option>nextEvent1</option>
-            <option>nextEvent2</option>
-            <option>nextEvent3</option>
-            <option>nextEvent4</option>
-            <option>nextEvent5</option>
+          <select name="nextEventSelection">
+            <option>Choisir</option>
           </select>
         </div>
         <div class="inputWrapper">
           <label>Juridiction à venir</label>
-          <select>
+          <select name="nextJuridictionSelection">
             <option>Choisir</option>
-            <option>nextTypeJuridiction1</option>
-            <option>nextTypeJuridiction2</option>
-            <option>nextTypeJuridiction3</option>
-            <option>nextTypeJuridiction4</option>
-            <option>nextTypeJuridiction5</option>
           </select>
         </div>
          <div class="inputWrapper">
@@ -96,6 +80,43 @@ class CreateNewEvent {
       </div>
     `
     this.main.appendChild(section)
+  }
+
+  async insertSelectOptions() {
+    const eventSelect = document.querySelector('select[name="eventSelection"]')
+    const nextEventSelect = document.querySelector(
+      'select[name="nextEventSelection"]',
+    )
+    const juridictionSelect = document.querySelector(
+      'select[name="juridictionSelection"]',
+    )
+    const nextJuridictionSelect = document.querySelector(
+      'select[name="nextJuridictionSelection"]',
+    )
+
+    this.eventDictionary.forEach((event) => {
+      const option1 = document.createElement('option')
+      option1.textContent = event['libelle']
+      option1.value = event['libelle']
+      eventSelect.appendChild(option1)
+
+      const option2 = document.createElement('option')
+      option2.textContent = event['libelle']
+      option2.value = event['libelle']
+      nextEventSelect.appendChild(option2)
+    })
+
+    this.juridictionDictionary.forEach((juridiction) => {
+      const option1 = document.createElement('option')
+      option1.textContent = juridiction['libelle']
+      option1.value = juridiction['libelle']
+      juridictionSelect.appendChild(option1)
+
+      const option2 = document.createElement('option')
+      option2.textContent = juridiction['libelle']
+      option2.value = juridiction['libelle']
+      nextJuridictionSelect.appendChild(option2)
+    })
   }
 
   async handleSubmitEventCreation() {
@@ -138,6 +159,7 @@ class CreateNewEvent {
 
   async initCreateNewEvent() {
     await this.renderSection()
+    await this.insertSelectOptions()
     await this.initEventListeners()
   }
 }

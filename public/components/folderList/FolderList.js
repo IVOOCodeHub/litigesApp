@@ -15,6 +15,7 @@ class FolderList {
     }
 
     this.foldersDatas = await this.folderService.getFolder(this.userCredentials)
+    console.log('this.foldersDatas —>', this.foldersDatas)
   }
 
   async initMain() {
@@ -35,25 +36,27 @@ class FolderList {
         <div class="inputWrapper">
           <label for="society">Société:</label>
           <select id="society" name="society">
-            <option>mockup</option>
-            <option>mockup</option>
-            <option>mockup</option>
+            <option>Toutes</option>           
           </select>
         </div>
         <div class="inputWrapper">
           <label for="tiers">Tiers:</label>
           <select id="tiers" name="tiers">
-            <option>mockup</option>
-            <option>mockup</option>
-            <option>mockup</option>
+            <option>Tous</option>
           </select>
         </div>
         <div class="inputWrapper">
           <label for="theme">Theme:</label>
           <select id="theme" name="theme">
-            <option>mockup</option>
-            <option>mockup</option>
-            <option>mockup</option> 
+            <option value="Choisir">Choisir</option>
+            <option value="Amauger">Amauger</option>
+            <option value="Cial">Cial</option>
+            <option value="Divers">Divers</option>
+            <option value="Fiscal">Fiscal</option>
+            <option value="Penal">Penal</option>
+            <option value="RC">RC</option>
+            <option value="Social">Social</option>
+            <option value="Stenico">Stenico</option>
           </select>
         </div>
         <div class="inputWrapper">
@@ -75,6 +78,33 @@ class FolderList {
 
     this.main.appendChild(section)
     await this.utils.trapFocus(section)
+  }
+
+  async insertSelect() {
+    const societySelectOption = []
+    const tiersSelectOption = []
+
+    this.foldersDatas.forEach((el) => {
+      if (!societySelectOption.includes(el['societe'])) {
+        societySelectOption.push(el['societe'])
+      }
+      if (!tiersSelectOption.includes(el['tiers'])) {
+        tiersSelectOption.push(el['tiers'])
+      }
+    })
+
+    const societySelect = document.querySelector('select[name="society"]')
+    societySelectOption.forEach((society) => {
+      societySelect.innerHTML += `
+        <option>${society}</option>
+      `
+    })
+    const tiersSelect = document.querySelector('select[name="tiers"]')
+    tiersSelectOption.forEach((tiers) => {
+      tiersSelect.innerHTML += `
+        <option>${tiers}</option>
+      `
+    })
   }
 
   async renderFolderList() {
@@ -283,6 +313,7 @@ class FolderList {
     await this.getDatas()
     await this.initMain()
     await this.renderSearchBar()
+    await this.insertSelect()
     await this.renderFolderList()
     await this.insertDatas(this.foldersDatas)
     await this.initEventListeners()

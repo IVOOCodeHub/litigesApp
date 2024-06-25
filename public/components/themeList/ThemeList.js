@@ -109,7 +109,6 @@ class ThemeList {
     }
     this.datas = await this.themeService.getList(userDatas)
     console.log('data: ', this.datas)
-    await this.insertDatas(this.datas) // Insert data after fetching
   }
 
   async initMain() {
@@ -272,6 +271,7 @@ class ThemeList {
     await this.getData()
     await this.initMain()
     await this.initTable()
+    await this.insertDatas(this.datas) // Insert data after fetching
   }
 }
 

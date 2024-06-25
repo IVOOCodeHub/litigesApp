@@ -112,8 +112,7 @@ class ViewMail {
   async insertComment() {
     const comment = document.querySelector('textarea[name="litigeComment"]')
     const litigeComment = this.datas['litiges_commentaire']
-      ? (comment.value = litigeComment)
-      : (comment.value = '')
+    litigeComment ? (comment.value = litigeComment) : (comment.value = '')
   }
 
   async submitMailUpdate() {

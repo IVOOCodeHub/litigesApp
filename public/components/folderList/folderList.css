@@ -23,7 +23,7 @@
 .searchContainer {
   display: flex;
   background: #36395a;
-  width: 75%;
+  width: 90%;
   align-items: center;
   justify-content: space-around;
   padding: 0.5em;
@@ -48,7 +48,7 @@
 /* TABLE */
 #folderListModal .tableContainer {
   order: 2;
-  width: 75%;
+  width: 90%;
   max-height: 67dvh;
   overflow-y: scroll;
 }
