@@ -10,6 +10,9 @@ class Event {
     this.credentials = null
     this.datas = null
     this.eventsDictionary = JSON.parse(localStorage.getItem('eventTypes'))
+    this.juridictionDictionary = JSON.parse(
+      localStorage.getItem('juridictionTypes'),
+    )
   }
 
   async getDatas() {
@@ -36,9 +39,12 @@ class Event {
         <input type="text" name="key" />
     </div>
     <div class="inputWrapper">
-        <label for="name">Nom: </label>
-        <select name="name">
-          <option value="Choisir">Choisir</option>          
+        <label for="action">Stade: </label>
+        <select name="action">
+          <option value="Choisir">Choisir</option>  
+          <option>Pré-contentieux</option>
+          <option>Contentieux</option>
+          <option>Éxecution</option>        
         </select>
     </div>
     <div class="inputWrapper">
@@ -68,11 +74,15 @@ class Event {
               <tr>
                 <th>Clé</th>
                 <th>Dossier de l'évènement</th>
+                <th>Stade</th>
+                <th>Évènement</th>
+                <th>Juridiction</th>
+                <th>Lieu</th>
+                <th>Date de création</th>
                 <th>Commentaire</th>
-                <th>Type d'évènement</th>
-                <th>Date dernier évènement</th>
-                <th>État</th>
-                <th>Date prochain évènement</th>
+                <th>Prochaine évènement</th>
+                <th>Prochaine juridiction</th>
+                <th>Date de l'évènement suivant</th>
               </tr>
           </thead>
           <tbody></tbody>
@@ -92,17 +102,29 @@ class Event {
       const findNextEventType = this.eventsDictionary.find(
         (type) => type['type'] === event['next_event'],
       )
+      const findJuridictionType = this.juridictionDictionary.find(
+        (type) => type['type'] === event['juridiction_type'],
+      )
+      const findNextJuridictionType = this.juridictionDictionary.find(
+        (type) => type['type'] === event['next_juridiction_type'],
+      )
       const eventTypeConverted = findEventType['libelle']
       const nextEventTypeConverted = findNextEventType['libelle']
+      const juridictionTypeConverted = findJuridictionType['libelle']
+      const nextJuridictionTypeConverted = findNextJuridictionType['libelle']
 
       tableBody.innerHTML += `
         <tr>
           <td>${event['cle']}</td>
           <td>${event['cle_litige_dossier']}</td>
-          <td>${event['commentaire']}</td>
+          <td>${event['action']}</td>
           <td>${eventTypeConverted}</td>
+          <td>${juridictionTypeConverted}</td>
+          <td>${event['lieu_juridiction']}</td>
           <td>${this.utils.reformatDate(event['datederevent'])}</td>
+          <td>${event['commentaire']}</td>
           <td>${nextEventTypeConverted}</td>
+          <td>${nextJuridictionTypeConverted}</td>
           <td>${this.utils.reformatDate(event['datenextevent'])}</td>
         </tr>      
       `
@@ -127,21 +149,29 @@ class Event {
           newDatas = this.datas
         }
         break
-      case 'name':
+      case 'action':
         if (htmlElementValue !== 'Choisir') {
-          const resultFromName = await this.datas.filter(
-            (row) => row['name'].trim() === htmlElementValue,
+          const resultFromAction = await this.datas.filter(
+            (row) => row['action'].trim() === htmlElementValue,
           )
-          resultFromName ? (newDatas = resultFromName) : (newDatas = this.datas)
+          resultFromAction
+            ? (newDatas = resultFromAction)
+            : (newDatas = this.datas)
         } else {
+          // TODO : Les recherches ne fonctionnes pas pour le moment. (En cas de vide, pas de changement visuel)
           newDatas = this.datas
         }
         break
       case 'type':
         if (htmlElementValue !== 'Tous') {
-          const resultFromType = await this.datas.filter(
-            (row) => row['type'].trim() === htmlElementValue,
-          )
+          const resultFromType = await this.datas.filter((row) => {
+            const getTypeFromDictionary = this.eventsDictionary.find(
+              (label) => {
+                return htmlElementValue.trim() === label['libelle'].trim()
+              },
+            )
+            return row['event_type'] === getTypeFromDictionary['type']
+          })
           resultFromType ? (newDatas = resultFromType) : (newDatas = this.datas)
         } else {
           newDatas = this.datas
@@ -184,21 +214,9 @@ class Event {
   }
 
   async insertSelect() {
-    const nameSelectOption = []
     const typeSelectOption = []
-    this.datas.forEach((el) => {
-      if (!nameSelectOption.includes(el['name'])) {
-        nameSelectOption.push(el['name'])
-      }
-      if (!typeSelectOption.includes(el['type']))
-        typeSelectOption.push(el['type'])
-    })
-
-    const nameSelect = document.querySelector('select[name="name"]')
-    nameSelectOption.forEach((name) => {
-      nameSelect.innerHTML += `
-        <option>${name}</option>
-      `
+    this.eventsDictionary.forEach((event) => {
+      typeSelectOption.push(event['libelle'])
     })
     const typeSelect = document.querySelector('select[name="type"]')
     typeSelectOption.forEach((type) => {
@@ -222,7 +240,7 @@ class Event {
 
   async initEventListeners() {
     await this.searchBy('key')
-    await this.searchBy('name')
+    await this.searchBy('action')
     await this.searchBy('type')
     await this.searchBy('previousEventDate')
     await this.searchBy('nextEventDate')

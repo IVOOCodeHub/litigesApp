@@ -6,6 +6,7 @@ class Folder {
     this.footer = new Footer()
     this.utils = new Utils()
     this.mailHistory = new MailHistory()
+    this.folderHistory = new FolderHistory()
     this.eventList = new EventList()
     this.main = null
     this.root = document.querySelector('#root')
@@ -63,7 +64,7 @@ class Folder {
             </li>
             <li>
               <label for="tiers">Nom : </label>
-              <p>${this.datas['tiers']} vs ${this.datas['societe']}</p>
+              <p>${this.datas['societe']} vs ${this.datas['tiers']}</p>
             </li>
             <li>
               <label for="comment">Commentaire : </label>
@@ -116,7 +117,7 @@ class Folder {
               <button class="button displayMailHistory">Liste des courriers (${this.bindMailCount})</button>
             </li>
             <li class="buttonWrapper">
-              <button class="button displayHistory">Liste des dossiers associers</button>
+              <button class="button displayFolderHistory">Liste des dossiers associers</button>
             </li>
              <li class="buttonWrapper">
               <button class="button ">Historique des évènements</button>
@@ -172,6 +173,13 @@ class Folder {
     const goToLinkedMail = document.querySelector('.displayMailHistory')
     goToLinkedMail.addEventListener('click', () =>
       this.mailHistory.initMailHistory(this.id),
+    )
+  }
+
+  async displayFolderHistory() {
+    const goToFolderHistory = document.querySelector('.displayFolderHistory')
+    goToFolderHistory.addEventListener('click', () =>
+      this.folderHistory.initFolderHistory(this.id),
     )
   }
 
@@ -278,18 +286,10 @@ class Folder {
       ...this.datas,
     }
 
-    const societeSelect = document.querySelector('select[name="socity"]')
-    if (societeSelect.value !== this.datas['societe']) {
-      newDatas['societe'] = societeSelect.value
-    }
-
-    const tiersSelect = document.querySelector('select[name="tiers"]')
-    if (tiersSelect.value !== this.datas['tiers']) {
-      newDatas['tiers'] = tiersSelect.value
-    }
-
     const commentaireInput = document.querySelector('textarea[name="comment"]')
+    console.log('commentaireInput —>', commentaireInput)
     if (commentaireInput.value !== this.datas['commentaire']) {
+      console.log('commentaireInput update true')
       newDatas['commentaire'] = commentaireInput.value
     }
 
@@ -316,11 +316,27 @@ class Folder {
       newDatas['statut'] = statutSelect.value
     }
 
+    // TODO: fix date message: "Conversion failed when converting date and/or time from character string."
+
     const dateDebutInput = document.querySelector('input[name="startDate"]')
     if (dateDebutInput.value !== this.datas['datedebut']) {
-      newDatas['datedebut'] = dateDebutInput.value
+      newDatas['datedebut'] = new Date(dateDebutInput.value)
     }
 
+    // todo: date fin non présente en base de donnée pour le moment
+
+    // const dateEndInput = document.querySelector('input[name="endDate"]')
+    // if (dateEndInput.value !== this.datas['endDate']) {
+    //   newDatas['endDate'] = dateEndInput.value
+    // }
+
+    Object.keys(newDatas).forEach((key) => {
+      if (typeof newDatas[key] === 'string' && newDatas[key].includes('T')) {
+        newDatas[key] = new Date(newDatas[key])
+      }
+    })
+
+    console.log('this.datas —>', this.datas)
     console.log('newDatas =>', newDatas)
     await this.folderService.createEditFolder(this.credentials, newDatas)
   }
@@ -341,6 +357,7 @@ class Folder {
     )
 
     await this.displayLinkedMail()
+    await this.displayFolderHistory()
     await this.linkEvent()
   }
 

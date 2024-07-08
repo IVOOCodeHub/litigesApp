@@ -9,6 +9,8 @@ class List {
     this.root = document.querySelector('#root')
     this.sortDirection = {}
     this.themeList = null
+    this.datas = null
+    this.activeDatas = null
   }
 
   async getData() {
@@ -18,6 +20,11 @@ class List {
       password: user['mdp'],
     }
     this.datas = await this.listService.getList(userCredentials)
+
+    this.activeDatas = this.datas.filter(
+      (datas) => datas['statut'] === 'EN COURS',
+    )
+
     this.themeList = await this.themeListService.getList(userCredentials)
   }
 
@@ -99,7 +106,7 @@ class List {
       tableBody.innerHTML += `
         <tr>
           <td>${row['cle']}</td>
-          <td>${row['tiers']} vs ${row['societe']}</td>
+          <td>${row['societe']} vs ${row['tiers']}</td>
           <td>${row['commentaire']}</td>
           <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
           <td>${row['theme']}</td>
@@ -113,7 +120,7 @@ class List {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
-    const themeSelectOption = []
+    const themeSelect = document.querySelector('select[name="theme"]')
 
     this.datas.forEach((el) => {
       if (!societySelectOption.includes(el['societe'])) {
@@ -124,29 +131,29 @@ class List {
       }
     })
 
-    this.themeList.forEach((el) => {
-      if (!themeSelectOption.includes(el['theme'] && el['actif'] === '1')) {
-        themeSelectOption.push(el['theme'])
-      }
-    })
-
     const societySelect = document.querySelector('select[name="society"]')
     societySelectOption.forEach((society) => {
-      societySelect.innerHTML += `
-        <option>${society}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', society)
+      option.textContent = society
+      societySelect.appendChild(option)
     })
+
     const tiersSelect = document.querySelector('select[name="tiers"]')
     tiersSelectOption.forEach((tiers) => {
-      tiersSelect.innerHTML += `
-        <option>${tiers}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', tiers)
+      option.textContent = tiers
+      tiersSelect.appendChild(option)
     })
-    const themeSelect = document.querySelector('select[name="theme"]')
-    themeSelectOption.forEach((theme) => {
-      themeSelect.innerHTML += `
-        <option>${theme}</option>
-      `
+
+    this.themeList.forEach((theme) => {
+      if (theme['theme'] && theme['actif'] === '1') {
+        const option = document.createElement('option')
+        option.setAttribute('value', theme['theme'])
+        option.textContent = theme['theme']
+        themeSelect.appendChild(option)
+      }
     })
   }
 
@@ -308,7 +315,7 @@ class List {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.insertDatas(this.datas)
+    await this.insertDatas(this.activeDatas)
     await this.insertSelect()
     await this.footer.initFooter(true, 'Créer un dossier vierge')
     await this.initEventListeners()
