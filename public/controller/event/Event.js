@@ -91,11 +91,11 @@ class Event {
     this.main.appendChild(section)
   }
 
-  async insertDatas() {
+  async insertDatas(datas) {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
 
-    this.datas?.forEach((event) => {
+    datas?.forEach((event) => {
       const findEventType = this.eventsDictionary.find(
         (type) => type['type'] === event['event_type'],
       )
@@ -151,14 +151,13 @@ class Event {
         break
       case 'action':
         if (htmlElementValue !== 'Choisir') {
-          const resultFromAction = await this.datas.filter(
-            (row) => row['action'].trim() === htmlElementValue,
-          )
+          const resultFromAction = await this.datas.filter((row) => {
+            return row['action'].trim() === htmlElementValue
+          })
           resultFromAction
             ? (newDatas = resultFromAction)
             : (newDatas = this.datas)
         } else {
-          // TODO : Les recherches ne fonctionnes pas pour le moment. (En cas de vide, pas de changement visuel)
           newDatas = this.datas
         }
         break
@@ -177,11 +176,14 @@ class Event {
           newDatas = this.datas
         }
         break
-      case 'lastEventDate':
+      case 'previousEventDate':
         if (htmlElementValue !== '') {
-          const resultFromLastEventDate = await this.datas.filter(
-            (row) => row['datederevent'].trim() === htmlElementValue,
-          )
+          const resultFromLastEventDate = await this.datas.filter((row) => {
+            return (
+              this.utils.reformatDate(row['datederevent']) ===
+              this.utils.reformatDate(htmlElementValue)
+            )
+          })
           resultFromLastEventDate
             ? (newDatas = resultFromLastEventDate)
             : (newDatas = this.datas)
@@ -191,9 +193,12 @@ class Event {
         break
       case 'nextEventDate':
         if (htmlElementValue !== '') {
-          const resultFromNextEventDate = await this.datas.filter(
-            (row) => row['datenextevent'].trim() === htmlElementValue,
-          )
+          const resultFromNextEventDate = await this.datas.filter((row) => {
+            return (
+              this.utils.reformatDate(row['datenextevent']) ===
+              this.utils.reformatDate(htmlElementValue)
+            )
+          })
           resultFromNextEventDate
             ? (newDatas = resultFromNextEventDate)
             : (newDatas = this.datas)
@@ -251,7 +256,7 @@ class Event {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.insertDatas()
+    await this.insertDatas(this.datas)
     await this.insertSelect()
     await this.footer.initFooter()
     await this.createNewEventButton()

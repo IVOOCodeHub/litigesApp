@@ -90,6 +90,23 @@
   font-weight: 700;
 }
 
+#createEvent textarea {
+  font-size: 14px;
+  min-height: 75px;
+}
+
 .subSection {
   margin-top: 4em;
+  position: relative;
+}
+
+.subSection:before {
+  content: '';
+  position: absolute;
+  top: -3em;
+  left: 50%;
+  width: 50%;
+  transform: translateX(-50%);
+  height: 1px;
+  background: #36395a;
 }

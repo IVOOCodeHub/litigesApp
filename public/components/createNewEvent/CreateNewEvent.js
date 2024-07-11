@@ -2,11 +2,13 @@ class CreateNewEvent {
   constructor() {
     this.utils = new Utils()
     this.alert = new Alert()
+    this.folderList = new FolderList()
     this.main = null
     this.eventDictionary = JSON.parse(localStorage.getItem('eventTypes'))
     this.juridictionDictionary = JSON.parse(
       localStorage.getItem('juridictionTypes'),
     )
+    this.selectedFolderID = null
   }
 
   async renderSection() {
@@ -16,64 +18,99 @@ class CreateNewEvent {
     section.innerHTML += `
       <form>
         <h2>Crée un nouvel évènement</h2>
+        
+        <!-- boundTo -->
+        <div class="buttonWrapper">
+            <button class="button displayFolder">Choisir un dossier à associer à l'évènement</button>
+        </div>        
+        
+        <!-- stade (action in database) -->
+        
         <div class="radioBtnContainer">
           <label class="bold">Stade</label>
           <ul class="radioBtnWrapper">
             <li>
-              <input type="radio" name="eta" id="eta" />
-              <label for="eta">Pré-contentieux</label>
+              <input type="radio" name="stade" id="preContentieux" value="Pré-contentieux" />
+              <label for="preContentieux">Pré-contentieux</label>
             </li>
             <li>
-              <input type="radio" name="eta" id="eta" />
-              <label for="eta">Contentieux</label>
+              <input type="radio" name="stade" id="contentieux" value="Contentieux" />
+              <label for="contentieux">Contentieux</label>
             </li>
             <li>
-              <input type="radio" name="eta" id="eta" />
-              <label for="eta">Execution</label>
+              <input type="radio" name="stade" id="execution" value="Éxecution" />
+              <label for="execution">Éxecution</label>
             </li>
           </ul>
-        </div>
+        </div>        
+        
+        <!-- évènement -->
+        
         <div class="inputWrapper">
           <label>Évènement</label>
-          <select name="eventSelection">
+          <select name="eventType">
             <option>Choisir</option>
           </select>
         </div>
+        
+        <!-- juridiction -->
+        
         <div class="inputWrapper">
           <label>Juridiction</label>
-          <select name="juridictionSelection">
+          <select name="juridictionType">
             <option>Choisir</option>
           </select>
         </div>
+        
+        <!-- lieux -->
+
         <div class="inputWrapper">
-          <label>Lieu</label>
-          <input type="text" />
+          <label for="lieuJuridiction">Lieu de l'évènement</label>
+          <input type="text" name="lieuJuridiction"/>
         </div>
+        
+        <!-- eventDate -->        
+        
         <div class="inputWrapper">
-          <label>Date</label>
-           <input type="date" />
+          <label for="dateDerEvent">Date</label>
+          <input type="date" name="dateDerEvent" />
         </div>
+        
+        <!-- commentaire -->
+        
         <div class="inputWrapper">
-          <label>Commentaire</label>
-          <textarea></textarea>
+          <label for="commentaire">Commentaire</label>
+          <textarea name="commentaire"></textarea>
         </div>
+        
+        <!-- nextEvent -->
+        
         <div class="inputWrapper subSection">
           <label>Évènement suivant</label>
-          <select name="nextEventSelection">
+          <select name="nextEventType">
             <option>Choisir</option>
           </select>
         </div>
+        
+        <!-- nextJuridiction -->
+        
         <div class="inputWrapper">
           <label>Juridiction à venir</label>
-          <select name="nextJuridictionSelection">
+          <select name="nextJuridictionType">
             <option>Choisir</option>
           </select>
         </div>
+        
+        <!-- nextEventDate -->
+        
          <div class="inputWrapper">
-          <label>Évènement à venir</label>
-          <input type="date" />
+          <label for="dateNextEvent">Évènement à venir</label>
+          <input type="date" name="dateNextEvent" />
         </div>
       </form>
+      
+      <!-- submit button -->
+      
       <div class="btnWrapper">
         <button class="validButton submitEventCreation">Crée l'évènement</button>
         <button class="errorButton">Annuler</button>
@@ -83,15 +120,15 @@ class CreateNewEvent {
   }
 
   async insertSelectOptions() {
-    const eventSelect = document.querySelector('select[name="eventSelection"]')
+    const eventSelect = document.querySelector('select[name="eventType"]')
     const nextEventSelect = document.querySelector(
-      'select[name="nextEventSelection"]',
+      'select[name="nextEventType"]',
     )
     const juridictionSelect = document.querySelector(
-      'select[name="juridictionSelection"]',
+      'select[name="juridictionType"]',
     )
     const nextJuridictionSelect = document.querySelector(
-      'select[name="nextJuridictionSelection"]',
+      'select[name="nextJuridictionType"]',
     )
 
     this.eventDictionary.forEach((event) => {
@@ -120,24 +157,85 @@ class CreateNewEvent {
   }
 
   async handleSubmitEventCreation() {
-    console.log('handleSubmitEventCreation')
-    const datas = []
-
     const isConfirm = this.alert.initAlert(
       `Confirmez vous la création de l'évènement avec ses données ?`,
     )
 
     if (isConfirm) {
-      const inputs = document.querySelectorAll('input')
-      inputs.forEach((input) => {
-        const value = input.value
-        if (value) {
-          datas.push({ name: input.name, value: value })
-        }
-      })
+      const selectedRadio = document.querySelector(
+        'input[name="stade"]:checked',
+      ).value
+
+      // TODO : CA MARCHE PAS !!! Uncaught (in promise) TypeError: can't access property "value", document.querySelector(...) is null
+
+      const getEventKey = (eventSelection) => {
+        console.log('eventSelection —>', eventSelection)
+        return this.eventDictionary.find((event) => {
+          console.log('event —>', event)
+          const eventValue = document.querySelector(
+            `select[name="${eventSelection}"]`,
+          ).value
+          if (eventValue === event['libelle']) {
+            return event['type']
+          }
+        })
+      }
+
+      const getJuridictionKey = (juridictionSelection) => {
+        console.log('juridictionSelection —>', juridictionSelection)
+        return this.juridictionDictionary.find((juridiction) => {
+          console.log('juridiction —>', juridiction)
+          const juridictionValue = document.querySelector(
+            `select[name="${juridictionSelection}"]`,
+          ).value
+          if (juridictionValue === juridiction['libelle']) {
+            return juridiction['type']
+          }
+        })
+      }
+
+      const cle_litige_dossier = document
+        .querySelector('#createEvent p')
+        .textContent.split(' : ')[0]
+      const action = selectedRadio
+      const dh_action = document.querySelector(
+        'select[name="dateDerEvent"]',
+      ).value
+      const stade = selectedRadio
+      const event_type = getEventKey('eventType')
+      const datederevent = document.querySelector(
+        'select[name="dateDerEvent"]',
+      ).value
+      const juridiction_type = getJuridictionKey('juridictionType')
+      const lieu_juridiction = document.querySelector(
+        'input[name="lieuJuridiction"]',
+      ).value
+      const next_event = getEventKey('nextEventType')
+      const datenextevent = document.querySelector(
+        'select[name="dateNextEvent"]',
+      ).value
+      const next_juridiction_type = getJuridictionKey('nextJuridictionType')
+      const commentaire = document.querySelector(
+        'textarea[name="commentaire"]',
+      ).value
+
+      const datas = {
+        cle_litige_dossier: cle_litige_dossier,
+        action: action,
+        dh_action: dh_action,
+        stade: stade,
+        event_type: event_type,
+        datederevent: datederevent,
+        juridiction_type: juridiction_type,
+        lieu_juridiction: lieu_juridiction,
+        next_event: next_event,
+        datenextevent: datenextevent,
+        next_juridiction_type: next_juridiction_type,
+        commentaire: commentaire,
+      }
+      console.log('datas —>', datas)
     }
 
-    console.log('datas —>', datas)
     // await this.destroyComponent()
   }
 
@@ -147,6 +245,15 @@ class CreateNewEvent {
   }
 
   async initEventListeners() {
+    const displayFolderBtn = document.querySelector('.displayFolder')
+    displayFolderBtn.addEventListener('click', (event) => {
+      event.preventDefault()
+      this.folderList.initFolderList()
+    })
+    document.addEventListener('folderSelected', (event) => {
+      this.selectedFolderID = event.detail.folderID
+    })
+
     const cancelButton = document.querySelector('.errorButton')
     cancelButton.addEventListener('click', async () => this.destroyComponent())
 

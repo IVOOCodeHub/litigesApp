@@ -67,11 +67,11 @@ class List {
           <div class="inputWrapper">
               <label for="statut">Statut:</label>
               <select name="statut">
-                <option value="Choisir">Choisir</option>
+                <option value="Choisir">Tous</option>
                 <option value="A VALIDER">A valider</option>
-                <option value="EN COURS">En cours</option>
-                <option value="AJOURNE">Ajourné</option>
-                <option value="TERMINE">Terminé</option>
+                <option selected value="EN COURS">En cours</option>
+                <option value="AJOURNÉE">Ajournée</option>
+                <option value="TERMINÉ">Terminé</option>
               </select>
           </div>
         `

@@ -37,7 +37,6 @@ class ViewMail {
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
 
-    console.log('this.id —>', this.id)
     this.datas = this.datas.find((object) => object['cle'] === this.id)
 
     this.folderDatas = await this.folderService.getFolder(this.credentials)

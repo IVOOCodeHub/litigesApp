@@ -142,7 +142,7 @@ class FolderList {
   }
 
   async insertDatas(datas) {
-    const tableBody = document.querySelector('table tbody')
+    const tableBody = document.querySelector('#folderListModal table tbody')
     tableBody.innerHTML = ''
     datas?.forEach((row) => {
       tableBody.innerHTML += `
@@ -285,15 +285,40 @@ class FolderList {
         isAlreadySelected.remove()
       }
 
-      // create new HTMLElement in VewMail.js / viewMail.html
-      const editMail = document.querySelector('.bindFolderWrapper')
-      const displaySelectedFolder = document.createElement('li')
-      displaySelectedFolder.classList.add('selectedFolderContainer')
-      displaySelectedFolder.innerHTML = `
-        <label>Clé du dossier sélectionné : </label>
-        <p>${selectedFolderID} : ${selectedFolderName}</p>
-      `
-      editMail.insertAdjacentElement('afterend', displaySelectedFolder)
+      const url = new URL(window.location.href)
+      switch (true) {
+        case url.pathname.includes(`viewMail.html`):
+          {
+            // create new HTMLElement in VewMail.js / viewMail.html
+            const editMail = document.querySelector('.bindFolderWrapper')
+            const displaySelectedFolder = document.createElement('li')
+            displaySelectedFolder.classList.add('selectedFolderContainer')
+            displaySelectedFolder.innerHTML = `
+            <label>Clé du dossier sélectionné : </label>
+            <p>${selectedFolderID} : ${selectedFolderName}</p>
+          `
+            editMail.insertAdjacentElement('afterend', displaySelectedFolder)
+          }
+          break
+
+        case url.pathname.endsWith('/event.html'):
+          {
+            // create new HTMLElement in CreateNewEvent.js / createNewEvent.html
+            const createNewEventFrom =
+              document.querySelector('#createEvent form')
+            const displayEventSelectedFolder = document.createElement('li')
+            displayEventSelectedFolder.classList.add('inputWrapper')
+            displayEventSelectedFolder.innerHTML = `
+            <label>Clé du dossier sélectionné : </label>
+            <p>${selectedFolderID} : ${selectedFolderName}</p>
+          `
+            createNewEventFrom.appendChild(displayEventSelectedFolder)
+
+            const displayFolderBtn = document.querySelector('.displayFolder')
+            displayFolderBtn.remove()
+          }
+          break
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 class Folder {
   constructor() {
     this.folderService = new FolderService()
+    this.themeListService = new ThemeListService()
     this.folderHeader = new FolderHeader()
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
@@ -78,7 +79,6 @@ class Folder {
               <label for="theme">Thème</label>
               <select name="theme">
                 <option>Choisir</option>
-                <option selected="selected">${this.datas['theme']}</option>
               </select>
             </li>     
             <li class="checkBoxWrapper">
@@ -88,10 +88,11 @@ class Folder {
             <li>
               <label for="statut">Statut</label>
               <select name="statut">
-                <option selected="selected">${this.datas['statut']}</option>
-                <option>En cours</option>
-                <option>Ajourné</option>
-                <option>Cloturé</option>
+                <option>Choisir</option>
+                <option>A VALIDER</option>
+                <option>EN COURS</option>
+                <option>AJOURNÉE</option>
+                <option>TERMINÉ</option>
               </select>
             </li>
             <li>
@@ -198,6 +199,21 @@ class Folder {
       conseilInput.value = 'Aucun'
     }
 
+    const themeSelect = document.querySelector(
+      '.leftArticle select[name="theme"]',
+    )
+    const themeList = await this.themeListService.getList(this.credentials)
+    themeList.forEach((theme) => {
+      if (theme['actif'] === '1') {
+        themeSelect.innerHTML += `
+        <option value="${theme['theme']}">${theme['theme']}</option>
+      `
+        if (this.datas['theme'] === theme['theme']) {
+          themeSelect.value = theme['theme']
+        }
+      }
+    })
+
     const isMultiple = this.datas['multiple']
     if (isMultiple === '1') {
       this.isMultiple = 1
@@ -218,10 +234,21 @@ class Folder {
       }
     }
 
+    const statusSelect = document.querySelector(
+      '.leftArticle select[name="statut"]',
+    )
+    statusSelect.value = this.datas['statut']
+
     if (this.datas['datedebut']) {
       const startDate = new Date(this.datas['datedebut'])
       const dateDebutInput = document.querySelector('.startDate')
       dateDebutInput.value = startDate.toISOString().split('T')[0]
+    }
+
+    if (this.datas['datefin']) {
+      const endDate = new Date(this.datas['datefin'])
+      const dateFinInput = document.querySelector('.endDate')
+      dateFinInput.value = endDate.toISOString().split('T')[0]
     }
   }
 
@@ -287,7 +314,6 @@ class Folder {
     }
 
     const commentaireInput = document.querySelector('textarea[name="comment"]')
-    console.log('commentaireInput —>', commentaireInput)
     if (commentaireInput.value !== this.datas['commentaire']) {
       console.log('commentaireInput update true')
       newDatas['commentaire'] = commentaireInput.value
@@ -316,19 +342,15 @@ class Folder {
       newDatas['statut'] = statutSelect.value
     }
 
-    // TODO: fix date message: "Conversion failed when converting date and/or time from character string."
-
     const dateDebutInput = document.querySelector('input[name="startDate"]')
     if (dateDebutInput.value !== this.datas['datedebut']) {
       newDatas['datedebut'] = new Date(dateDebutInput.value)
     }
 
-    // todo: date fin non présente en base de donnée pour le moment
-
-    // const dateEndInput = document.querySelector('input[name="endDate"]')
-    // if (dateEndInput.value !== this.datas['endDate']) {
-    //   newDatas['endDate'] = dateEndInput.value
-    // }
+    const dateEndInput = document.querySelector('input[name="endDate"]')
+    if (dateEndInput.value !== this.datas['endDate']) {
+      newDatas['datefin'] = new Date(dateEndInput.value)
+    }
 
     Object.keys(newDatas).forEach((key) => {
       if (typeof newDatas[key] === 'string' && newDatas[key].includes('T')) {
