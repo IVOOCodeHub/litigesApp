@@ -3,6 +3,14 @@ class EventService extends ApiCalls {
     super()
   }
 
+  async createEvent(credentials, datas) {
+    const params = {
+      ...credentials,
+      request: '',
+      args: datas,
+    }
+  }
+
   async getEvent(credentials) {
     const params = {
       ...credentials,

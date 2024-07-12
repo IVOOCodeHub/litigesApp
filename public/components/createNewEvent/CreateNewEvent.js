@@ -2,6 +2,7 @@ class CreateNewEvent {
   constructor() {
     this.utils = new Utils()
     this.alert = new Alert()
+    this.eventService = new EventService()
     this.folderList = new FolderList()
     this.main = null
     this.eventDictionary = JSON.parse(localStorage.getItem('eventTypes'))
@@ -30,7 +31,7 @@ class CreateNewEvent {
           <label class="bold">Stade</label>
           <ul class="radioBtnWrapper">
             <li>
-              <input type="radio" name="stade" id="preContentieux" value="Pré-contentieux" />
+              <input type="radio" name="stade" id="preContentieux" value="Pré-contentieux" checked />
               <label for="preContentieux">Pré-contentieux</label>
             </li>
             <li>
@@ -157,86 +158,89 @@ class CreateNewEvent {
   }
 
   async handleSubmitEventCreation() {
-    const isConfirm = this.alert.initAlert(
-      `Confirmez vous la création de l'évènement avec ses données ?`,
-    )
+    const selectedRadio = document.querySelector(
+      'input[name="stade"]:checked',
+    ).value
 
-    if (isConfirm) {
-      const selectedRadio = document.querySelector(
-        'input[name="stade"]:checked',
-      ).value
-
-      // TODO : CA MARCHE PAS !!! Uncaught (in promise) TypeError: can't access property "value", document.querySelector(...) is null
-
-      const getEventKey = (eventSelection) => {
-        console.log('eventSelection —>', eventSelection)
-        return this.eventDictionary.find((event) => {
-          console.log('event —>', event)
-          const eventValue = document.querySelector(
-            `select[name="${eventSelection}"]`,
-          ).value
-          if (eventValue === event['libelle']) {
-            return event['type']
-          }
-        })
-      }
-
-      const getJuridictionKey = (juridictionSelection) => {
-        console.log('juridictionSelection —>', juridictionSelection)
-        return this.juridictionDictionary.find((juridiction) => {
-          console.log('juridiction —>', juridiction)
-          const juridictionValue = document.querySelector(
-            `select[name="${juridictionSelection}"]`,
-          ).value
-          if (juridictionValue === juridiction['libelle']) {
-            return juridiction['type']
-          }
-        })
-      }
-
-      const cle_litige_dossier = document
-        .querySelector('#createEvent p')
-        .textContent.split(' : ')[0]
-      const action = selectedRadio
-      const dh_action = document.querySelector(
-        'select[name="dateDerEvent"]',
-      ).value
-      const stade = selectedRadio
-      const event_type = getEventKey('eventType')
-      const datederevent = document.querySelector(
-        'select[name="dateDerEvent"]',
-      ).value
-      const juridiction_type = getJuridictionKey('juridictionType')
-      const lieu_juridiction = document.querySelector(
-        'input[name="lieuJuridiction"]',
-      ).value
-      const next_event = getEventKey('nextEventType')
-      const datenextevent = document.querySelector(
-        'select[name="dateNextEvent"]',
-      ).value
-      const next_juridiction_type = getJuridictionKey('nextJuridictionType')
-      const commentaire = document.querySelector(
-        'textarea[name="commentaire"]',
-      ).value
-
-      const datas = {
-        cle_litige_dossier: cle_litige_dossier,
-        action: action,
-        dh_action: dh_action,
-        stade: stade,
-        event_type: event_type,
-        datederevent: datederevent,
-        juridiction_type: juridiction_type,
-        lieu_juridiction: lieu_juridiction,
-        next_event: next_event,
-        datenextevent: datenextevent,
-        next_juridiction_type: next_juridiction_type,
-        commentaire: commentaire,
-      }
-      console.log('datas —>', datas)
+    const getEventKey = (eventSelection) => {
+      return this.eventDictionary.find((event) => {
+        const eventValue = document.querySelector(
+          `select[name="${eventSelection}"]`,
+        ).value
+        if (eventValue === event['libelle']) {
+          return event.type
+        }
+      })
     }
 
-    // await this.destroyComponent()
+    const getJuridictionKey = (juridictionSelection) => {
+      return this.juridictionDictionary.find((juridiction) => {
+        const juridictionValue = document.querySelector(
+          `select[name="${juridictionSelection}"]`,
+        ).value
+        if (juridictionValue === juridiction['libelle']) {
+          return juridiction.type
+        }
+      })
+    }
+
+    const cle_litige_dossier = document
+      .querySelector('#createEvent p')
+      .textContent.split(' : ')[0]
+
+    const action = selectedRadio
+
+    const dh_action = document.querySelector('input[name="dateDerEvent"]').value
+
+    const stade = selectedRadio
+
+    const findEvent_type = getEventKey('eventType')
+    const event_type = findEvent_type['type']
+
+    const datederevent = document.querySelector(
+      'input[name="dateDerEvent"]',
+    ).value
+
+    const findJuridiction_type = getJuridictionKey('juridictionType')
+    const juridiction_type = findJuridiction_type['type']
+
+    const lieu_juridiction = document.querySelector(
+      'input[name="lieuJuridiction"]',
+    ).value
+
+    const findNext_event = getEventKey('nextEventType')
+    const next_event = findNext_event['type']
+
+    const datenextevent = document.querySelector(
+      'input[name="dateNextEvent"]',
+    ).value
+
+    const findNext_juridiction_type = getJuridictionKey('nextJuridictionType')
+    const next_juridiction_type = findNext_juridiction_type['type']
+    console.log('next_juridiction_type —>', next_juridiction_type)
+
+    const commentaire = document.querySelector(
+      'textarea[name="commentaire"]',
+    ).value
+
+    const datas = {
+      cle_litige_dossier: cle_litige_dossier,
+      action: action,
+      dh_action: dh_action,
+      stade: stade,
+      event_type: event_type,
+      datederevent: datederevent,
+      juridiction_type: juridiction_type,
+      lieu_juridiction: lieu_juridiction,
+      next_event: next_event,
+      datenextevent: datenextevent,
+      next_juridiction_type: next_juridiction_type,
+      commentaire: commentaire,
+    }
+
+    await this.eventService.createEvent(datas)
+
+    await this.destroyComponent()
   }
 
   async destroyComponent() {
