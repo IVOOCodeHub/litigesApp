@@ -6,9 +6,10 @@ class EventService extends ApiCalls {
   async createEvent(credentials, datas) {
     const params = {
       ...credentials,
-      request: '',
+      request: 'create_litige_event',
       args: datas,
     }
+    await this.postRequest(params)
   }
 
   async getEvent(credentials) {

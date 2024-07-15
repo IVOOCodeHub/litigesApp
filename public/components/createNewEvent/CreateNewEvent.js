@@ -5,11 +5,20 @@ class CreateNewEvent {
     this.eventService = new EventService()
     this.folderList = new FolderList()
     this.main = null
+    this.credentials = null
     this.eventDictionary = JSON.parse(localStorage.getItem('eventTypes'))
     this.juridictionDictionary = JSON.parse(
       localStorage.getItem('juridictionTypes'),
     )
     this.selectedFolderID = null
+  }
+
+  async getCredentials() {
+    const user = await JSON.parse(localStorage.getItem('user'))
+    this.credentials = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
   }
 
   async renderSection() {
@@ -190,8 +199,6 @@ class CreateNewEvent {
 
     const action = selectedRadio
 
-    const dh_action = document.querySelector('input[name="dateDerEvent"]').value
-
     const stade = selectedRadio
 
     const findEvent_type = getEventKey('eventType')
@@ -217,7 +224,6 @@ class CreateNewEvent {
 
     const findNext_juridiction_type = getJuridictionKey('nextJuridictionType')
     const next_juridiction_type = findNext_juridiction_type['type']
-    console.log('next_juridiction_type —>', next_juridiction_type)
 
     const commentaire = document.querySelector(
       'textarea[name="commentaire"]',
@@ -226,7 +232,6 @@ class CreateNewEvent {
     const datas = {
       cle_litige_dossier: cle_litige_dossier,
       action: action,
-      dh_action: dh_action,
       stade: stade,
       event_type: event_type,
       datederevent: datederevent,
@@ -238,7 +243,7 @@ class CreateNewEvent {
       commentaire: commentaire,
     }
 
-    await this.eventService.createEvent(datas)
+    await this.eventService.createEvent(this.credentials, datas)
 
     await this.destroyComponent()
   }
@@ -246,6 +251,7 @@ class CreateNewEvent {
   async destroyComponent() {
     const section = document.querySelector('#createEvent')
     section.remove()
+    window.location.reload()
   }
 
   async initEventListeners() {
@@ -269,6 +275,7 @@ class CreateNewEvent {
   }
 
   async initCreateNewEvent() {
+    await this.getCredentials()
     await this.renderSection()
     await this.insertSelectOptions()
     await this.initEventListeners()

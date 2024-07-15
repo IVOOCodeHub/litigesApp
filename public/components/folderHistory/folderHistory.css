@@ -1,0 +1,27 @@
+#folderHistory {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 100dvh;
+    z-index: 9999;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.5);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+#folderHistory h2 {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+#folderHistory .tableContainer {
+    max-width: 75%;
+    max-height: 67dvh;
+    overflow-y: scroll;
+    margin-bottom: 2em;
+}
