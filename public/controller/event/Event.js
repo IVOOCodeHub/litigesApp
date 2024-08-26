@@ -92,44 +92,49 @@ class Event {
   }
 
   async insertDatas(datas) {
-    const tableBody = document.querySelector('table tbody')
-    tableBody.innerHTML = ''
+    const tableBody = document.querySelector('table tbody');
+    tableBody.innerHTML = '';
 
     datas?.forEach((event) => {
-      const findEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['event_type'],
-      )
-      const findNextEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['next_event'],
-      )
-      const findJuridictionType = this.juridictionDictionary.find(
-        (type) => type['type'] === event['juridiction_type'],
-      )
-      const findNextJuridictionType = this.juridictionDictionary.find(
-        (type) => type['type'] === event['next_juridiction_type'],
-      )
-      const eventTypeConverted = findEventType['libelle']
-      const nextEventTypeConverted = findNextEventType['libelle']
-      const juridictionTypeConverted = findJuridictionType['libelle']
-      const nextJuridictionTypeConverted = findNextJuridictionType['libelle']
+      const events = Array.isArray(event) ? event : [event];
 
-      tableBody.innerHTML += `
+      events.forEach((singleEvent) => {
+        const findEventType = this.eventsDictionary.find((type) => type['type'] === singleEvent['event_type']);
+        const findNextEventType = this.eventsDictionary.find((type) => type['type'] === singleEvent['next_event']);
+        const findJuridictionType = this.juridictionDictionary.find((type) => type['type'] === singleEvent['juridiction_type']);
+        const findNextJuridictionType = this.juridictionDictionary.find((type) => type['type'] === singleEvent['next_juridiction_type']);
+
+        const eventTypeConverted = findEventType ? findEventType['libelle'] : '';
+        const nextEventTypeConverted = findNextEventType ? findNextEventType['libelle'] : '';
+        const juridictionTypeConverted = findJuridictionType ? findJuridictionType['libelle'] : '';
+        const nextJuridictionTypeConverted = findNextJuridictionType ? findNextJuridictionType['libelle'] : '';
+
+        tableBody.innerHTML += `
         <tr>
-          <td>${event['cle']}</td>
-          <td>${event['cle_litige_dossier']}</td>
-          <td>${event['action']}</td>
+          <td>${singleEvent['cle']}</td>
+          <td>
+              ${
+          singleEvent['cle_litige_dossier'] &&
+          singleEvent['cle_litige_dossier'] !== ''
+            ? singleEvent['cle_litige_dossier']
+            : '<button class="button attachFolder">Attacher à un dossier</button>'
+        }
+          </td>
+          <td>${singleEvent['action']}</td>
           <td>${eventTypeConverted}</td>
           <td>${juridictionTypeConverted}</td>
-          <td>${event['lieu_juridiction']}</td>
-          <td>${this.utils.reformatDate(event['datederevent'])}</td>
-          <td>${event['commentaire']}</td>
+          <td>${singleEvent['lieu_juridiction'] ? singleEvent['lieu_juridiction'] : 'Non renseigné'}</td>
+          <td>${this.utils.reformatDate(singleEvent['datederevent'])}</td>
+          <td>${singleEvent['commentaire']}</td>
           <td>${nextEventTypeConverted}</td>
           <td>${nextJuridictionTypeConverted}</td>
-          <td>${this.utils.reformatDate(event['datenextevent'])}</td>
-        </tr>      
-      `
-    })
+          <td>${this.utils.reformatDate(singleEvent['datenextevent'])}</td>
+        </tr>
+      `;
+      });
+    });
   }
+
 
   async searchFromSelect(htmlElement) {
     const htmlElementName = htmlElement.name
@@ -223,6 +228,7 @@ class Event {
     this.eventsDictionary.forEach((event) => {
       typeSelectOption.push(event['libelle'])
     })
+    typeSelectOption.sort((a, b) => a.localeCompare(b))
     const typeSelect = document.querySelector('select[name="type"]')
     typeSelectOption.forEach((type) => {
       typeSelect.innerHTML += `

@@ -120,6 +120,7 @@ class List {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
+
     const themeSelect = document.querySelector('select[name="theme"]')
 
     this.datas.forEach((el) => {
@@ -130,6 +131,9 @@ class List {
         tiersSelectOption.push(el['tiers'])
       }
     })
+
+    societySelectOption.sort((a, b) => a.localeCompare(b))
+    tiersSelectOption.sort((a, b) => a.localeCompare(b))
 
     const societySelect = document.querySelector('select[name="society"]')
     societySelectOption.forEach((society) => {
@@ -147,6 +151,7 @@ class List {
       tiersSelect.appendChild(option)
     })
 
+    this.themeList.sort((a, b) => a['theme'].localeCompare(b['theme']))
     this.themeList.forEach((theme) => {
       if (theme['theme'] && theme['actif'] === '1') {
         const option = document.createElement('option')

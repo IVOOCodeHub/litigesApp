@@ -18,6 +18,7 @@ class Folder {
     this.juridictionTypes = null
     this.isMultiple = 0
     this.bindMailcount = null
+    this.selectedEventID = null
   }
 
   async getParams() {
@@ -36,9 +37,15 @@ class Folder {
   }
 
   async bindMailCountIncrementer() {
-    this.datas['courriers']
-      ? (this.bindMailCount = this.datas['courriers']['rows'].length)
-      : (this.bindMailCount = 0)
+    if (!this.datas['courriers']) {
+      this.bindMailCount = 0
+    } else if (Array.isArray(this.datas['courriers']['rows'])) {
+      this.bindMailCount = this.datas['courriers']['rows'].length
+    } else if (typeof this.datas['courriers']['rows'] === 'object') {
+      this.bindMailCount = 1
+    } else {
+      this.bindMailCount = 0
+    }
   }
 
   async createMain() {
@@ -149,7 +156,7 @@ class Folder {
         
           <ul class="element">
             <h3>Gestion du dossier</h3>
-            <li>
+            <li class="bindEventWrapper">
               <label>Attacher un évènement : </label>
               <button class="button displayBindEventModal">Attacher un évènement</button>
             </li>
@@ -189,6 +196,9 @@ class Folder {
     goToLinkEvent.addEventListener('click', () =>
       this.eventList.initEventList(this.id),
     )
+    document.addEventListener('eventSelected', (event) => {
+      this.selectedEventID = event.detail.eventID
+    })
   }
 
   async insertDatas() {
@@ -358,9 +368,8 @@ class Folder {
       }
     })
 
-    console.log('this.datas —>', this.datas)
-    console.log('newDatas =>', newDatas)
     await this.folderService.createEditFolder(this.credentials, newDatas)
+    window.location.reload()
   }
 
   async initEventListeners() {
@@ -369,6 +378,7 @@ class Folder {
     const submitUpdateFolderBtn = document.querySelector('.submitUpdateFolder')
     submitUpdateFolderBtn.addEventListener('click', async () => {
       await this.submitUpdateFolder()
+      window.location.reload()
     })
 
     const createNewEventButton = document.querySelector(

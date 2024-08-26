@@ -67,28 +67,103 @@ class EventList {
   async insertDatas() {
     const tbody = document.querySelector('tbody')
     tbody.innerHTML = ''
-    this.eventsDatas.forEach((event) => {
-      const findEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['event_type'],
-      )
-      const findNextEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['next_event'],
-      )
-      const eventTypeConverted = findEventType['libelle']
-      const nextEventTypeConverted = findNextEventType['libelle']
 
-      tbody.innerHTML += `
+    // Traiter les événements en vérifiant si des sous-tableaux existent
+    const events = Array.isArray(this.eventsDatas)
+      ? this.eventsDatas
+      : [this.eventsDatas]
+
+    events.forEach((event) => {
+      const subEvents = Array.isArray(event) ? event : [event]
+
+      subEvents.forEach((singleEvent) => {
+        const findEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['event_type'],
+        )
+        const findNextEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['next_event'],
+        )
+        const eventTypeConverted = findEventType ? findEventType['libelle'] : ''
+        const nextEventTypeConverted = findNextEventType
+          ? findNextEventType['libelle']
+          : ''
+
+        tbody.innerHTML += `
         <tr>
-          <td>${event['cle']}</td>
-          <td>${event['cle_litige_dossier']}</td>
+          <td>${singleEvent['cle']}</td>
+          <td>${singleEvent['cle_litige_dossier']}</td>
           <td>${eventTypeConverted}</td>
-          <td>${this.utils.reformatDate(event['datenextevent']).split(' ')[0]}</td>
-          <td>${event['lieu_juridiction']}</td>
-          <td>${event['action']}</td>
-          <td>${event['commentaire']}</td>
+          <td>${this.utils.reformatDate(singleEvent['datenextevent']).split(' ')[0]}</td>
+          <td>${singleEvent['lieu_juridiction']}</td>
+          <td>${singleEvent['action']}</td>
+          <td>${singleEvent['commentaire']}</td>
         </tr>
       `
+      })
     })
+  }
+
+  async selectEvent() {
+    const rows = document.querySelectorAll('tr')
+
+    rows.forEach((row) => {
+      row.addEventListener('click', async () => {
+        const selectedEventID = row.firstElementChild.textContent
+        const selectedEventName = row.children[1].textContent
+
+        // return the ID on the component Folder.js who's send the values to backend
+        const event = new CustomEvent('eventSelected', {
+          detail: { folderID: selectedEventID },
+        })
+        document.dispatchEvent(event)
+
+        await this.isEventSelected(selectedEventID, selectedEventName)
+        await this.destroyComponent()
+      })
+    })
+  }
+
+  async isEventSelected(selectedEventID, selectedEventName) {
+    if (selectedEventID) {
+      const isAlreadySelected = document.querySelector(
+        '.selectedEventContainer',
+      )
+      if (isAlreadySelected) {
+        isAlreadySelected.remove()
+      }
+
+      const url = new URL(window.location.href)
+      switch (true) {
+        case url.pathname.includes(`folder.html`):
+          {
+            // create new HTMLElement in Folder.js / folder.html
+            const editFolder = document.querySelector('.bindEventWrapper')
+            const displaySelectedEvent = document.createElement('li')
+            displaySelectedEvent.classList.add('selectedEventContainer')
+            displaySelectedEvent.innerHTML = `
+            <label>Clé de l'évènement sélectionné : </label>
+            <p>${selectedEventID}</p>
+          `
+            editFolder.insertAdjacentElement('afterend', displaySelectedEvent)
+          }
+          break
+
+        case url.pathname.endsWith('/createNewEvent.html'):
+          {
+            // Create new HTMLElement in CreateNewEvent.js / createNewEvent.html
+            const createNewEventForm =
+              document.querySelector('#createEvent form')
+            const displayEventSelectedFolder = document.createElement('li')
+            displayEventSelectedFolder.classList.add('inputWrapper')
+            displayEventSelectedFolder.innerHTML = `
+            <label>Clé de l'évènement sélectionné : </label>
+            <p>${selectedEventID}</p>
+          `
+            createNewEventForm.appendChild(displayEventSelectedFolder)
+          }
+          break
+      }
+    }
   }
 
   async destroyComponent() {
@@ -97,6 +172,7 @@ class EventList {
   }
 
   async initEventListeners() {
+    await this.selectEvent()
     const cancelButton = document.querySelector(
       '#eventListModal .eventListDestroy',
     )
