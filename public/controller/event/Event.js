@@ -1,10 +1,11 @@
 class Event {
   constructor() {
     this.eventService = new EventService()
+    this.createNewEvent = new CreateNewEvent()
     this.utils = new Utils()
     this.footer = new Footer()
-    this.createNewEvent = new CreateNewEvent()
     this.alert = new Alert()
+    this.folderList = new FolderList()
     this.main = null
     this.root = document.querySelector('#root')
     this.credentials = null
@@ -13,6 +14,7 @@ class Event {
     this.juridictionDictionary = JSON.parse(
       localStorage.getItem('juridictionTypes'),
     )
+    this.selectedFolderID = null
   }
 
   async getDatas() {
@@ -21,7 +23,7 @@ class Event {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    this.datas = await this.eventService.getEvent(this.credentials)
+    this.datas = await this.eventService.readEvent(this.credentials)
   }
 
   async initMain() {
@@ -92,33 +94,47 @@ class Event {
   }
 
   async insertDatas(datas) {
-    const tableBody = document.querySelector('table tbody');
-    tableBody.innerHTML = '';
+    const tableBody = document.querySelector('table tbody')
+    tableBody.innerHTML = ''
 
     datas?.forEach((event) => {
-      const events = Array.isArray(event) ? event : [event];
+      const events = Array.isArray(event) ? event : [event]
 
       events.forEach((singleEvent) => {
-        const findEventType = this.eventsDictionary.find((type) => type['type'] === singleEvent['event_type']);
-        const findNextEventType = this.eventsDictionary.find((type) => type['type'] === singleEvent['next_event']);
-        const findJuridictionType = this.juridictionDictionary.find((type) => type['type'] === singleEvent['juridiction_type']);
-        const findNextJuridictionType = this.juridictionDictionary.find((type) => type['type'] === singleEvent['next_juridiction_type']);
+        const findEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['event_type'],
+        )
+        const findNextEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['next_event'],
+        )
+        const findJuridictionType = this.juridictionDictionary.find(
+          (type) => type['type'] === singleEvent['juridiction_type'],
+        )
+        const findNextJuridictionType = this.juridictionDictionary.find(
+          (type) => type['type'] === singleEvent['next_juridiction_type'],
+        )
 
-        const eventTypeConverted = findEventType ? findEventType['libelle'] : '';
-        const nextEventTypeConverted = findNextEventType ? findNextEventType['libelle'] : '';
-        const juridictionTypeConverted = findJuridictionType ? findJuridictionType['libelle'] : '';
-        const nextJuridictionTypeConverted = findNextJuridictionType ? findNextJuridictionType['libelle'] : '';
+        const eventTypeConverted = findEventType ? findEventType['libelle'] : ''
+        const nextEventTypeConverted = findNextEventType
+          ? findNextEventType['libelle']
+          : ''
+        const juridictionTypeConverted = findJuridictionType
+          ? findJuridictionType['libelle']
+          : ''
+        const nextJuridictionTypeConverted = findNextJuridictionType
+          ? findNextJuridictionType['libelle']
+          : ''
 
         tableBody.innerHTML += `
         <tr>
           <td>${singleEvent['cle']}</td>
           <td>
               ${
-          singleEvent['cle_litige_dossier'] &&
-          singleEvent['cle_litige_dossier'] !== ''
-            ? singleEvent['cle_litige_dossier']
-            : '<button class="button attachFolder">Attacher à un dossier</button>'
-        }
+                singleEvent['cle_litige_dossier'] !== '' &&
+                singleEvent['cle_litige_dossier'] !== '0'
+                  ? singleEvent['cle_litige_dossier']
+                  : '<button class="button attachFolder">Attacher à un dossier</button>'
+              }
           </td>
           <td>${singleEvent['action']}</td>
           <td>${eventTypeConverted}</td>
@@ -130,11 +146,10 @@ class Event {
           <td>${nextJuridictionTypeConverted}</td>
           <td>${this.utils.reformatDate(singleEvent['datenextevent'])}</td>
         </tr>
-      `;
-      });
-    });
+      `
+      })
+    })
   }
-
 
   async searchFromSelect(htmlElement) {
     const htmlElementName = htmlElement.name
@@ -249,12 +264,33 @@ class Event {
     btnWrapper.appendChild(createdBtn)
   }
 
+  async displayFolders(eventKey, htmlButtonElement) {
+    htmlButtonElement.classList.add('selectedEventButton')
+    htmlButtonElement.addEventListener('click', async () => {
+      await this.folderList.initFolderList(eventKey)
+    })
+    document.addEventListener('folderSelected', (event) => {
+      this.selectedFolderID = event.detail.folderID
+    })
+  }
+
   async initEventListeners() {
     await this.searchBy('key')
     await this.searchBy('action')
     await this.searchBy('type')
     await this.searchBy('previousEventDate')
     await this.searchBy('nextEventDate')
+
+    // search for the attachFolder button if it exists, and attach the listener to it
+    const rows = document.querySelectorAll('tbody tr')
+    rows.forEach((row) => {
+      if (row.children[1].firstElementChild) {
+        const eventKey = row.children[0].textContent // get the eventKey for update the event
+        const attachFolderButton =
+          row.children[1].querySelector('.attachFolder')
+        this.displayFolders(eventKey, attachFolderButton)
+      }
+    })
   }
 
   async initValidation() {

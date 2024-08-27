@@ -12,6 +12,16 @@ class EventService extends ApiCalls {
     await this.postRequest(params)
   }
 
+  async readEvent(credentials) {
+    const params = {
+      ...credentials,
+      request: 'read_litige_dossier_events',
+      args: null,
+    }
+    await this.postRequest(params)
+    return this.data['data']['rows']
+  }
+
   async getEvent(credentials) {
     const params = {
       ...credentials,
@@ -32,5 +42,17 @@ class EventService extends ApiCalls {
       }
     })
     return events
+  }
+
+  async bindEventToFolder(credentials, eventID, folderID) {
+    const params = {
+      ...credentials,
+      request: 'bind_litige_dossier_event',
+      args: {
+        cle: eventID,
+        cle_litige_dossier: folderID,
+      },
+    }
+    await this.postRequest(params)
   }
 }
