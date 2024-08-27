@@ -1,11 +1,14 @@
 class Folder {
   constructor() {
     this.folderService = new FolderService()
+    this.themeListService = new ThemeListService()
+    this.eventService = new EventService()
     this.folderHeader = new FolderHeader()
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
     this.utils = new Utils()
     this.mailHistory = new MailHistory()
+    this.folderHistory = new FolderHistory()
     this.eventList = new EventList()
     this.main = null
     this.root = document.querySelector('#root')
@@ -16,6 +19,8 @@ class Folder {
     this.juridictionTypes = null
     this.isMultiple = 0
     this.bindMailcount = null
+    this.selectedEventID = null
+    this.selectedEventName = null
   }
 
   async getParams() {
@@ -34,9 +39,15 @@ class Folder {
   }
 
   async bindMailCountIncrementer() {
-    this.datas['courriers']
-      ? (this.bindMailCount = this.datas['courriers']['rows'].length)
-      : (this.bindMailCount = 0)
+    if (!this.datas['courriers']) {
+      this.bindMailCount = 0
+    } else if (Array.isArray(this.datas['courriers']['rows'])) {
+      this.bindMailCount = this.datas['courriers']['rows'].length
+    } else if (typeof this.datas['courriers']['rows'] === 'object') {
+      this.bindMailCount = 1
+    } else {
+      this.bindMailCount = 0
+    }
   }
 
   async createMain() {
@@ -63,7 +74,7 @@ class Folder {
             </li>
             <li>
               <label for="tiers">Nom : </label>
-              <p>${this.datas['tiers']} vs ${this.datas['societe']}</p>
+              <p>${this.datas['societe']} vs ${this.datas['tiers']}</p>
             </li>
             <li>
               <label for="comment">Commentaire : </label>
@@ -77,7 +88,6 @@ class Folder {
               <label for="theme">Thème</label>
               <select name="theme">
                 <option>Choisir</option>
-                <option selected="selected">${this.datas['theme']}</option>
               </select>
             </li>     
             <li class="checkBoxWrapper">
@@ -87,10 +97,11 @@ class Folder {
             <li>
               <label for="statut">Statut</label>
               <select name="statut">
-                <option selected="selected">${this.datas['statut']}</option>
-                <option>En cours</option>
-                <option>Ajourné</option>
-                <option>Cloturé</option>
+                <option>Choisir</option>
+                <option>A VALIDER</option>
+                <option>EN COURS</option>
+                <option>AJOURNÉE</option>
+                <option>TERMINÉ</option>
               </select>
             </li>
             <li>
@@ -116,7 +127,7 @@ class Folder {
               <button class="button displayMailHistory">Liste des courriers (${this.bindMailCount})</button>
             </li>
             <li class="buttonWrapper">
-              <button class="button displayHistory">Liste des dossiers associers</button>
+              <button class="button displayFolderHistory">Liste des dossiers associers</button>
             </li>
              <li class="buttonWrapper">
               <button class="button ">Historique des évènements</button>
@@ -147,7 +158,7 @@ class Folder {
         
           <ul class="element">
             <h3>Gestion du dossier</h3>
-            <li>
+            <li class="bindEventWrapper">
               <label>Attacher un évènement : </label>
               <button class="button displayBindEventModal">Attacher un évènement</button>
             </li>
@@ -160,7 +171,7 @@ class Folder {
               <input name="addMail" type="file"/>
             </li>
             <li class="buttonWrapper">
-              <button class="validButton">Sauvegarder les modifications</button>
+              <button class="validButton updateEventFolder">Sauvegarder les modifications</button>
             </li>
           </ul>
         </article>
@@ -175,11 +186,22 @@ class Folder {
     )
   }
 
+  async displayFolderHistory() {
+    const goToFolderHistory = document.querySelector('.displayFolderHistory')
+    goToFolderHistory.addEventListener('click', () =>
+      this.folderHistory.initFolderHistory(this.id),
+    )
+  }
+
   async linkEvent() {
     const goToLinkEvent = document.querySelector('.displayBindEventModal')
     goToLinkEvent.addEventListener('click', () =>
       this.eventList.initEventList(this.id),
     )
+    document.addEventListener('eventSelected', (event) => {
+      this.selectedEventID = event.detail.eventID
+      this.selectedEventName = event.detail.eventName
+    })
   }
 
   async insertDatas() {
@@ -189,6 +211,21 @@ class Folder {
     } else {
       conseilInput.value = 'Aucun'
     }
+
+    const themeSelect = document.querySelector(
+      '.leftArticle select[name="theme"]',
+    )
+    const themeList = await this.themeListService.getList(this.credentials)
+    themeList.forEach((theme) => {
+      if (theme['actif'] === '1') {
+        themeSelect.innerHTML += `
+        <option value="${theme['theme']}">${theme['theme']}</option>
+      `
+        if (this.datas['theme'] === theme['theme']) {
+          themeSelect.value = theme['theme']
+        }
+      }
+    })
 
     const isMultiple = this.datas['multiple']
     if (isMultiple === '1') {
@@ -210,10 +247,21 @@ class Folder {
       }
     }
 
+    const statusSelect = document.querySelector(
+      '.leftArticle select[name="statut"]',
+    )
+    statusSelect.value = this.datas['statut']
+
     if (this.datas['datedebut']) {
       const startDate = new Date(this.datas['datedebut'])
       const dateDebutInput = document.querySelector('.startDate')
       dateDebutInput.value = startDate.toISOString().split('T')[0]
+    }
+
+    if (this.datas['datefin']) {
+      const endDate = new Date(this.datas['datefin'])
+      const dateFinInput = document.querySelector('.endDate')
+      dateFinInput.value = endDate.toISOString().split('T')[0]
     }
   }
 
@@ -278,18 +326,9 @@ class Folder {
       ...this.datas,
     }
 
-    const societeSelect = document.querySelector('select[name="socity"]')
-    if (societeSelect.value !== this.datas['societe']) {
-      newDatas['societe'] = societeSelect.value
-    }
-
-    const tiersSelect = document.querySelector('select[name="tiers"]')
-    if (tiersSelect.value !== this.datas['tiers']) {
-      newDatas['tiers'] = tiersSelect.value
-    }
-
     const commentaireInput = document.querySelector('textarea[name="comment"]')
     if (commentaireInput.value !== this.datas['commentaire']) {
+      console.log('commentaireInput update true')
       newDatas['commentaire'] = commentaireInput.value
     }
 
@@ -318,11 +357,34 @@ class Folder {
 
     const dateDebutInput = document.querySelector('input[name="startDate"]')
     if (dateDebutInput.value !== this.datas['datedebut']) {
-      newDatas['datedebut'] = dateDebutInput.value
+      newDatas['datedebut'] = new Date(dateDebutInput.value)
     }
 
-    console.log('newDatas =>', newDatas)
+    const dateEndInput = document.querySelector('input[name="endDate"]')
+    if (dateEndInput.value !== this.datas['endDate']) {
+      newDatas['datefin'] = new Date(dateEndInput.value)
+    }
+
+    Object.keys(newDatas).forEach((key) => {
+      if (typeof newDatas[key] === 'string' && newDatas[key].includes('T')) {
+        newDatas[key] = new Date(newDatas[key])
+      }
+    })
+
     await this.folderService.createEditFolder(this.credentials, newDatas)
+    window.location.reload()
+  }
+
+  async submitEventUpdate() {
+    const submitButton = document.querySelector('.updateEventFolder')
+    submitButton.addEventListener('click', async () => {
+      await this.eventService.bindEventToFolder(
+        this.credentials,
+        this.selectedEventID,
+        this.id,
+      )
+      window.location.reload()
+    })
   }
 
   async initEventListeners() {
@@ -331,7 +393,9 @@ class Folder {
     const submitUpdateFolderBtn = document.querySelector('.submitUpdateFolder')
     submitUpdateFolderBtn.addEventListener('click', async () => {
       await this.submitUpdateFolder()
+      window.location.reload()
     })
+
 
     const createNewEventButton = document.querySelector(
       '.displayCreateEventModal',
@@ -340,9 +404,13 @@ class Folder {
       this.createNewEvent.initCreateNewEvent(),
     )
 
+    await this.submitEventUpdate()
     await this.displayLinkedMail()
+    await this.displayFolderHistory()
     await this.linkEvent()
   }
+
+
 
   async initFolder() {
     await this.getParams()

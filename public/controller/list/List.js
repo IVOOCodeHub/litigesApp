@@ -2,20 +2,30 @@ class List {
   constructor() {
     this.utils = new Utils()
     this.listService = new ListService()
+    this.themeListService = new ThemeListService()
     this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.main = null
     this.root = document.querySelector('#root')
     this.sortDirection = {}
+    this.themeList = null
+    this.datas = null
+    this.activeDatas = null
   }
 
   async getData() {
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
+    const userCredentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    this.datas = await this.listService.getList(userDatas)
+    this.datas = await this.listService.getList(userCredentials)
+
+    this.activeDatas = this.datas.filter(
+      (datas) => datas['statut'] === 'EN COURS',
+    )
+
+    this.themeList = await this.themeListService.getList(userCredentials)
   }
 
   async initMain() {
@@ -48,14 +58,6 @@ class List {
               <label for="theme">Theme:</label>
               <select name="theme">
                 <option value="Choisir">Choisir</option>
-                <option value="Amauger">Amauger</option>
-                <option value="Cial">Cial</option>
-                <option value="Divers">Divers</option>
-                <option value="Fiscal">Fiscal</option>
-                <option value="Penal">Penal</option>
-                <option value="RC">RC</option>
-                <option value="Social">Social</option>
-                <option value="Stenico">Stenico</option>
               </select>
           </div>
           <div class="inputWrapper">
@@ -65,11 +67,11 @@ class List {
           <div class="inputWrapper">
               <label for="statut">Statut:</label>
               <select name="statut">
-                <option value="Choisir">Choisir</option>
+                <option value="Choisir">Tous</option>
                 <option value="A VALIDER">A valider</option>
-                <option value="EN COURS">En cours</option>
-                <option value="AJOURNE">Ajourné</option>
-                <option value="TERMINE">Terminé</option>
+                <option selected value="EN COURS">En cours</option>
+                <option value="AJOURNÉE">Ajournée</option>
+                <option value="TERMINÉ">Terminé</option>
               </select>
           </div>
         `
@@ -104,7 +106,7 @@ class List {
       tableBody.innerHTML += `
         <tr>
           <td>${row['cle']}</td>
-          <td>${row['tiers']} vs ${row['societe']}</td>
+          <td>${row['societe']} vs ${row['tiers']}</td>
           <td>${row['commentaire']}</td>
           <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
           <td>${row['theme']}</td>
@@ -118,6 +120,9 @@ class List {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
+
+    const themeSelect = document.querySelector('select[name="theme"]')
+
     this.datas.forEach((el) => {
       if (!societySelectOption.includes(el['societe'])) {
         societySelectOption.push(el['societe'])
@@ -127,17 +132,33 @@ class List {
       }
     })
 
+    societySelectOption.sort((a, b) => a.localeCompare(b))
+    tiersSelectOption.sort((a, b) => a.localeCompare(b))
+
     const societySelect = document.querySelector('select[name="society"]')
     societySelectOption.forEach((society) => {
-      societySelect.innerHTML += `
-        <option>${society}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', society)
+      option.textContent = society
+      societySelect.appendChild(option)
     })
+
     const tiersSelect = document.querySelector('select[name="tiers"]')
     tiersSelectOption.forEach((tiers) => {
-      tiersSelect.innerHTML += `
-        <option>${tiers}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', tiers)
+      option.textContent = tiers
+      tiersSelect.appendChild(option)
+    })
+
+    this.themeList.sort((a, b) => a['theme'].localeCompare(b['theme']))
+    this.themeList.forEach((theme) => {
+      if (theme['theme'] && theme['actif'] === '1') {
+        const option = document.createElement('option')
+        option.setAttribute('value', theme['theme'])
+        option.textContent = theme['theme']
+        themeSelect.appendChild(option)
+      }
     })
   }
 
@@ -299,7 +320,7 @@ class List {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.insertDatas(this.datas)
+    await this.insertDatas(this.activeDatas)
     await this.insertSelect()
     await this.footer.initFooter(true, 'Créer un dossier vierge')
     await this.initEventListeners()

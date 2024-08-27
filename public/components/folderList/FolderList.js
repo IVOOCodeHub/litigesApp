@@ -1,10 +1,14 @@
 class FolderList {
   constructor() {
     this.folderService = new FolderService()
+    this.themeListService = new ThemeListService()
+    this.eventService = new EventService()
     this.utils = new Utils()
     this.userCredentials = null
     this.foldersDatas = null
     this.main = null
+    this.themeList = null
+    this.eventKey = null
   }
 
   async getDatas() {
@@ -15,7 +19,7 @@ class FolderList {
     }
 
     this.foldersDatas = await this.folderService.getFolder(this.userCredentials)
-    console.log('this.foldersDatas —>', this.foldersDatas)
+    this.themeList = await this.themeListService.getList(this.userCredentials)
   }
 
   async initMain() {
@@ -49,14 +53,6 @@ class FolderList {
           <label for="theme">Theme:</label>
           <select id="theme" name="theme">
             <option value="Choisir">Choisir</option>
-            <option value="Amauger">Amauger</option>
-            <option value="Cial">Cial</option>
-            <option value="Divers">Divers</option>
-            <option value="Fiscal">Fiscal</option>
-            <option value="Penal">Penal</option>
-            <option value="RC">RC</option>
-            <option value="Social">Social</option>
-            <option value="Stenico">Stenico</option>
           </select>
         </div>
         <div class="inputWrapper">
@@ -83,6 +79,7 @@ class FolderList {
   async insertSelect() {
     const societySelectOption = []
     const tiersSelectOption = []
+    const themeSelect = document.querySelector('select[name="theme"]')
 
     this.foldersDatas.forEach((el) => {
       if (!societySelectOption.includes(el['societe'])) {
@@ -95,15 +92,27 @@ class FolderList {
 
     const societySelect = document.querySelector('select[name="society"]')
     societySelectOption.forEach((society) => {
-      societySelect.innerHTML += `
-        <option>${society}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', society)
+      option.textContent = society
+      societySelect.appendChild(option)
     })
+
     const tiersSelect = document.querySelector('select[name="tiers"]')
     tiersSelectOption.forEach((tiers) => {
-      tiersSelect.innerHTML += `
-        <option>${tiers}</option>
-      `
+      const option = document.createElement('option')
+      option.setAttribute('value', tiers)
+      option.textContent = tiers
+      tiersSelect.appendChild(option)
+    })
+
+    this.themeList.forEach((el) => {
+      if (el['theme'] && el['actif'] === '1') {
+        const option = document.createElement('option')
+        option.setAttribute('value', el['theme'])
+        option.textContent = el['theme']
+        themeSelect.appendChild(option)
+      }
     })
   }
 
@@ -135,13 +144,13 @@ class FolderList {
   }
 
   async insertDatas(datas) {
-    const tableBody = document.querySelector('table tbody')
+    const tableBody = document.querySelector('#folderListModal table tbody')
     tableBody.innerHTML = ''
     datas?.forEach((row) => {
       tableBody.innerHTML += `
         <tr>
           <td>${row['cle']}</td>
-          <td>${row['tiers']} vs ${row['societe']}</td>
+          <td>${row['societe']} vs ${row['tiers']}</td>
           <td>${row['commentaire']}</td>
           <td>${this.utils.reformatDate(row['datedebut']).split(' ')[0]}</td>
           <td>${row['theme']}</td>
@@ -278,15 +287,49 @@ class FolderList {
         isAlreadySelected.remove()
       }
 
-      // create new HTMLElement in VewMail.js / viewMail.html
-      const editMail = document.querySelector('.bindFolderWrapper')
-      const displaySelectedFolder = document.createElement('li')
-      displaySelectedFolder.classList.add('selectedFolderContainer')
-      displaySelectedFolder.innerHTML = `
-        <label>Clé du dossier sélectionné : </label>
-        <p>${selectedFolderID} : ${selectedFolderName}</p>
-      `
-      editMail.insertAdjacentElement('afterend', displaySelectedFolder)
+      const url = new URL(window.location.href)
+      switch (true) {
+        case url.pathname.includes(`viewMail.html`):
+          {
+            // create new HTMLElement in VewMail.js / viewMail.html
+            const editMail = document.querySelector('.bindFolderWrapper')
+            const displaySelectedFolder = document.createElement('li')
+            displaySelectedFolder.classList.add('selectedFolderContainer')
+            displaySelectedFolder.innerHTML = `
+            <label>Clé du dossier sélectionné : </label>
+            <p>${selectedFolderID} : ${selectedFolderName}</p>
+          `
+            editMail.insertAdjacentElement('afterend', displaySelectedFolder)
+          }
+          break
+
+        case url.pathname.endsWith('/event.html'):
+          {
+            // create new HTMLElement in CreateNewEvent.js / createNewEvent.html
+            const createNewEventFrom =
+              document.querySelector('#createEvent form')
+            if (createNewEventFrom) {
+              const displayEventSelectedFolder = document.createElement('li')
+              displayEventSelectedFolder.classList.add('inputWrapper')
+              displayEventSelectedFolder.innerHTML = `
+                <label>Clé du dossier sélectionné : </label>
+                <p>${selectedFolderID} : ${selectedFolderName}</p>
+              `
+              createNewEventFrom.appendChild(displayEventSelectedFolder)
+
+              const displayFolderBtn = document.querySelector('.displayFolder')
+              displayFolderBtn.remove()
+            } else {
+              await this.eventService.bindEventToFolder(
+                this.userCredentials,
+                this.eventKey.toString(),
+                selectedFolderID.toString(),
+              )
+              window.location.reload()
+            }
+          }
+          break
+      }
     }
   }
 
@@ -309,7 +352,8 @@ class FolderList {
     cancelButton.addEventListener('click', () => this.destroyComponent())
   }
 
-  async initFolderList() {
+  async initFolderList(eventKey) {
+    this.eventKey = eventKey
     await this.getDatas()
     await this.initMain()
     await this.renderSearchBar()

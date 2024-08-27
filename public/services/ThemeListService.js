@@ -52,9 +52,9 @@ class ThemeListService extends ApiCalls {
     super()
   }
 
-  async getList(user) {
+  async getList(credentials) {
     const params = {
-      ...user,
+      ...credentials,
       request: 'read_litige_dossier',
       args: null,
     }

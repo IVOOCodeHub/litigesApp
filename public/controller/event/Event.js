@@ -1,15 +1,20 @@
 class Event {
   constructor() {
     this.eventService = new EventService()
+    this.createNewEvent = new CreateNewEvent()
     this.utils = new Utils()
     this.footer = new Footer()
-    this.createNewEvent = new CreateNewEvent()
     this.alert = new Alert()
+    this.folderList = new FolderList()
     this.main = null
     this.root = document.querySelector('#root')
     this.credentials = null
     this.datas = null
     this.eventsDictionary = JSON.parse(localStorage.getItem('eventTypes'))
+    this.juridictionDictionary = JSON.parse(
+      localStorage.getItem('juridictionTypes'),
+    )
+    this.selectedFolderID = null
   }
 
   async getDatas() {
@@ -18,7 +23,7 @@ class Event {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    this.datas = await this.eventService.getEvent(this.credentials)
+    this.datas = await this.eventService.readEvent(this.credentials)
   }
 
   async initMain() {
@@ -36,9 +41,12 @@ class Event {
         <input type="text" name="key" />
     </div>
     <div class="inputWrapper">
-        <label for="name">Nom: </label>
-        <select name="name">
-          <option value="Choisir">Choisir</option>          
+        <label for="action">Stade: </label>
+        <select name="action">
+          <option value="Choisir">Choisir</option>  
+          <option>Pré-contentieux</option>
+          <option>Contentieux</option>
+          <option>Éxecution</option>        
         </select>
     </div>
     <div class="inputWrapper">
@@ -67,12 +75,16 @@ class Event {
           <thead>
               <tr>
                 <th>Clé</th>
+                <th>Dossier de l'évènement</th>
+                <th>Stade</th>
+                <th>Évènement</th>
+                <th>Juridiction</th>
+                <th>Lieu</th>
+                <th>Date de création</th>
                 <th>Commentaire</th>
-                <th>Type d'évènement</th>
-                <th>Date dernier évènement</th>
-                <th>État</th>
-                <th>Prochain évènement</th>
-                <th>Date prochain évènement</th>
+                <th>Prochaine évènement</th>
+                <th>Prochaine juridiction</th>
+                <th>Date de l'évènement suivant</th>
               </tr>
           </thead>
           <tbody></tbody>
@@ -81,109 +93,157 @@ class Event {
     this.main.appendChild(section)
   }
 
-  async insertDatas() {
+  async insertDatas(datas) {
     const tableBody = document.querySelector('table tbody')
     tableBody.innerHTML = ''
 
-    this.datas?.forEach((event) => {
-      const findEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['event_type'],
-      )
-      const findNextEventType = this.eventsDictionary.find(
-        (type) => type['type'] === event['next_event'],
-      )
-      const eventTypeConverted = findEventType['libelle']
-      const nextEventTypeConverted = findNextEventType['libelle']
+    datas?.forEach((event) => {
+      const events = Array.isArray(event) ? event : [event]
 
-      tableBody.innerHTML += `
+      events.forEach((singleEvent) => {
+        const findEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['event_type'],
+        )
+        const findNextEventType = this.eventsDictionary.find(
+          (type) => type['type'] === singleEvent['next_event'],
+        )
+        const findJuridictionType = this.juridictionDictionary.find(
+          (type) => type['type'] === singleEvent['juridiction_type'],
+        )
+        const findNextJuridictionType = this.juridictionDictionary.find(
+          (type) => type['type'] === singleEvent['next_juridiction_type'],
+        )
+
+        const eventTypeConverted = findEventType ? findEventType['libelle'] : ''
+        const nextEventTypeConverted = findNextEventType
+          ? findNextEventType['libelle']
+          : ''
+        const juridictionTypeConverted = findJuridictionType
+          ? findJuridictionType['libelle']
+          : ''
+        const nextJuridictionTypeConverted = findNextJuridictionType
+          ? findNextJuridictionType['libelle']
+          : ''
+
+        tableBody.innerHTML += `
         <tr>
-          <td>${event['cle']}</td>
-          <td>${event['commentaire']}</td>
+          <td>${singleEvent['cle']}</td>
+          <td>
+              ${
+                singleEvent['cle_litige_dossier'] !== '' &&
+                singleEvent['cle_litige_dossier'] !== '0'
+                  ? singleEvent['cle_litige_dossier']
+                  : '<button class="button attachFolder">Attacher à un dossier</button>'
+              }
+          </td>
+          <td>${singleEvent['action']}</td>
           <td>${eventTypeConverted}</td>
-          <td>${this.utils.reformatDate(event['datederevent'])}</td>
-          <td>${''}</td>
+          <td>${juridictionTypeConverted}</td>
+          <td>${singleEvent['lieu_juridiction'] ? singleEvent['lieu_juridiction'] : 'Non renseigné'}</td>
+          <td>${this.utils.reformatDate(singleEvent['datederevent'])}</td>
+          <td>${singleEvent['commentaire']}</td>
           <td>${nextEventTypeConverted}</td>
-          <td>${this.utils.reformatDate(event['datenextevent'])}</td>
-        </tr>      
+          <td>${nextJuridictionTypeConverted}</td>
+          <td>${this.utils.reformatDate(singleEvent['datenextevent'])}</td>
+        </tr>
       `
+      })
     })
   }
 
-  async searchFromSelect(htmlSelectElement) {
-    const selectedValue = htmlSelectElement.value
+  async searchFromSelect(htmlElement) {
+    const htmlElementName = htmlElement.name
+    const htmlElementValue = htmlElement.value
     let newDatas = null
-    if (htmlSelectElement.name === 'key') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) => row['key'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'name') {
-      if (selectedValue !== 'Choisir') {
-        newDatas = this.datas.filter(
-          (row) => row['name'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'type') {
-      if (selectedValue !== 'Tous') {
-        newDatas = this.datas.filter(
-          (row) => row['type'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'previousEventDate') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) => row['previousEventDate'].trim() === selectedValue,
-        )
-      } else {
-        newDatas = this.datas
-      }
-    } else if (htmlSelectElement.name === 'nextEventDate') {
-      if (selectedValue !== '') {
-        newDatas = this.datas.filter(
-          (row) =>
-            this.utils.reformatDate(row['nextEventDate']).split(' ')[0] ===
-            this.utils.reformatDate(selectedValue).split(' ')[0],
-        )
-      } else {
-        newDatas = this.datas
-      }
+
+    switch (htmlElementName) {
+      case 'key':
+        if (htmlElementValue !== '') {
+          const resultFromValue = await this.datas.filter(
+            (row) => row['cle'].trim() === htmlElementValue,
+          )
+          resultFromValue
+            ? (newDatas = resultFromValue)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'action':
+        if (htmlElementValue !== 'Choisir') {
+          const resultFromAction = await this.datas.filter((row) => {
+            return row['action'].trim() === htmlElementValue
+          })
+          resultFromAction
+            ? (newDatas = resultFromAction)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'type':
+        if (htmlElementValue !== 'Tous') {
+          const resultFromType = await this.datas.filter((row) => {
+            const getTypeFromDictionary = this.eventsDictionary.find(
+              (label) => {
+                return htmlElementValue.trim() === label['libelle'].trim()
+              },
+            )
+            return row['event_type'] === getTypeFromDictionary['type']
+          })
+          resultFromType ? (newDatas = resultFromType) : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'previousEventDate':
+        if (htmlElementValue !== '') {
+          const resultFromLastEventDate = await this.datas.filter((row) => {
+            return (
+              this.utils.reformatDate(row['datederevent']) ===
+              this.utils.reformatDate(htmlElementValue)
+            )
+          })
+          resultFromLastEventDate
+            ? (newDatas = resultFromLastEventDate)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
+        break
+      case 'nextEventDate':
+        if (htmlElementValue !== '') {
+          const resultFromNextEventDate = await this.datas.filter((row) => {
+            return (
+              this.utils.reformatDate(row['datenextevent']) ===
+              this.utils.reformatDate(htmlElementValue)
+            )
+          })
+          resultFromNextEventDate
+            ? (newDatas = resultFromNextEventDate)
+            : (newDatas = this.datas)
+        } else {
+          newDatas = this.datas
+        }
     }
 
     await this.insertDatas(newDatas)
   }
 
   async searchBy(elementName) {
-    const select = document.querySelector(`[name="${elementName}"]`)
-    select.addEventListener(
+    const htmlElement = document.querySelector(`[name="${elementName}"]`)
+    htmlElement.addEventListener(
       'change',
-      async () => await this.searchFromSelect(select),
+      async () => await this.searchFromSelect(htmlElement),
     )
   }
 
   async insertSelect() {
-    const nameSelectOption = []
     const typeSelectOption = []
-    this.datas.forEach((el) => {
-      if (!nameSelectOption.includes(el['name'])) {
-        nameSelectOption.push(el['name'])
-      }
-      if (!typeSelectOption.includes(el['type']))
-        typeSelectOption.push(el['type'])
+    this.eventsDictionary.forEach((event) => {
+      typeSelectOption.push(event['libelle'])
     })
-
-    const nameSelect = document.querySelector('select[name="name"]')
-    nameSelectOption.forEach((name) => {
-      nameSelect.innerHTML += `
-        <option>${name}</option>
-      `
-    })
+    typeSelectOption.sort((a, b) => a.localeCompare(b))
     const typeSelect = document.querySelector('select[name="type"]')
     typeSelectOption.forEach((type) => {
       typeSelect.innerHTML += `
@@ -204,12 +264,33 @@ class Event {
     btnWrapper.appendChild(createdBtn)
   }
 
+  async displayFolders(eventKey, htmlButtonElement) {
+    htmlButtonElement.classList.add('selectedEventButton')
+    htmlButtonElement.addEventListener('click', async () => {
+      await this.folderList.initFolderList(eventKey)
+    })
+    document.addEventListener('folderSelected', (event) => {
+      this.selectedFolderID = event.detail.folderID
+    })
+  }
+
   async initEventListeners() {
     await this.searchBy('key')
-    await this.searchBy('name')
+    await this.searchBy('action')
     await this.searchBy('type')
     await this.searchBy('previousEventDate')
     await this.searchBy('nextEventDate')
+
+    // search for the attachFolder button if it exists, and attach the listener to it
+    const rows = document.querySelectorAll('tbody tr')
+    rows.forEach((row) => {
+      if (row.children[1].firstElementChild) {
+        const eventKey = row.children[0].textContent // get the eventKey for update the event
+        const attachFolderButton =
+          row.children[1].querySelector('.attachFolder')
+        this.displayFolders(eventKey, attachFolderButton)
+      }
+    })
   }
 
   async initValidation() {
@@ -217,7 +298,7 @@ class Event {
     await this.initMain()
     await this.initForm()
     await this.initTable()
-    await this.insertDatas()
+    await this.insertDatas(this.datas)
     await this.insertSelect()
     await this.footer.initFooter()
     await this.createNewEventButton()

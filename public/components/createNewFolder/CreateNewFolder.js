@@ -3,13 +3,23 @@ class CreateNewFolder {
     this.utils = new Utils()
     this.alert = new Alert()
     this.folderService = new FolderService()
+    this.themeListService = new ThemeListService()
+    this.themeList = null
     this.main = null
-    this.user = null
+    this.credentials = null
     this.isMultiple = 0
   }
 
   async getUser() {
-    this.user = await JSON.parse(localStorage.getItem('user'))
+    const user = await JSON.parse(localStorage.getItem('user'))
+    this.credentials = {
+      userID: user['matricule'],
+      password: user['mdp'],
+    }
+  }
+
+  async getThemeList() {
+    this.themeList = await this.themeListService.getList(this.credentials)
   }
 
   async renderSection() {
@@ -52,14 +62,6 @@ class CreateNewFolder {
           <label for="theme">Theme:</label>
           <select name="theme" required>
             <option>Choisir</option>
-            <option>Amauger</option>
-            <option>Cial</option>
-            <option>Divers</option>
-            <option>Fiscal</option>
-            <option>Pénal</option>
-            <option>RC</option>
-            <option>Social</option>
-            <option>Sténico</option>
           </select>
         </div>
         <div class="inputWrapper checkBoxWrapper">
@@ -92,6 +94,22 @@ class CreateNewFolder {
     `
     this.main.appendChild(section)
     await this.utils.trapFocus(section)
+  }
+
+  async insertSelectOption() {
+    const themeSelect = document.querySelector('#submitForm select[name="theme"]')
+
+    if (!this.themeList || !Array.isArray(this.themeList)) {
+      console.error(`This.themeList, is not defined or not an array`)
+      return
+    }
+
+    this.themeList.forEach((theme) => {
+      const option = document.createElement('option')
+      option.setAttribute('value', theme['theme'])
+      option.textContent = theme['theme']
+      themeSelect.appendChild(option)
+    })
   }
 
   async destroyComponent() {
@@ -141,7 +159,7 @@ class CreateNewFolder {
     const commentaire = document.querySelector(
       '#submitForm textarea[name="comment"]',
     ).value
-    const auteur = this.user['matricule']
+    const auteur = this.credentials['userID']
     const conseil = document.querySelector(
       '#submitForm input[name="conseil"]',
     ).value
@@ -156,10 +174,6 @@ class CreateNewFolder {
       '#submitForm input[name="startDate"]',
     ).value
 
-    const user = {
-      userID: this.user['matricule'],
-      password: this.user['mdp'],
-    }
     let datas = {
       societe: societe,
       tiers: tiers,
@@ -193,14 +207,14 @@ class CreateNewFolder {
 
     replaceEmptyStringsWithNull(datas)
 
-    console.log('datas —>', datas)
     await this.destroyComponent()
-    await this.folderService.createEditFolder(user, datas)
+    await this.folderService.createEditFolder(this.credentials, datas)
     window.location.reload()
   }
 
   async initEventListeners() {
     await this.isMultiples()
+    await this.insertSelectOption()
     const cancelButton = document.querySelector('.errorButton')
     cancelButton.addEventListener('click', async () => this.destroyComponent())
 
@@ -213,6 +227,7 @@ class CreateNewFolder {
 
   async initCreateNewFolder() {
     await this.getUser()
+    await this.getThemeList()
     await this.renderSection()
     await this.initEventListeners()
   }

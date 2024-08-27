@@ -141,7 +141,7 @@ class Affectation {
       case 'type':
         if (htmlElementValue !== 'Tous') {
           const resultFromType = await this.datas.filter(
-            (row) => row['type'].trim() === htmlElementValue,
+            (row) => row['nature'].trim() === htmlElementValue,
           )
           resultFromType ? (newDatas = resultFromType) : (newDatas = this.datas)
         } else {
@@ -179,13 +179,14 @@ class Affectation {
     }
 
     await this.insertDatas(newDatas)
+    await this.initEventListeners()
   }
 
   async searchBy(elementName) {
     const htmlElement = document.querySelector(`[name="${elementName}"]`)
     htmlElement.addEventListener(
       'change',
-      async () => await this.searchFromForm(elementName),
+      async () => await this.searchFromForm(htmlElement),
     )
   }
 

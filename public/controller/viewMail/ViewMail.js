@@ -6,7 +6,6 @@ class ViewMail {
     this.bindMailService = new BindMailService()
     this.folderService = new FolderService()
     this.folderHeader = new FolderHeader()
-    this.footer = new Footer()
     this.createNewFolder = new CreateNewFolder()
     this.createNewEvent = new CreateNewEvent()
     this.folderList = new FolderList()
@@ -37,7 +36,6 @@ class ViewMail {
       localStorage.setItem('datas', JSON.stringify(this.datas))
     }
 
-    console.log('this.id —>', this.id)
     this.datas = this.datas.find((object) => object['cle'] === this.id)
 
     this.folderDatas = await this.folderService.getFolder(this.credentials)
@@ -128,6 +126,30 @@ class ViewMail {
         .value,
     }
     await this.bindMailService.setBindMail(this.credentials, newDatas)
+    window.location.reload()
+  }
+
+  // Didn't use the footer component to force the affectation view to
+  // fetch the datas again, if we comme from the affectation view.
+  async insertPreviousButton() {
+    const buttonWrapper = document.createElement('footer')
+    const previousButton = document.createElement('button')
+    previousButton.classList.add('errorButton')
+    previousButton.textContent = 'Retour'
+
+    const previousUrl = document.referrer
+    if (previousUrl.includes('affectation.html')) {
+      previousButton.addEventListener('click', () =>
+        window.location.replace(
+          'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        ),
+      )
+    } else {
+      previousButton.addEventListener('click', () => window.history.back())
+    }
+
+    buttonWrapper.appendChild(previousButton)
+    this.main.appendChild(buttonWrapper)
   }
 
   async initEventListeners() {
@@ -165,7 +187,7 @@ class ViewMail {
     await this.displayCourrier()
     await this.editCourrier()
     await this.insertComment()
-    await this.footer.initFooter()
+    await this.insertPreviousButton()
     await this.initEventListeners()
   }
 }
