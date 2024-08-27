@@ -193,9 +193,11 @@ class CreateNewEvent {
       })
     }
 
-    const cle_litige_dossier = document
-      .querySelector('#createEvent p')
-      .textContent.split(' : ')[0]
+    const getCleLitigeDossier = document.querySelector('#createEvent p')
+
+    const cle_litige_dossier = getCleLitigeDossier
+      ? getCleLitigeDossier.textContent.split(' : ')[0]
+      : 0
 
     const action = selectedRadio
 

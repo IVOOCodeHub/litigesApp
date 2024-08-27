@@ -2,6 +2,7 @@ class Folder {
   constructor() {
     this.folderService = new FolderService()
     this.themeListService = new ThemeListService()
+    this.eventService = new EventService()
     this.folderHeader = new FolderHeader()
     this.createNewEvent = new CreateNewEvent()
     this.footer = new Footer()
@@ -19,6 +20,7 @@ class Folder {
     this.isMultiple = 0
     this.bindMailcount = null
     this.selectedEventID = null
+    this.selectedEventName = null
   }
 
   async getParams() {
@@ -169,7 +171,7 @@ class Folder {
               <input name="addMail" type="file"/>
             </li>
             <li class="buttonWrapper">
-              <button class="validButton">Sauvegarder les modifications</button>
+              <button class="validButton updateEventFolder">Sauvegarder les modifications</button>
             </li>
           </ul>
         </article>
@@ -198,6 +200,7 @@ class Folder {
     )
     document.addEventListener('eventSelected', (event) => {
       this.selectedEventID = event.detail.eventID
+      this.selectedEventName = event.detail.eventName
     })
   }
 
@@ -372,6 +375,18 @@ class Folder {
     window.location.reload()
   }
 
+  async submitEventUpdate() {
+    const submitButton = document.querySelector('.updateEventFolder')
+    submitButton.addEventListener('click', async () => {
+      await this.eventService.bindEventToFolder(
+        this.credentials,
+        this.selectedEventID,
+        this.id,
+      )
+      window.location.reload()
+    })
+  }
+
   async initEventListeners() {
     await this.isMultiples()
 
@@ -381,6 +396,7 @@ class Folder {
       window.location.reload()
     })
 
+
     const createNewEventButton = document.querySelector(
       '.displayCreateEventModal',
     )
@@ -388,10 +404,13 @@ class Folder {
       this.createNewEvent.initCreateNewEvent(),
     )
 
+    await this.submitEventUpdate()
     await this.displayLinkedMail()
     await this.displayFolderHistory()
     await this.linkEvent()
   }
+
+
 
   async initFolder() {
     await this.getParams()

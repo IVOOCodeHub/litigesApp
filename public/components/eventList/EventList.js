@@ -15,7 +15,6 @@ class EventList {
     }
 
     this.eventsDatas = await this.eventService.getEvent(this.userCredentials)
-    console.log('this.eventsDatas —>', this.eventsDatas)
   }
 
   async initMain() {
@@ -109,11 +108,11 @@ class EventList {
     rows.forEach((row) => {
       row.addEventListener('click', async () => {
         const selectedEventID = row.firstElementChild.textContent
-        const selectedEventName = row.children[1].textContent
+        const selectedEventName = row.children[2].textContent
 
         // return the ID on the component Folder.js who's send the values to backend
         const event = new CustomEvent('eventSelected', {
-          detail: { folderID: selectedEventID },
+          detail: { eventID: selectedEventID, eventName: selectedEventName },
         })
         document.dispatchEvent(event)
 
@@ -142,7 +141,7 @@ class EventList {
             displaySelectedEvent.classList.add('selectedEventContainer')
             displaySelectedEvent.innerHTML = `
             <label>Clé de l'évènement sélectionné : </label>
-            <p>${selectedEventID}</p>
+            <p>${selectedEventID} - ${selectedEventName}</p>
           `
             editFolder.insertAdjacentElement('afterend', displaySelectedEvent)
           }
@@ -157,7 +156,7 @@ class EventList {
             displayEventSelectedFolder.classList.add('inputWrapper')
             displayEventSelectedFolder.innerHTML = `
             <label>Clé de l'évènement sélectionné : </label>
-            <p>${selectedEventID}</p>
+            <p>${selectedEventID} - ${selectedEventName}</p>
           `
             createNewEventForm.appendChild(displayEventSelectedFolder)
           }
@@ -179,7 +178,7 @@ class EventList {
     cancelButton.addEventListener('click', async () => this.destroyComponent())
   }
 
-  async initEventList(folderID) {
+  async initEventList() {
     await this.getDatas()
     await this.initMain()
     await this.renderSearchBar()

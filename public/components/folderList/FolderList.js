@@ -2,11 +2,13 @@ class FolderList {
   constructor() {
     this.folderService = new FolderService()
     this.themeListService = new ThemeListService()
+    this.eventService = new EventService()
     this.utils = new Utils()
     this.userCredentials = null
     this.foldersDatas = null
     this.main = null
     this.themeList = null
+    this.eventKey = null
   }
 
   async getDatas() {
@@ -306,16 +308,25 @@ class FolderList {
             // create new HTMLElement in CreateNewEvent.js / createNewEvent.html
             const createNewEventFrom =
               document.querySelector('#createEvent form')
-            const displayEventSelectedFolder = document.createElement('li')
-            displayEventSelectedFolder.classList.add('inputWrapper')
-            displayEventSelectedFolder.innerHTML = `
-            <label>Clé du dossier sélectionné : </label>
-            <p>${selectedFolderID} : ${selectedFolderName}</p>
-          `
-            createNewEventFrom.appendChild(displayEventSelectedFolder)
+            if (createNewEventFrom) {
+              const displayEventSelectedFolder = document.createElement('li')
+              displayEventSelectedFolder.classList.add('inputWrapper')
+              displayEventSelectedFolder.innerHTML = `
+                <label>Clé du dossier sélectionné : </label>
+                <p>${selectedFolderID} : ${selectedFolderName}</p>
+              `
+              createNewEventFrom.appendChild(displayEventSelectedFolder)
 
-            const displayFolderBtn = document.querySelector('.displayFolder')
-            displayFolderBtn.remove()
+              const displayFolderBtn = document.querySelector('.displayFolder')
+              displayFolderBtn.remove()
+            } else {
+              await this.eventService.bindEventToFolder(
+                this.userCredentials,
+                this.eventKey.toString(),
+                selectedFolderID.toString(),
+              )
+              window.location.reload()
+            }
           }
           break
       }
@@ -341,7 +352,8 @@ class FolderList {
     cancelButton.addEventListener('click', () => this.destroyComponent())
   }
 
-  async initFolderList() {
+  async initFolderList(eventKey) {
+    this.eventKey = eventKey
     await this.getDatas()
     await this.initMain()
     await this.renderSearchBar()
