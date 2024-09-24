@@ -9,7 +9,7 @@ class HeaderRenderer {
     const header = document.createElement('header')
 
     const link = document.createElement('a')
-    link.href = 'http://192.168.0.254:8080/usv_prod/menugeneral.asp'
+    link.href = 'http://srv-web:8080/usv_prod/menugeneral.asp'
     link.title = 'Menu général'
 
     const logoWrapper = document.createElement('figure')
@@ -17,10 +17,7 @@ class HeaderRenderer {
 
     const brandingLogo = document.createElement('img')
     brandingLogo.classList.add('logoWrapper__logo')
-    brandingLogo.src =
-      this.pageName === 'Litiges'
-        ? './public/assets/brandingLogo.png'
-        : './public/assets/brandingLogo.png'
+    brandingLogo.src = '../../public/assets/brandingLogo.png'
 
     const appTitle = document.createElement('h1')
     appTitle.textContent = this.pageName

@@ -15,7 +15,7 @@ class MainMenu {
       password: this.user['mdp'],
     }
     if (!this.user) {
-      window.location.href = `http://192.168.0.254:8080/usv_prod/menu0.asp`
+      window.location.href = `http://srv-web:8080/usv_prod/menu0.asp`
     }
   }
 
@@ -38,19 +38,19 @@ class MainMenu {
     const buttonsInfoH = [
       {
         title: 'Courrier a affecter',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+        href: './public/views/affectation.html',
       },
       {
         title: 'Liste des dossiers',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/list.html',
+        href: './public/views/list.html',
       },
       {
         title: 'Liste des évènements',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/event.html',
+        href: './public/views/event.html',
       },
       {
         title: 'Calendrier events',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/calendrier.html',
+        href: './public/views/calendrier.html',
       },
     ]
 
@@ -71,15 +71,15 @@ class MainMenu {
     const buttonsInfoV = [
       {
         title: 'Alertes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
+        href: './public/views/views/#.html',
       },
       {
         title: 'Thèmes',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/themeList.html',
+        href: './public/views/themeList.html',
       },
       {
         title: 'Conseils',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/#.html',
+        href: './public/views/#.html',
       },
     ]
 

@@ -252,10 +252,10 @@ class FolderList {
 
   async searchBy(elementName) {
     const htmlElement = document.querySelector(`[name="${elementName}"]`)
-    htmlElement.addEventListener(
-      'change',
-      async () => await this.searchFromBar(htmlElement),
-    )
+    htmlElement.addEventListener('change', async () => {
+      await this.searchFromBar(htmlElement)
+      await this.selectFolder()
+    })
   }
 
   async selectFolder() {

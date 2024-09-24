@@ -48,7 +48,7 @@ class Header {
     const header = document.createElement('header')
 
     const link = document.createElement('a')
-    link.href = 'http://192.168.0.254:8080/usv_prod/menugeneral.asp'
+    link.href = 'http://srv-web:8080/usv_prod/menugeneral.asp'
     link.title = 'Menu général'
 
     const logoWrapper = document.createElement('figure')

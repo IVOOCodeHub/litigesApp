@@ -16,7 +16,7 @@ class ViewMail {
     this.datas = null
     this.credentials = null
     this.folderDatas = null
-    this.mailFolder = 'http://192.168.0.254:8080/usv_prod/courriers/'
+    this.mailFolder = 'http://srv-web:8080/usv_prod/courriers/'
   }
 
   async getParams() {
@@ -141,7 +141,7 @@ class ViewMail {
     if (previousUrl.includes('affectation.html')) {
       previousButton.addEventListener('click', () =>
         window.location.replace(
-          'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/affectation.html',
+          'http://srv-web:8080/usv_prod/litigesApp/public/views/affectation.html',
         ),
       )
     } else {
