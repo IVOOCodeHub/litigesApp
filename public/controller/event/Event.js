@@ -43,16 +43,16 @@ class Event {
     <div class="inputWrapper">
         <label for="action">Stade: </label>
         <select name="action">
-          <option value="Choisir">Choisir</option>  
+          <option value="Choisir">Choisir</option>
           <option>Pré-contentieux</option>
           <option>Contentieux</option>
-          <option>Éxecution</option>        
+          <option>Éxecution</option>
         </select>
     </div>
     <div class="inputWrapper">
         <label for="type">Type d'évènement: </label>
         <select name="type">
-          <option value="Tous">Tous</option>          
+          <option value="Tous">Tous</option>
         </select>
     </div>
     <div class="inputWrapper">

@@ -134,3 +134,120 @@ document.addEventListener('DOMContentLoaded', function () {
 
   footerContainer.appendChild(goBackButton)
 })
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// test avec fetch des datas pour le calendrier
+
+// document.addEventListener('DOMContentLoaded', async function () {
+//   // Instancie EventService et les autres variables nécessaires
+//   const eventService = new EventService()
+//   const utils = new Utils()
+//   let userCredentials = null
+//   let eventsDatas = []
+
+//   // Fonction pour récupérer les événements, comme dans EventList.js
+//   async function getDatas() {
+//     const user = JSON.parse(localStorage.getItem('user'))
+//     userCredentials = {
+//       userID: user['matricule'],
+//       password: user['mdp'],
+//     }
+
+//     eventsDatas = await eventService.getEvent(userCredentials)
+//   }
+
+//   // Récupère les événements et les ajoute au calendrier
+//   async function fetchEventsForCalendar() {
+//     try {
+//       await getDatas() // Récupère les événements depuis l'API
+
+//       // Transformation des données en objets compatibles avec FullCalendar
+//       const events = []
+//       eventsDatas.forEach((eventGroup) => {
+//         ;(Array.isArray(eventGroup) ? eventGroup : [eventGroup]).forEach(
+//           (singleEvent) => {
+//             events.push({
+//               title: singleEvent['event_type'] || 'Événement',
+//               start: singleEvent['datederevent'],
+//               end: singleEvent['datenextevent'] || null,
+//               color: singleEvent['color'] || '#3788d8', // Couleur par défaut si non spécifiée
+//             })
+//           },
+//         )
+//       })
+
+//       // Initialise et rend le calendrier avec les événements
+//       const calendarEl = document.getElementById('calendar')
+//       const calendar = new FullCalendar.Calendar(calendarEl, {
+//         locale: 'fr',
+//         initialDate: '2024-05-01',
+//         editable: false,
+//         selectable: false,
+//         businessHours: true,
+//         dayMaxEvents: true,
+//         titleFormat: {
+//           month: 'long',
+//           year: 'numeric',
+//           day: 'numeric',
+//           weekday: 'long',
+//         },
+//         events: events, // Ajoute les événements au calendrier
+//       })
+
+//       calendar.render() // Affiche le calendrier avec les événements
+//     } catch (error) {
+//       console.error('Erreur lors de la récupération des événements:', error)
+//     }
+//   }
+
+//   // Appel de la fonction pour récupérer et afficher les événements dans le calendrier
+//   await fetchEventsForCalendar()
+
+//   // Ajout de la légende et du bouton de retour (inchangé par rapport à votre code initial)
+//   const legendContainer = document.getElementById('legendContainer')
+//   const legend = document.createElement('div')
+//   legend.classList.add('legend')
+
+//   const categories = [
+//     { name: 'Amauger', color: '#ff9f89' },
+//     { name: 'Cial', color: '#00FFFF' },
+//     { name: 'Divers', color: '#a3ffa3' },
+//     { name: 'Fiscal', color: '#a3a3ff' },
+//     { name: 'Pénal', color: '#FF00FF' },
+//     { name: 'RC', color: '#ffffa3' },
+//     { name: 'Social', color: '#008080' },
+//     { name: 'Stenico', color: '#FF0000' },
+//   ]
+
+//   categories.forEach(function (category) {
+//     const item = document.createElement('div')
+//     item.classList.add('legend-item')
+
+//     const color = document.createElement('div')
+//     color.classList.add('legend-color')
+//     color.style.backgroundColor = category.color
+
+//     const text = document.createElement('span')
+//     text.textContent = category.name
+
+//     item.appendChild(color)
+//     item.appendChild(text)
+//     legend.appendChild(item)
+//   })
+
+//   if (legendContainer) {
+//     legendContainer.appendChild(legend)
+//   }
+
+//   const footerContainer = document.getElementById('footerContainer')
+//   if (footerContainer) {
+//     const goBackButton = document.createElement('button')
+//     goBackButton.classList.add('goBackButton', 'errorButton')
+//     goBackButton.textContent = 'Retour'
+//     goBackButton.addEventListener('click', function () {
+//       window.history.back()
+//     })
+
+//     footerContainer.appendChild(goBackButton)
+//   }
+// })

@@ -10,21 +10,24 @@
 
     <title>Litiges — Calendrier</title>
 
-    <script src='./dist/index.global.js' defer></script>
-    <script src="./public/components/calendrier/calendar.js" defer></script>
+
 </head>
 
 <body>
     <div id="headerContainer"></div>
     <div id="legendContainer"></div>
     <div id='calendar'></div>
-    <!-- <div id="legendContainer"></div> -->
     <div id="footerContainer"></div>
+
+
+    <script src="./public/scripts/utils/Utils.js"></script>
+    <script src="./public/scripts/api/ApiCalls.js"></script>
+    <script src="./public/services/Event.service.js"></script>
+    <script src='./dist/index.global.js' defer></script>
+    <script src="./public/components/calendrier/calendar.js" defer></script>
 
     <script src="https://kit.fontawesome.com/2743dbdb32.js" crossorigin="anonymous"></script>
     <script src="./public/components/header/calendarHeader.js"></script>
-    <script lang="application/javascript" src="./public/scripts/api/ApiCalls.js"></script>
-    <script lang="application/javascript" src="./public/scripts/utils/Utils.js"></script>
 </body>
 
 </html>
