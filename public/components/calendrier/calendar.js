@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
     eventSources: ['http://192.168.0.112/Public/ndecr_test/calendrier.php'],
   })
   const retrievedEvents = calendar.getEvents()
-  console.log('évènements :', retrievedEvents)
+  console.log('évènements test :', retrievedEvents)
   calendar.render()
 
   // Ajouter la légende
