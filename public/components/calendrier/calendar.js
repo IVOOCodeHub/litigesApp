@@ -1,3 +1,6 @@
+// import { EventService } from '../services/Event.service.js'
+// import { Utils } from '../scripts/utils/Utils.js'
+
 // document.addEventListener('DOMContentLoaded', function () {
 //   let eventColor = ''
 //   let eventTextColor = ''
@@ -136,55 +139,51 @@
 // })
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// test avec fetch des datas pour le calendrier
+// test avec fetch des datas pour le calendrier et intégration dans une classe
 
-document.addEventListener('DOMContentLoaded', async function () {
-  const eventService = new EventService()
-  let userCredentials = null
-  let eventsDatas = []
+// window.onload = async function () {
+//   if (typeof Utils === 'undefined' || typeof EventService === 'undefined') {
+//     console.error(
+//       "Utils ou EventService n'est pas défini. Assurez-vous que les dépendances sont correctement chargées.",
+//     )
+//     return
+//   }
 
-  // Récupérer les informations d'authentification de l'utilisateur
-  async function getDatas() {
+// Classe pour tester la récupération des événements
+class CalendarTestComponent {
+  constructor() {
+    this.eventService = new EventService()
+    this.utils = new Utils()
+    this.userCredentials = null
+    this.eventsData = []
+  }
+
+  async init() {
+    await this.getEventsData()
+    this.logEvents()
+  }
+
+  async getCredentials() {
+    // Récupère les informations d'authentification de l'utilisateur depuis localStorage
     const user = JSON.parse(localStorage.getItem('user'))
-    userCredentials = {
+    this.userCredentials = {
       userID: user['matricule'],
       password: user['mdp'],
     }
-    eventsDatas = await eventService.getEvent(userCredentials)
   }
 
-  // Charger et afficher les événements dans le calendrier
-  async function fetchEventsForCalendar() {
-    await getDatas() // Récupère les événements depuis l'API
-
-    const events = eventsDatas.flat().map((singleEvent) => ({
-      title: singleEvent['event_type'] || 'Événement',
-      start: singleEvent['datederevent'],
-      end: singleEvent['datenextevent'] || null,
-      color: singleEvent['color'] || '#3788d8',
-    }))
-
-    // Configuration et rendu du calendrier
-    const calendarEl = document.getElementById('calendar')
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      locale: 'fr',
-      initialDate: '2024-05-01',
-      editable: false,
-      selectable: false,
-      businessHours: true,
-      dayMaxEvents: true,
-      titleFormat: {
-        month: 'long',
-        year: 'numeric',
-        day: 'numeric',
-        weekday: 'long',
-      },
-      events: events,
-    })
-
-    calendar.render()
+  async getEventsData() {
+    // Récupère les événements de la base de données
+    await this.getCredentials()
+    this.eventsData = await this.eventService.getEvent(this.userCredentials)
   }
 
-  // Exécute la fonction pour charger les événements
-  await fetchEventsForCalendar()
-})
+  logEvents() {
+    // Affiche les événements dans la console
+    console.log('Événements récupérés :', this.eventsData)
+  }
+}
+
+// Initialise et exécute le composant de test
+const calendarTestComponent = new CalendarTestComponent()
+calendarTestComponent.init()

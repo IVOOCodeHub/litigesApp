@@ -1,3 +1,4 @@
+console.log('ApiCalls.js chargé')
 class ApiCalls extends Utils {
   constructor() {
     super()
@@ -33,7 +34,6 @@ class ApiCalls extends Utils {
       console.error(`Can't fetch datas : ${err}, at : ${this.getDate()}`)
     }
   }
-
 
   async getRequest(url) {
     try {

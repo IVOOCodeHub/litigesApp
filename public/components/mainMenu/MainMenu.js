@@ -21,8 +21,14 @@ class MainMenu {
 
   async getLitigesDictionary() {
     const datas = await this.mainMenuService.getDictionary(this.credentials)
-    localStorage.setItem('eventTypes', JSON.stringify(datas['event_types']['rows']))
-    localStorage.setItem('juridictionTypes', JSON.stringify(datas['juridiction_types']['rows']))
+    localStorage.setItem(
+      'eventTypes',
+      JSON.stringify(datas['event_types']['rows']),
+    )
+    localStorage.setItem(
+      'juridictionTypes',
+      JSON.stringify(datas['juridiction_types']['rows']),
+    )
   }
 
   async render() {
@@ -50,7 +56,7 @@ class MainMenu {
       },
       {
         title: 'Calendrier events',
-        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/calendrier.html',
+        href: 'http://192.168.0.254:8080/usv_prod/litigesApp/public/views/calendrier.html',
       },
     ]
 

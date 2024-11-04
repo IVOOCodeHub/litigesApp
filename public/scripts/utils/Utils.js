@@ -1,3 +1,4 @@
+console.log('Utils.js chargé')
 class Utils {
   constructor() {}
 
