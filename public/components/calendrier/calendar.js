@@ -190,14 +190,7 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-window.onload = async function () {
-  if (typeof Utils === 'undefined' || typeof EventService === 'undefined') {
-    console.error(
-      "Utils ou EventService n'est pas défini. Assurez-vous que les dépendances sont correctement chargées.",
-    )
-    return
-  }
-
+document.addEventListener('DOMContentLoaded', () => {
   class CalendarComponent {
     constructor() {
       this.eventService = new EventService()
@@ -226,30 +219,29 @@ window.onload = async function () {
     }
 
     transformEventsForCalendar() {
-      // Transforme les données d'événements pour être compatible avec FullCalendar
       return this.eventsData.map((event) => ({
         title: event.action || 'Événement',
-        start: event.datederevent, // date de début
+        start: event.datederevent,
         end:
           event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
             ? event.datenextevent
-            : null, // date de fin si disponible
-        color: this.getEventColor(event.stade), // fonction pour déterminer la couleur de l'événement
-        textColor: 'black', // couleur du texte
+            : null,
+        color: this.getEventColor(event.event_type),
+        textColor: 'black',
         extendedProps: {
-          commentaire: event.commentaire, // stocke le commentaire dans les propriétés étendues
+          commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
         },
       }))
     }
 
-    getEventColor(stade) {
+    getEventColor(type) {
       const colors = {
-        'Pré-contentieux': 'yellow',
-        Contentieux: 'red',
-        Recouvrement: 'green',
+        9: 'yellow',
+        10: 'red',
+        11: 'green',
       }
-      return colors[stade] || '#3788d8' // couleur par défaut si le stade n'est pas dans le dictionnaire
+      return colors[type] || '#3788d8'
     }
 
     displayCalendar() {
@@ -269,7 +261,7 @@ window.onload = async function () {
           weekday: 'long',
         },
         events: transformedEvents,
-        eventClick: this.handleEventClick, // Gestionnaire de clic sur un événement
+        eventClick: this.handleEventClick.bind(this), // Bind this
       })
 
       calendar.render()
@@ -279,26 +271,26 @@ window.onload = async function () {
       const commentaire = info.event.extendedProps.commentaire
       const lieu_juridiction = info.event.extendedProps.lieu_juridiction
       console.log('lieu :', lieu_juridiction)
+
       const eventCommentEl = document.getElementById('eventComment')
       const eventPlaceEl = document.getElementById('eventPlace')
       const modal = document.getElementById('eventModal')
+
       eventCommentEl.innerText = commentaire
       eventPlaceEl.innerText = lieu_juridiction
-      modal.style.display = 'flex' // Affiche la modale
+      modal.style.display = 'flex'
     }
 
     setupModal() {
-      // Ajoute un gestionnaire pour fermer la modale
       const modal = document.getElementById('eventModal')
       const closeModalButton = document.getElementById('closeModal')
 
-      closeModalButton.onclick = function () {
+      closeModalButton.onclick = () => {
         modal.style.display = 'none'
       }
 
-      // Ferme la modale si on clique en dehors du contenu
-      window.onclick = function (event) {
-        if (event.target == modal) {
+      window.onclick = (event) => {
+        if (event.target === modal) {
           modal.style.display = 'none'
         }
       }
@@ -308,4 +300,4 @@ window.onload = async function () {
   // Initialisation du composant de calendrier
   const calendarComponent = new CalendarComponent()
   calendarComponent.init()
-}
+})
