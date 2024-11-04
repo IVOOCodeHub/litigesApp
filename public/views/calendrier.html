@@ -17,6 +17,15 @@
     <div id="calendar"></div>
     <div id="footerContainer"></div>
 
+    <!-- Modale pour afficher le commentaire de l'événement -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <p id="eventComment">Détail de l'événement: </p>
+            <p id="eventPlace">Lieu: </p>
+        </div>
+    </div>
+
     <!-- Charger les utilitaires et services en premier -->
     <script lang="application/javascript" src="../scripts/utils/Utils.js"></script>
     <script lang="application/javascript" src="../scripts/api/ApiCalls.js"></script>

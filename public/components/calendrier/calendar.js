@@ -208,6 +208,7 @@ window.onload = async function () {
     async init() {
       await this.getEventsData()
       this.displayCalendar()
+      this.setupModal()
     }
 
     async getCredentials() {
@@ -237,6 +238,7 @@ window.onload = async function () {
         textColor: 'black', // couleur du texte
         extendedProps: {
           commentaire: event.commentaire, // stocke le commentaire dans les propriétés étendues
+          lieu_juridiction: event.lieu_juridiction,
         },
       }))
     }
@@ -274,10 +276,32 @@ window.onload = async function () {
     }
 
     handleEventClick(info) {
-      // Récupère le commentaire de l'événement depuis les propriétés étendues
       const commentaire = info.event.extendedProps.commentaire
-      // Affiche le commentaire dans une alerte (ou personnalisez l'affichage ici)
-      alert("Détail de l'événement : " + commentaire)
+      const lieu_juridiction = info.event.extendedProps.lieu_juridiction
+      console.log('lieu :', lieu_juridiction)
+      const eventCommentEl = document.getElementById('eventComment')
+      const eventPlaceEl = document.getElementById('eventPlace')
+      const modal = document.getElementById('eventModal')
+      eventCommentEl.innerText = commentaire
+      eventPlaceEl.innerText = lieu_juridiction
+      modal.style.display = 'flex' // Affiche la modale
+    }
+
+    setupModal() {
+      // Ajoute un gestionnaire pour fermer la modale
+      const modal = document.getElementById('eventModal')
+      const closeModalButton = document.getElementById('closeModal')
+
+      closeModalButton.onclick = function () {
+        modal.style.display = 'none'
+      }
+
+      // Ferme la modale si on clique en dehors du contenu
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = 'none'
+        }
+      }
     }
   }
 
