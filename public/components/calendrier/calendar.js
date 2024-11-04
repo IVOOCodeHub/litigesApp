@@ -235,11 +235,13 @@ window.onload = async function () {
             : null, // date de fin si disponible
         color: this.getEventColor(event.stade), // fonction pour déterminer la couleur de l'événement
         textColor: 'black', // couleur du texte
+        extendedProps: {
+          commentaire: event.commentaire, // stocke le commentaire dans les propriétés étendues
+        },
       }))
     }
 
     getEventColor(stade) {
-      // Définissez des couleurs en fonction du stade de l'événement
       const colors = {
         'Pré-contentieux': 'yellow',
         Contentieux: 'red',
@@ -254,7 +256,6 @@ window.onload = async function () {
 
       const calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'fr',
-        initialDate: '2024-05-01',
         editable: false,
         selectable: false,
         businessHours: true,
@@ -265,10 +266,18 @@ window.onload = async function () {
           day: 'numeric',
           weekday: 'long',
         },
-        events: transformedEvents, // Ajout des événements transformés
+        events: transformedEvents,
+        eventClick: this.handleEventClick, // Gestionnaire de clic sur un événement
       })
 
       calendar.render()
+    }
+
+    handleEventClick(info) {
+      // Récupère le commentaire de l'événement depuis les propriétés étendues
+      const commentaire = info.event.extendedProps.commentaire
+      // Affiche le commentaire dans une alerte (ou personnalisez l'affichage ici)
+      alert("Détail de l'événement : " + commentaire)
     }
   }
 
