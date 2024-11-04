@@ -148,42 +148,131 @@
 //     )
 //     return
 //   }
-
+/////////////////////////////////////////////////////////////////////////////////////////
 // Classe pour tester la récupération des événements
-class CalendarTestComponent {
-  constructor() {
-    this.eventService = new EventService()
-    this.utils = new Utils()
-    this.userCredentials = null
-    this.eventsData = []
+// class CalendarTestComponent {
+//   constructor() {
+//     this.eventService = new EventService()
+//     this.utils = new Utils()
+//     this.userCredentials = null
+//     this.eventsData = []
+//   }
+
+//   async init() {
+//     await this.getEventsData()
+//     this.logEvents()
+//   }
+
+//   async getCredentials() {
+//     // Récupère les informations d'authentification de l'utilisateur depuis localStorage
+//     const user = JSON.parse(localStorage.getItem('user'))
+//     this.userCredentials = {
+//       userID: user['matricule'],
+//       password: user['mdp'],
+//     }
+//   }
+
+//   async getEventsData() {
+//     // Récupère les événements de la base de données
+//     await this.getCredentials()
+//     this.eventsData = await this.eventService.getEvent(this.userCredentials)
+//   }
+
+//   logEvents() {
+//     // Affiche les événements dans la console
+//     console.log('Événements récupérés :', this.eventsData)
+//   }
+// }
+
+// // Initialise et exécute le composant de test
+// const calendarTestComponent = new CalendarTestComponent()
+// calendarTestComponent.init()
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+window.onload = async function () {
+  if (typeof Utils === 'undefined' || typeof EventService === 'undefined') {
+    console.error(
+      "Utils ou EventService n'est pas défini. Assurez-vous que les dépendances sont correctement chargées.",
+    )
+    return
   }
 
-  async init() {
-    await this.getEventsData()
-    this.logEvents()
-  }
+  class CalendarComponent {
+    constructor() {
+      this.eventService = new EventService()
+      this.userCredentials = null
+      this.eventsData = []
+    }
 
-  async getCredentials() {
-    // Récupère les informations d'authentification de l'utilisateur depuis localStorage
-    const user = JSON.parse(localStorage.getItem('user'))
-    this.userCredentials = {
-      userID: user['matricule'],
-      password: user['mdp'],
+    async init() {
+      await this.getEventsData()
+      this.displayCalendar()
+    }
+
+    async getCredentials() {
+      const user = JSON.parse(localStorage.getItem('user'))
+      this.userCredentials = {
+        userID: user['matricule'],
+        password: user['mdp'],
+      }
+    }
+
+    async getEventsData() {
+      await this.getCredentials()
+      this.eventsData = await this.eventService.getEvent(this.userCredentials)
+      console.log('Événements récupérés :', this.eventsData)
+    }
+
+    transformEventsForCalendar() {
+      // Transforme les données d'événements pour être compatible avec FullCalendar
+      return this.eventsData.map((event) => ({
+        title: event.action || 'Événement',
+        start: event.datederevent, // date de début
+        end:
+          event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
+            ? event.datenextevent
+            : null, // date de fin si disponible
+        color: this.getEventColor(event.stade), // fonction pour déterminer la couleur de l'événement
+        textColor: 'black', // couleur du texte
+      }))
+    }
+
+    getEventColor(stade) {
+      // Définissez des couleurs en fonction du stade de l'événement
+      const colors = {
+        'Pré-contentieux': 'yellow',
+        Contentieux: 'red',
+        Recouvrement: 'green',
+      }
+      return colors[stade] || '#3788d8' // couleur par défaut si le stade n'est pas dans le dictionnaire
+    }
+
+    displayCalendar() {
+      const calendarEl = document.getElementById('calendar')
+      const transformedEvents = this.transformEventsForCalendar()
+
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'fr',
+        initialDate: '2024-05-01',
+        editable: false,
+        selectable: false,
+        businessHours: true,
+        dayMaxEvents: true,
+        titleFormat: {
+          month: 'long',
+          year: 'numeric',
+          day: 'numeric',
+          weekday: 'long',
+        },
+        events: transformedEvents, // Ajout des événements transformés
+      })
+
+      calendar.render()
     }
   }
 
-  async getEventsData() {
-    // Récupère les événements de la base de données
-    await this.getCredentials()
-    this.eventsData = await this.eventService.getEvent(this.userCredentials)
-  }
-
-  logEvents() {
-    // Affiche les événements dans la console
-    console.log('Événements récupérés :', this.eventsData)
-  }
+  // Initialisation du composant de calendrier
+  const calendarComponent = new CalendarComponent()
+  calendarComponent.init()
 }
-
-// Initialise et exécute le composant de test
-const calendarTestComponent = new CalendarTestComponent()
-calendarTestComponent.init()
