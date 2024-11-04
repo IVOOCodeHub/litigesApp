@@ -73,6 +73,10 @@
     margin-right: 5px;
 }
 
+.fc-daygrid-event {
+    cursor: pointer;
+}
+
 /* Styles pour la modale */
 .modal {
     display: none;
@@ -90,7 +94,9 @@
 }
 
 .modal-content {
-    background-color: white;
+    background-color: #eaeaea;
+    font-family: 'Ubuntu', sans-serif;
+    color: #36395a;
     padding: 20px;
     border-radius: 8px;
     width: 80%;

@@ -226,11 +226,14 @@ document.addEventListener('DOMContentLoaded', () => {
           event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
             ? event.datenextevent
             : null,
-        color: this.getEventColor(event.event_type),
-        textColor: 'black',
+        backgroundColor: this.getEventColor(event.event_type), // Couleur de fond de l'événement
+        borderColor: this.getEventColor(event.event_type), // Couleur de bordure de l'événement
+        eventBackgroundColor: '#99ff99',
+        textColor: 'white',
         extendedProps: {
           commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
+          event_type: event.event_type,
         },
       }))
     }
@@ -261,7 +264,19 @@ document.addEventListener('DOMContentLoaded', () => {
           weekday: 'long',
         },
         events: transformedEvents,
-        eventClick: this.handleEventClick.bind(this), // Bind this
+        eventClick: this.handleEventClick.bind(this),
+
+        // Fonction pour forcer la couleur des événements
+        eventDidMount: (info) => {
+          const eventType = info.event.extendedProps.event_type
+          const eventColor = this.getEventColor(eventType)
+
+          // Applique les couleurs directement au style de l'élément
+          info.el.style.backgroundColor = eventColor
+          info.el.style.borderColor = eventColor
+
+          info.el.style.color = eventColor === 'yellow' ? 'black' : 'white' // Couleur du texte pour garantir la lisibilité
+        },
       })
 
       calendar.render()
@@ -276,8 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const eventPlaceEl = document.getElementById('eventPlace')
       const modal = document.getElementById('eventModal')
 
-      eventCommentEl.innerText = commentaire
-      eventPlaceEl.innerText = lieu_juridiction
+      eventCommentEl.innerText = "Détails de l'évènement : " + commentaire
+      eventPlaceEl.innerText = 'Lieu : ' + lieu_juridiction
       modal.style.display = 'flex'
     }
 
