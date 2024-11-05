@@ -315,4 +315,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialisation du composant de calendrier
   const calendarComponent = new CalendarComponent()
   calendarComponent.init()
+
+  // Gestionnaire pour le bouton retour
+  const backButton = document.getElementById('backButton')
+  backButton.addEventListener('click', () => {
+    window.history.back() // Retourne à la page précédente
+  })
 })
