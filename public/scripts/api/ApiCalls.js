@@ -1,4 +1,3 @@
-console.log('ApiCalls.js chargé')
 class ApiCalls extends Utils {
   constructor() {
     super()
