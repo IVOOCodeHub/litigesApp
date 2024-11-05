@@ -292,8 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const modal = document.getElementById('eventModal')
       const modalContent = modal.querySelector('.modal-content')
 
-      eventCommentEl.innerText = "Détails de l'évènement : " + commentaire
-      eventPlaceEl.innerText = 'Lieu : ' + lieu_juridiction
+      eventCommentEl.innerText = commentaire
+      eventPlaceEl.innerText = lieu_juridiction
 
       // Applique la couleur de fond en fonction du type d'événement
       modalContent.style.backgroundColor =
