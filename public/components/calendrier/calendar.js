@@ -285,15 +285,30 @@ document.addEventListener('DOMContentLoaded', () => {
     handleEventClick(info) {
       const commentaire = info.event.extendedProps.commentaire
       const lieu_juridiction = info.event.extendedProps.lieu_juridiction
-      console.log('lieu :', lieu_juridiction)
+      const eventType = info.event.extendedProps.event_type
 
       const eventCommentEl = document.getElementById('eventComment')
       const eventPlaceEl = document.getElementById('eventPlace')
       const modal = document.getElementById('eventModal')
+      const modalContent = modal.querySelector('.modal-content')
 
       eventCommentEl.innerText = "Détails de l'évènement : " + commentaire
       eventPlaceEl.innerText = 'Lieu : ' + lieu_juridiction
+
+      // Applique la couleur de fond en fonction du type d'événement
+      modalContent.style.backgroundColor =
+        this.getModalBackgroundColor(eventType)
+
       modal.style.display = 'flex'
+    }
+
+    getModalBackgroundColor(type) {
+      const backgroundColors = {
+        9: '#fffacd', // Jaune très clair pour le type 9
+        10: '#ffcccc', // Rouge très clair pour le type 10
+        11: '#ccffcc', // Vert très clair pour le type 11
+      }
+      return backgroundColors[type] || '#eaeaea' // Couleur par défaut si le type n'est pas défini
     }
 
     setupModal() {
