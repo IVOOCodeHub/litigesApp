@@ -220,7 +220,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     transformEventsForCalendar() {
       return this.eventsData.map((event) => ({
-        title: event.action || 'Événement',
+        // title: event.action || 'Événement',
+        title: event.cle_litige_dossier || 'Événement',
+        // cle_litige_dossier: event.cle_litige_dossier,
         start: event.datederevent,
         end:
           event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
@@ -231,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         eventBackgroundColor: '#99ff99',
         textColor: 'white',
         extendedProps: {
+          titre: event.action,
           commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
           event_type: event.event_type,
@@ -285,15 +288,18 @@ document.addEventListener('DOMContentLoaded', () => {
     handleEventClick(info) {
       const commentaire = info.event.extendedProps.commentaire
       const lieu_juridiction = info.event.extendedProps.lieu_juridiction
+      const titre = info.event.extendedProps.titre
       const eventType = info.event.extendedProps.event_type
 
       const eventCommentEl = document.getElementById('eventComment')
       const eventPlaceEl = document.getElementById('eventPlace')
+      const eventTitleEl = document.getElementById('eventTitle')
       const modal = document.getElementById('eventModal')
       const modalContent = modal.querySelector('.modal-content')
 
       eventCommentEl.innerText = commentaire
       eventPlaceEl.innerText = lieu_juridiction
+      eventTitleEl.innerText = titre
 
       // Applique la couleur de fond en fonction du type d'événement
       modalContent.style.backgroundColor =
