@@ -222,7 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return this.eventsData.map((event) => ({
         // title: event.action || 'Événement',
         title: event.cle_litige_dossier || 'Événement',
-        // cle_litige_dossier: event.cle_litige_dossier,
         start: event.datederevent,
         end:
           event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
