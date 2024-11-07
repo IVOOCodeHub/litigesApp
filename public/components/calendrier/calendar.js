@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   class CalendarComponent {
     constructor() {
       this.eventService = new EventService()
+      this.folderService = new FolderService()
       this.userCredentials = null
       this.eventsData = []
     }
@@ -216,6 +217,18 @@ document.addEventListener('DOMContentLoaded', () => {
       await this.getCredentials()
       this.eventsData = await this.eventService.getEvent(this.userCredentials)
       console.log('Événements récupérés :', this.eventsData)
+      this.foldersData = await this.folderService.getFolder(
+        this.userCredentials,
+      )
+      console.log('Dossiers récupérés :', this.foldersData)
+    }
+
+    // Retourne le nom du dossier correspondant à l'id
+    getFolderName(folderId) {
+      const folder = this.foldersData.find(
+        (folder) => folder['cle'] === folderId,
+      )
+      return folder['nom']
     }
 
     transformEventsForCalendar() {
@@ -229,13 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
         //     : null,
         backgroundColor: this.getEventColor(event.event_type), // Couleur de fond de l'événement
         borderColor: this.getEventColor(event.event_type), // Couleur de bordure de l'événement
-        // textColor: 'white',
+        textColor: 'white',
         extendedProps: {
           titre: event.action,
           commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
           event_type: event.event_type,
           event_dossier: event.cle_litige_dossier,
+          dossier: this.getFolderName(event.cle_litige_dossier),
         },
       }))
     }
@@ -276,6 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // Applique les couleurs directement au style de l'élément
           info.el.style.backgroundColor = eventColor
           info.el.style.borderColor = eventColor
+          info.el.style.eventTextColor =
+            eventColor === 'yellow' ? 'black' : 'white'
 
           // info.el.style.textColor = 'white'
           // TODO: Ajouter la fonction de tooltip
