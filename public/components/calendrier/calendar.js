@@ -235,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
           commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
           event_type: event.event_type,
+          event_dossier: event.cle_litige_dossier,
         },
       }))
     }
@@ -295,13 +296,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const lieu_juridiction = info.event.extendedProps.lieu_juridiction
       const titre = info.event.extendedProps.titre
       const eventType = info.event.extendedProps.event_type
+      const eventDossier = info.event.extendedProps.event_dossier
 
+      // Mise à jour des éléments de la modale
+      const eventDossierEl = document.getElementById('eventDossier')
       const eventCommentEl = document.getElementById('eventComment')
       const eventPlaceEl = document.getElementById('eventPlace')
       const eventTitleEl = document.getElementById('eventTitle')
       const modal = document.getElementById('eventModal')
       const modalContent = modal.querySelector('.modal-content')
 
+      eventDossierEl.innerText = eventDossier
       eventCommentEl.innerText = commentaire
       eventPlaceEl.innerText = lieu_juridiction
       eventTitleEl.innerText = titre
