@@ -121,3 +121,11 @@
 .close-button:hover {
     color: red;
 }
+
+.fc-event-title {
+    color: rgba(0, 0, 0, 0.85);
+    /* Texte noir avec opacité pour une meilleure lisibilité */
+    font-weight: bold;
+    padding: 2px 4px;
+    border-radius: 3px;
+}

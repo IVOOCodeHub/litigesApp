@@ -222,15 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return this.eventsData.map((event) => ({
         // title: event.action || 'Événement',
         title: event.cle_litige_dossier || 'Événement',
-        start: event.datederevent,
-        end:
-          event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
-            ? event.datenextevent
-            : null,
+        start: event.datederevent.slice(0, 10), // Tronque l'heure pour ne garder que la date (format YYYY-MM-DD)
+        // end:
+        //   event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
+        //     ? event.datenextevent
+        //     : null,
         backgroundColor: this.getEventColor(event.event_type), // Couleur de fond de l'événement
         borderColor: this.getEventColor(event.event_type), // Couleur de bordure de l'événement
-        eventBackgroundColor: '#99ff99',
-        textColor: 'white',
+        // textColor: 'white',
         extendedProps: {
           titre: event.action,
           commentaire: event.commentaire,
@@ -277,7 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
           info.el.style.backgroundColor = eventColor
           info.el.style.borderColor = eventColor
 
-          info.el.style.color = eventColor === 'yellow' ? 'black' : 'white' // Couleur du texte pour garantir la lisibilité
+          // info.el.style.textColor = 'white'
+          // TODO: Ajouter la fonction de tooltip
+          // var tooltip = new Tooltip(info.el, {
+          //   title: info.event.extendedProps.description,
+          //   placement: 'top',
+          //   trigger: 'hover',
+          //   container: 'body',
+          // })
         },
       })
 
