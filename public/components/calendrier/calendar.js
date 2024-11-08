@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //     : null,
         backgroundColor: this.getEventColor(event.event_type), // Couleur de fond de l'événement
         borderColor: this.getEventColor(event.event_type), // Couleur de bordure de l'événement
-        textColor: 'white',
+        textColor: this.getEventTextColor(event),
         extendedProps: {
           titre: event.action,
           commentaire: event.commentaire,
@@ -261,6 +261,13 @@ document.addEventListener('DOMContentLoaded', () => {
         11: 'green',
       }
       return colors[type] || '#3788d8'
+    }
+
+    getEventTextColor(event) {
+      // Vérifie si la couleur de fond de l'événement est 'yellow'
+      const textColor =
+        this.getEventColor(event.event_type) === 'yellow' ? 'black' : 'white'
+      return textColor
     }
 
     displayCalendar() {
