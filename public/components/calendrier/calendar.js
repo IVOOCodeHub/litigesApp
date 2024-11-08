@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     transformEventsForCalendar() {
       return this.eventsData.map((event) => ({
         // title: event.action || 'Événement',
-        title: event.cle_litige_dossier || 'Événement',
+        title: `${event.cle_litige_dossier} - ${this.getFolderName(event.cle_litige_dossier)}`,
         start: event.datederevent.slice(0, 10), // Tronque l'heure pour ne garder que la date (format YYYY-MM-DD)
         // end:
         //   event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
