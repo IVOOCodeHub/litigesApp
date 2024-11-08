@@ -123,12 +123,12 @@
 }
 
 /* couleur du texte des évènements si forcé*/
-/* .fc-event-title {
+.fc-event-title {
     color: rgba(0, 0, 0, 0.85);
     font-weight: bold;
     padding: 2px 4px;
     border-radius: 3px;
-} */
+}
 
 /* style du tooltip si besoin futur (pas utilisé pour le moment) */
 

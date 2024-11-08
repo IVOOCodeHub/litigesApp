@@ -290,8 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // Applique les couleurs directement au style de l'élément
           info.el.style.backgroundColor = eventColor
           info.el.style.borderColor = eventColor
-          info.el.style.eventTextColor =
-            eventColor === 'yellow' ? 'black' : 'white'
+          // info.el.style.eventTextColor =
+          //   eventColor === 'yellow' ? 'black' : 'white'
 
           // info.el.style.textColor = 'white'
           // TODO: Ajouter la fonction de tooltip
