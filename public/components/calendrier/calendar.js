@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
           lieu_juridiction: event.lieu_juridiction,
           event_type: event.event_type,
           event_dossier: event.cle_litige_dossier,
-          dossier: this.getFolderName(event.cle_litige_dossier),
+          name: this.getFolderName(event.cle_litige_dossier),
         },
       }))
     }
@@ -313,9 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const titre = info.event.extendedProps.titre
       const eventType = info.event.extendedProps.event_type
       const eventDossier = info.event.extendedProps.event_dossier
+      const eventName = info.event.extendedProps.name
 
       // Mise à jour des éléments de la modale
       const eventDossierEl = document.getElementById('eventDossier')
+      const eventNameEl = document.getElementById('eventName')
       const eventCommentEl = document.getElementById('eventComment')
       const eventPlaceEl = document.getElementById('eventPlace')
       const eventTitleEl = document.getElementById('eventTitle')
@@ -323,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const modalContent = modal.querySelector('.modal-content')
 
       eventDossierEl.innerText = eventDossier
+      eventNameEl.innerText = eventName
       eventCommentEl.innerText = commentaire
       eventPlaceEl.innerText = lieu_juridiction
       eventTitleEl.innerText = titre
