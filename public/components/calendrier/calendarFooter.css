@@ -130,6 +130,10 @@
     border-radius: 3px;
 }
 
+.fc-event-main {
+    text-align: center;
+}
+
 /* style du tooltip si besoin futur (pas utilisé pour le moment) */
 
 /* .popper,
