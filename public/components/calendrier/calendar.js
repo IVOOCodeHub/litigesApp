@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     constructor() {
       this.eventService = new EventService()
       this.folderService = new FolderService()
+      this.utils = new Utils()
       this.userCredentials = null
       this.eventsData = []
     }
@@ -217,25 +218,27 @@ document.addEventListener('DOMContentLoaded', () => {
       await this.getCredentials()
       this.eventsData = await this.eventService.getEvent(this.userCredentials)
       console.log('Événements récupérés :', this.eventsData)
-      this.foldersData = await this.folderService.getFolder(
-        this.userCredentials,
-      )
-      console.log('Dossiers récupérés :', this.foldersData)
+      // this.foldersData = await this.folderService.getFolder(
+      //   this.userCredentials,
+      // )
+      // console.log('Dossiers récupérés :', this.foldersData)
     }
 
     // Retourne le nom du dossier correspondant à l'id
-    getFolderName(folderId) {
-      const folder = this.foldersData.find(
-        (folder) => folder['cle'] === folderId,
-      )
-      return folder['nom']
-    }
+    // getFolderName(folderId) {
+    //   const folder = this.foldersData.find(
+    //     (folder) => folder['cle'] === folderId,
+    //   )
+    //   return folder['nom']
+    // }
 
     transformEventsForCalendar() {
       return this.eventsData.map((event) => ({
         // title: event.action || 'Événement',
-        title: `${event.cle_litige_dossier} - ${this.getFolderName(event.cle_litige_dossier)}`,
-        start: event.datederevent.slice(0, 10), // Tronque l'heure pour ne garder que la date (format YYYY-MM-DD)
+        title: `${event.cle_litige_dossier}`,
+        // title: `${event.cle_litige_dossier} - ${this.getFolderName(event.cle_litige_dossier)}`,
+        // start: event.datederevent.slice(0, 10), // Tronque l'heure pour ne garder que la date (format YYYY-MM-DD)
+        start: this.utils.reformatCalendarDate(event.datederevent),
         // end:
         //   event.datenextevent && event.datenextevent !== '1900-01-01T00:00:00'
         //     ? event.datenextevent
@@ -245,11 +248,12 @@ document.addEventListener('DOMContentLoaded', () => {
         textColor: this.getEventTextColor(event),
         extendedProps: {
           titre: event.action,
+          event_date: this.utils.reformatCalendarDate(event.datederevent),
           commentaire: event.commentaire,
           lieu_juridiction: event.lieu_juridiction,
           event_type: event.event_type,
           event_dossier: event.cle_litige_dossier,
-          name: this.getFolderName(event.cle_litige_dossier),
+          // name: this.getFolderName(event.cle_litige_dossier),
         },
       }))
     }
@@ -273,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     displayCalendar() {
       const calendarEl = document.getElementById('calendar')
       const transformedEvents = this.transformEventsForCalendar()
-
+      console.log('elements du calendrier :', transformedEvents)
       const calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'fr',
         editable: false,
