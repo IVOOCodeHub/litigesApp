@@ -201,9 +201,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async init() {
-      await this.getEventsData()
-      this.displayCalendar()
-      this.setupModal()
+      // Affiche le loader
+      const loader = document.getElementById('loader')
+      loader.style.display = 'flex'
+
+      try {
+        // Charge les données et affiche le calendrier
+        await this.getEventsData()
+        this.displayCalendar()
+        this.setupModal()
+      } catch (error) {
+        console.error('Erreur lors de l’initialisation du calendrier:', error)
+      } finally {
+        // Cache le loader
+        loader.style.display = 'none'
+      }
     }
 
     async getCredentials() {
