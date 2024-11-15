@@ -218,25 +218,26 @@ document.addEventListener('DOMContentLoaded', () => {
       await this.getCredentials()
       this.eventsData = await this.eventService.getEvent(this.userCredentials)
       console.log('Événements récupérés :', this.eventsData)
-      // this.foldersData = await this.folderService.getFolder(
-      //   this.userCredentials,
-      // )
-      // console.log('Dossiers récupérés :', this.foldersData)
+      // -----------------------------------------------------------------------------
+      this.foldersData = await this.folderService.getFolder(
+        this.userCredentials,
+      )
+      console.log('Dossiers récupérés :', this.foldersData)
     }
 
     // Retourne le nom du dossier correspondant à l'id
-    // getFolderName(folderId) {
-    //   const folder = this.foldersData.find(
-    //     (folder) => folder['cle'] === folderId,
-    //   )
-    //   return folder['nom']
-    // }
+    getFolderName(folderId) {
+      const folder = this.foldersData.find(
+        (folder) => folder['cle'] === folderId,
+      )
+      return folder ? folder['nom'] : 'Nom du dossier inconnu' // Retourne un texte par défaut si le dossier n'existe pas
+    }
 
     transformEventsForCalendar() {
       return this.eventsData.map((event) => ({
         // title: event.action || 'Événement',
-        title: `${event.cle_litige_dossier}`,
-        // title: `${event.cle_litige_dossier} - ${this.getFolderName(event.cle_litige_dossier)}`,
+        // title: `${event.cle_litige_dossier}`,
+        title: `${event.cle_litige_dossier} - ${this.getFolderName(event.cle_litige_dossier)}`,
         // start: event.datederevent.slice(0, 10), // Tronque l'heure pour ne garder que la date (format YYYY-MM-DD)
         start: this.utils.reformatCalendarDate(event.datederevent),
         // end:
@@ -250,10 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
           titre: event.action,
           event_date: this.utils.reformatCalendarDate(event.datederevent),
           commentaire: event.commentaire,
-          lieu_juridiction: event.lieu_juridiction,
+          lieu_juridiction: event.lieu_juridiction
+            ? event.lieu_juridiction
+            : 'non spécifié',
           event_type: event.event_type,
           event_dossier: event.cle_litige_dossier,
-          // name: this.getFolderName(event.cle_litige_dossier),
+          name: this.getFolderName(event.cle_litige_dossier),
         },
       }))
     }
