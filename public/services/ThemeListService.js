@@ -1,52 +1,3 @@
-// class ThemeService {
-//   async getList(userDatas) {
-//     // Make an API call to get the list of themes
-//     const response = await fetch('/api/themes', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(userDatas),
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch themes')
-//     }
-
-//     return response.json()
-//   }
-
-//   async addTheme(theme) {
-//     // Make an API call to add a new theme
-//     const response = await fetch('/api/themes/add', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(theme),
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('Failed to add theme')
-//     }
-//   }
-
-//   async updateTheme(theme) {
-//     // Make an API call to update an existing theme
-//     const response = await fetch(`/api/themes/update/${theme.id}`, {
-//       method: 'PUT',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(theme),
-//     })
-
-//     if (!response.ok) {
-//       throw new Error('Failed to update theme')
-//     }
-//   }
-// }
-
 class ThemeListService extends ApiCalls {
   constructor() {
     super()
@@ -62,33 +13,60 @@ class ThemeListService extends ApiCalls {
     return this.data['data']['data']['themes']['rows']
   }
 
-  async addTheme(theme) {
-    // Make an API call to add a new theme
-    const response = await fetch('/api/themes/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+  async addTheme(credentials, theme) {
+    const params = {
+      ...credentials,
+      request: 'create_edit_litige_theme',
+      args: {
+        cle: null, // null pour une création
+        theme: theme.theme,
+        actif: theme.actif ? 1 : 0,
       },
-      body: JSON.stringify(theme),
-    })
+    }
 
-    if (!response.ok) {
-      throw new Error('Failed to add theme')
+    try {
+      await this.postRequest(params)
+
+      // Vérifiez explicitement le statut de la réponse
+      if (!this.data || this.data.result !== '0') {
+        console.error('Erreur API lors de l’ajout du thème:', this.data)
+        throw new Error(this.data?.message || 'Erreur inconnue du backend')
+      }
+
+      // Log de succès pour vérifier
+      console.log('Thème ajouté avec succès :', this.data)
+    } catch (error) {
+      console.error('Erreur lors de l’ajout du thème:', error)
+      throw new Error(
+        'Impossible d’ajouter le thème. Veuillez vérifier vos informations.',
+      )
     }
   }
 
-  async updateTheme(theme) {
-    // Make an API call to update an existing theme
-    const response = await fetch(`/api/themes/update/${theme.id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
+  async updateTheme(credentials, theme) {
+    const params = {
+      ...credentials,
+      request: 'create_edit_litige_theme',
+      args: {
+        cle: theme.cle,
+        theme: theme.theme,
+        actif: theme.actif ? 1 : 0,
       },
-      body: JSON.stringify(theme),
-    })
+    }
 
-    if (!response.ok) {
-      throw new Error('Failed to update theme')
+    try {
+      await this.postRequest(params)
+
+      // Vérifiez explicitement le statut de la réponse
+      if (!this.data || this.data.result !== '0') {
+        console.error('Erreur API lors de la mise à jour du thème:', this.data)
+        throw new Error(this.data?.message || 'Erreur inconnue du backend')
+      }
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du thème:', error)
+      throw new Error(
+        'Impossible de mettre à jour le thème. Vérifiez votre connexion ou contactez un administrateur.',
+      )
     }
   }
 }
