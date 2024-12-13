@@ -1,25 +1,93 @@
+/* Conteneur du tableau */
 #tableContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin-bottom: 20px;
-    /* Ajout d'une marge pour espacer le bouton du tableau */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+    /* Permet de gérer le débordement horizontal sur les petits écrans */
 }
 
-#addThemeButton {
-    margin-top: 20px;
+table {
+    width: 90%;
+    /* Réduction de la largeur par défaut pour mieux s'adapter */
+    border-collapse: collapse;
+    /* Supprime les espaces entre les cellules */
+    table-layout: auto;
+    /* Ajuste automatiquement la taille des colonnes */
+}
+
+th,
+td {
+    padding: 10px 8px;
+    /* Réduit l'espacement entre les colonnes */
+    text-align: center;
+    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    /* Taille ajustée pour les petits écrans */
+    word-break: break-word;
+    /* Permet de couper les mots longs dans les petites colonnes */
+}
+
+thead {
+    background-color: #f5f5f5;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* Conteneur des boutons */
+#buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    /* Espace augmenté entre les boutons */
+    margin-top: 40px;
+    /* Plus d'espace au-dessus des boutons */
+    margin-bottom: 20px;
+    /* Espacement supplémentaire en bas */
+}
+
+/* Boutons */
+button {
     padding: 10px 20px;
-    background: #1191b7;
-    color: #fff;
+    border-radius: 6px;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    align-self: center;
-    /* Centrer le bouton */
+    transition: background 0.3s ease;
+    font-weight: bold;
+    font-family: 'Calibri', sans-serif;
 }
 
-#addThemeButton:hover {
-    background: #0f7ba7;
+/* Bouton "Ajouter un Thème" */
+.greenButton {
+    background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);
+    color: #ffffff;
+    box-shadow:
+        0 0.5px 1.5px rgba(76, 175, 80, 0.25),
+        inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+}
+
+.greenButton:hover {
+    background: #45a049;
+}
+
+/* Bouton "Retour" */
+.retourButton {
+    background: linear-gradient(180deg, #f44336 0%, #ff5722 100%);
+    color: #ffffff;
+    box-shadow:
+        0 0.5px 1.5px rgba(244, 67, 54, 0.25),
+        inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2);
+}
+
+.retourButton:hover {
+    background: #e53935;
 }
 
 /* Styles pour le modal */
@@ -55,7 +123,7 @@
 }
 
 .modalWrapper h2 {
-    font-size: 1.5dvw;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #36395a;
     text-align: center;
@@ -77,7 +145,7 @@
     padding: 0.5em 1em;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 1dvw;
+    font-size: 1rem;
 }
 
 .btnWrapper {
@@ -85,29 +153,36 @@
     gap: 1em;
 }
 
-button {
-    padding: 0.5em 1em;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.3s;
-}
-
-.validButton {
-    background: #1191b7;
-    color: #ffffff;
-    border: none;
-}
-
-.validButton:hover {
-    background: #0f7ba7;
-}
-
 .closeModal {
     background: #ff5e5e;
     color: #ffffff;
-    border: none;
 }
 
 .closeModal:hover {
     background: #ff3b3b;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        /* Utilise toute la largeur sur les petits écrans */
+    }
+
+    th,
+    td {
+        font-size: 0.8rem;
+        /* Réduit la taille de la police sur les petits écrans */
+        padding: 8px 6px;
+        /* Réduit encore plus l'espacement */
+    }
+
+    #buttonContainer {
+        flex-direction: column;
+        /* Les boutons sont empilés sur petits écrans */
+        gap: 15px;
+        /* Moins d'espace entre les boutons */
+        margin-top: 20px;
+        /* Ajuste l'espacement sur petits écrans */
+    }
 }

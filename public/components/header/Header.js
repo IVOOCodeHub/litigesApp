@@ -38,6 +38,10 @@ class Header {
         this.pageName = 'Dossier'
         break
       }
+      case this.url.pathname.endsWith('/themeList.html'): {
+        this.pageName = 'Thèmes'
+        break
+      }
       default: {
         this.pageName = ''
       }

@@ -19,38 +19,45 @@ class ThemeList {
 
   async initMain() {
     this.main = document.createElement('main')
+    this.main.setAttribute('id', 'themeListPage')
     this.root.appendChild(this.main)
   }
 
   async initTable() {
-    const section = document.createElement('section')
-    section.setAttribute('id', 'tableContainer')
-    section.innerHTML += `
+    // Conteneur du tableau
+    const tableSection = document.createElement('section')
+    tableSection.setAttribute('id', 'tableContainer')
+    tableSection.innerHTML += `
     <table>
       <thead>
-          <tr>
-            <th>Nom du Thème</th>
-            <th>Actif</th>
-            <th>Actions</th>
-          </tr>
+        <tr>
+          <th>Nom du Thème</th>
+          <th>Actif</th>
+          <th>Actions</th>
+        </tr>
       </thead>
       <tbody></tbody>
     </table>
-    <div id="buttonContainer">
-      <button id="addThemeButton" class="actionButton green">Ajouter un Thème</button>
-      <button id="backButton" class="actionButton red">Retour</button>
-    </div>
   `
-    this.main.appendChild(section)
+    this.main.appendChild(tableSection)
 
-    // Ajoutez les gestionnaires d'événements
+    // Conteneur des boutons
+    const buttonSection = document.createElement('section')
+    buttonSection.setAttribute('id', 'buttonContainer')
+    buttonSection.innerHTML += `
+    <button id="addThemeButton" class="greenButton">Ajouter un Thème</button>
+    <button id="backButton" class="retourButton">Retour</button>
+  `
+    this.main.appendChild(buttonSection)
+
+    // Ajout des gestionnaires d'événements
     document
       .getElementById('addThemeButton')
       .addEventListener('click', () => this.openAddModal())
 
     document
       .getElementById('backButton')
-      .addEventListener('click', () => window.history.back()) // Retour à la page précédente
+      .addEventListener('click', () => window.history.back())
   }
 
   async insertDatas(datas) {
@@ -96,7 +103,7 @@ class ThemeList {
           <input type="text" id="themeName" />
         </div>
         <div class="btnWrapper">
-          <button class="validButton">Ajouter</button>
+          <button class="greenButton">Ajouter</button>
           <button class="closeModal">Fermer</button>
         </div>
       </div>
@@ -138,7 +145,7 @@ class ThemeList {
           </select>
         </div>
         <div class="btnWrapper">
-          <button class="validButton">Valider</button>
+          <button class="greenButton">Valider</button>
           <button class="closeModal">Fermer</button>
         </div>
       </div>
