@@ -114,7 +114,7 @@ class ThemeList {
       .querySelector('.closeModal')
       .addEventListener('click', () => this.closeModal())
     modal
-      .querySelector('.validButton')
+      .querySelector('.greenButton')
       .addEventListener('click', () => this.addTheme())
   }
 
@@ -157,7 +157,7 @@ class ThemeList {
       .querySelector('.closeModal')
       .addEventListener('click', () => this.closeModal())
     modal
-      .querySelector('.validButton')
+      .querySelector('.greenButton')
       .addEventListener('click', () => this.updateTheme(themeId))
   }
 
