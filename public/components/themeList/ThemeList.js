@@ -23,6 +23,20 @@ class ThemeList {
     this.root.appendChild(this.main)
   }
 
+  showLoader() {
+    const loader = document.getElementById('loader')
+    if (loader) {
+      loader.style.display = 'flex'
+    }
+  }
+
+  hideLoader() {
+    const loader = document.getElementById('loader')
+    if (loader) {
+      loader.style.display = 'none'
+    }
+  }
+
   async initTable() {
     // Conteneur du tableau
     const tableSection = document.createElement('section')
@@ -249,10 +263,17 @@ class ThemeList {
   }
 
   async initList() {
-    await this.getData()
-    await this.initMain()
-    await this.initTable()
-    await this.insertDatas(this.datas) // Insert data after fetching
+    this.showLoader() // Affiche le loader
+    try {
+      await this.getData()
+      await this.initMain()
+      await this.initTable()
+      await this.insertDatas(this.datas) // Insère les données après récupération
+    } catch (err) {
+      console.error(`Erreur lors du chargement des données : ${err}`)
+    } finally {
+      this.hideLoader() // Masque le loader une fois terminé
+    }
   }
 }
 
