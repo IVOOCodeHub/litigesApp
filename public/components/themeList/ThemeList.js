@@ -165,8 +165,8 @@ class ThemeList {
         <div class="inputWrapper">
           <label for="themeActive">Actif :</label>
           <select id="themeActive">
-            <option value="1" ${theme['actif'] ? 'selected' : ''}>Oui</option>
-            <option value="0" ${!theme['actif'] ? 'selected' : ''}>Non</option>
+            <option value="1" ${theme['actif'] === true || theme['actif'] === 1 || theme['actif'] === '1' ? 'selected' : ''}>Oui</option>
+          <option value="0" ${theme['actif'] === false || theme['actif'] === 0 || theme['actif'] === '0' ? 'selected' : ''}>Non</option>
           </select>
         </div>
         <div class="btnWrapper">
