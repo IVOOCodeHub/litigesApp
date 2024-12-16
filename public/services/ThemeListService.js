@@ -18,7 +18,7 @@ class ThemeListService extends ApiCalls {
       ...credentials,
       request: 'create_edit_litige_theme',
       args: {
-        cle: null, // null pour une création
+        // cle: null,
         theme: theme.theme,
         actif: theme.actif ? 1 : 0,
       },
