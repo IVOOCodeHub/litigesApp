@@ -71,15 +71,15 @@ class ThemeList {
 
     // Tri des données : thèmes actifs en premier, puis tri alphabétique
     const sortedData = datas.sort((a, b) => {
-      // Trier par statut actif (actif = true/1 en premier)
+      // Tri par statut actif (actif = true/1 en premier)
       if (b.actif - a.actif !== 0) {
         return b.actif - a.actif // Les actifs (1) en premier
       }
-      // Ensuite trier par ordre alphabétique sur le nom du thème
+      // Ensuite tri par ordre alphabétique sur le nom du thème
       return a.theme.localeCompare(b.theme, 'fr', { sensitivity: 'base' })
     })
 
-    // Insérer les données triées dans le tableau
+    // J'insère les données triées dans le tableau
     sortedData.forEach((row) => {
       const isActive =
         row['actif'] === true || row['actif'] === 1 || row['actif'] === '1'
