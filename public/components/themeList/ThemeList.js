@@ -69,8 +69,18 @@ class ThemeList {
 
     tableBody.innerHTML = ''
 
-    datas?.forEach((row) => {
-      // Vérifiez précisément la valeur de `actif`
+    // Tri des données : thèmes actifs en premier, puis tri alphabétique
+    const sortedData = datas.sort((a, b) => {
+      // Trier par statut actif (actif = true/1 en premier)
+      if (b.actif - a.actif !== 0) {
+        return b.actif - a.actif // Les actifs (1) en premier
+      }
+      // Ensuite trier par ordre alphabétique sur le nom du thème
+      return a.theme.localeCompare(b.theme, 'fr', { sensitivity: 'base' })
+    })
+
+    // Insérer les données triées dans le tableau
+    sortedData.forEach((row) => {
       const isActive =
         row['actif'] === true || row['actif'] === 1 || row['actif'] === '1'
 
@@ -83,6 +93,7 @@ class ThemeList {
     `
     })
 
+    // Gestion des boutons "Modifier"
     document.querySelectorAll('.editButton').forEach((button) => {
       button.addEventListener('click', (event) => {
         const row = event.target.closest('tr')
