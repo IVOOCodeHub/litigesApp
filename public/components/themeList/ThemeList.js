@@ -9,11 +9,11 @@ class ThemeList {
 
   async getData() {
     const user = await JSON.parse(localStorage.getItem('user'))
-    const userDatas = {
-      userID: '6237',
-      password: 'lotri',
+    this.userCredentials = {
+      userID: user['matricule'],
+      password: user['mdp'],
     }
-    this.datas = await this.themeService.getList(userDatas)
+    this.datas = await this.themeService.getList(this.userCredentials)
     console.log('data: ', this.datas)
   }
 

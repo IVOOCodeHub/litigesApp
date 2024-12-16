@@ -190,6 +190,11 @@
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
+console.log(
+  'FullCalendar est-il défini ? :',
+  typeof FullCalendar !== 'undefined',
+)
+
 document.addEventListener('DOMContentLoaded', () => {
   class CalendarComponent {
     constructor() {
